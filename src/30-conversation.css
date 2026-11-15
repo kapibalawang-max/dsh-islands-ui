@@ -50,20 +50,20 @@ body[data-islands-ui] [data-islands-part~="hero-headline"] {
   letter-spacing: -0.01em;
 }
 
-/* New-session hero: the question replaces the shipped headline. Both spans of
-   the title group step aside (the headline text and the preview badge) so the
-   replacement inherits the host's type scale instead of restating it. The
-   group is found structurally: it is the box whose direct child carries the
-   headline part, so no host class name is involved. */
-body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]) > span {
+/* New-session hero: the question replaces the shipped headline. The headline
+   part sits on the row itself — first child is the brand-mark seat, second is
+   the title group — so the title group is that row's last span. Both spans of
+   the group step aside (the headline text and the preview badge) and the
+   replacement inherits the row's 26px type scale instead of restating it. */
+body[data-islands-ui] [data-islands-part~="hero-headline"] > span:last-child > span {
   display: none;
 }
 
-body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]):after {
+body[data-islands-ui] [data-islands-part~="hero-headline"] > span:last-child:after {
   content: '你今天要做些什么？';
 }
 
-html[lang^='en'] body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]):after {
+html[lang^='en'] body[data-islands-ui] [data-islands-part~="hero-headline"] > span:last-child:after {
   content: 'What would you like to do today?';
 }
 
