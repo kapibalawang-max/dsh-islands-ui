@@ -34,14 +34,28 @@ body[data-islands-ui] .isl-topbar {
   user-select: none;
 }
 
-/* One grip for the whole chrome band. The window is draggable from any point
-   in it — including the bar's own top padding and the traffic-light strip —
-   instead of only from a 30px sash between the controls. */
+/* One grip for the chrome band. The window is draggable from any point in it —
+   including the bar's own top padding and the traffic-light strip — instead of
+   only from a 30px sash between the controls.
+
+   It stops short of both side columns on purpose. The right panel toggle is
+   portaled to <body> (z-index reasons, see 30-conversation.css) and the left
+   toggle is a sibling of this element, not a descendant, so neither can rely
+   on `no-drag` punching a hole: Electron only lets a drag region's own
+   descendants opt back in, and a control sitting under a drag region becomes
+   dead — the window starts a drag instead of delivering the click. Keeping the
+   controls outside the region's geometry sidesteps that rule entirely. */
 body[data-islands-ui] .isl-topbarGrip {
   position: absolute;
-  inset: 0;
+  inset: 0 calc(var(--isl-gap) + 36px) 0 44px;
   pointer-events: auto;
   -webkit-app-region: drag;
+}
+
+/* macOS draws its traffic lights inside the first 88px of this band, so the
+   bar starts at 88 and the left toggle ends at 116. */
+html[data-platform='darwin'] body[data-islands-ui] .isl-topbarGrip {
+  left: 120px;
 }
 
 /* macOS draws its traffic lights inside the first 88px of this band. */
@@ -94,5 +108,9 @@ body[data-islands-ui] .isl-topbarToggle:focus-visible {
 
   body[data-islands-ui] .isl-topbarToggle {
     display: none;
+  }
+
+  body[data-islands-ui] .isl-topbarGrip {
+    left: 0;
   }
 }
