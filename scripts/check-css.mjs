@@ -32,7 +32,6 @@ const ownAttributes = new Set([
   'data-ring',
   'data-col',
   'data-span',
-  'data-islands-sea',
   'data-islands-density',
   'data-islands-theme',
   'data-islands-age',

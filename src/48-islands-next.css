@@ -38,62 +38,7 @@ body[data-islands-ui] [data-composer-card]:focus-within {
   box-shadow: var(--isl-seam), var(--isl-ring-accent), var(--isl-shadow-card-focus);
 }
 
-/* ---- 3. Sea texture (opt-in) -------------------------------------------- */
-
-/* A horizon, not wallpaper: three soft dot layers on prime pitches, then a
-   canvas-coloured band that fades them out at the top and bottom, so the field
-   pools behind the middle of the page and never becomes dust on a card. The
-   sidebar stays crisp; only the canvas and the conversation column carry it. */
-body[data-islands-ui][data-islands-sea] [data-islands-part~="layout-frame"],
-body[data-islands-ui][data-islands-sea] [data-islands-part~="center-column"] {
-  background-image:
-    linear-gradient(
-      to bottom,
-      var(--isl-canvas) 0%,
-      transparent 30%,
-      transparent 72%,
-      var(--isl-canvas) 100%
-    ),
-    radial-gradient(circle at center, var(--isl-sea-glow) 0, var(--isl-sea-glow) 0.9px, transparent 2.4px),
-    radial-gradient(circle at center, var(--isl-sea-dot) 0, var(--isl-sea-dot) 0.7px, transparent 1.9px),
-    radial-gradient(circle at center, var(--isl-sea-dot) 0, var(--isl-sea-dot) 0.5px, transparent 1.4px);
-  background-size:
-    auto,
-    41px 41px,
-    23px 23px,
-    17px 17px;
-  background-position:
-    0 0,
-    13px 5px,
-    7px 11px,
-    0 0;
-  background-repeat: no-repeat, repeat, repeat, repeat;
-}
-
-/* The conversation card gets the field at half strength: it holds text. */
-body[data-islands-ui][data-islands-sea] [data-islands-part~="center-column"] {
-  background-image:
-    linear-gradient(
-      to bottom,
-      var(--isl-surface) 0%,
-      transparent 34%,
-      transparent 76%,
-      var(--isl-surface) 100%
-    ),
-    radial-gradient(circle at center, color-mix(in srgb, var(--isl-sea-glow) 60%, transparent) 0, color-mix(in srgb, var(--isl-sea-glow) 60%, transparent) 0.9px, transparent 2.2px),
-    radial-gradient(circle at center, color-mix(in srgb, var(--isl-sea-dot) 55%, transparent) 0, color-mix(in srgb, var(--isl-sea-dot) 55%, transparent) 0.7px, transparent 1.7px);
-  background-size:
-    auto,
-    41px 41px,
-    23px 23px;
-  background-position:
-    0 0,
-    18px 9px,
-    4px 6px;
-  background-repeat: no-repeat, repeat, repeat;
-}
-
-/* ---- 4. Density --------------------------------------------------------- */
+/* ---- 3. Density --------------------------------------------------------- */
 
 body[data-islands-ui][data-islands-density='compact'] [data-row-key^='session:'] {
   height: var(--isl-row-h-compact);
@@ -113,7 +58,7 @@ body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
   gap: 0;
 }
 
-/* ---- 5. Theme presets --------------------------------------------------- */
+/* ---- 4. Theme presets --------------------------------------------------- */
 
 /* Mist is the shipped palette; these two are whole token sets, not accents. */
 body[data-islands-ui][data-islands-theme='sand'] {
@@ -130,7 +75,6 @@ body[data-islands-ui][data-islands-theme='sand'] {
   --isl-hover: rgba(60, 42, 22, 0.05);
   --isl-active: rgba(60, 42, 22, 0.08);
   --isl-accent: #a4632a;
-  --isl-sea-dot: rgba(60, 42, 22, 0.06);
 }
 
 body[data-islands-ui][data-islands-theme='sage'] {
@@ -145,7 +89,6 @@ body[data-islands-ui][data-islands-theme='sage'] {
   --isl-border: rgba(34, 52, 30, 0.15);
   --isl-border-strong: rgba(34, 52, 30, 0.22);
   --isl-accent: #4c7a4f;
-  --isl-sea-dot: rgba(34, 52, 30, 0.06);
 }
 
 body[data-islands-ui][data-islands-theme='clay'] {
@@ -160,7 +103,6 @@ body[data-islands-ui][data-islands-theme='clay'] {
   --isl-border: rgba(58, 36, 26, 0.15);
   --isl-border-strong: rgba(58, 36, 26, 0.22);
   --isl-accent: #a8583f;
-  --isl-sea-dot: rgba(58, 36, 26, 0.065);
 }
 
 body[data-islands-ui][data-islands-theme='lilac'] {
@@ -175,7 +117,6 @@ body[data-islands-ui][data-islands-theme='lilac'] {
   --isl-border: rgba(42, 34, 66, 0.15);
   --isl-border-strong: rgba(42, 34, 66, 0.23);
   --isl-accent: #6f5bd1;
-  --isl-sea-dot: rgba(42, 34, 66, 0.06);
 }
 
 body[data-islands-ui][data-islands-theme='graphite'] {
@@ -190,7 +131,6 @@ body[data-islands-ui][data-islands-theme='graphite'] {
   --isl-border: rgba(17, 24, 39, 0.17);
   --isl-border-strong: rgba(17, 24, 39, 0.25);
   --isl-accent: #3f4652;
-  --isl-sea-dot: rgba(17, 24, 39, 0.07);
 }
 
 body[data-islands-ui][data-islands-theme='ink'] {
@@ -205,7 +145,6 @@ body[data-islands-ui][data-islands-theme='ink'] {
   --isl-border: rgba(17, 24, 39, 0.16);
   --isl-border-strong: rgba(17, 24, 39, 0.24);
   --isl-accent: #2f4bb8;
-  --isl-sea-dot: rgba(17, 24, 39, 0.06);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
@@ -219,7 +158,6 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
   --isl-border: rgba(255, 236, 214, 0.1);
   --isl-border-strong: rgba(255, 236, 214, 0.17);
   --isl-accent: #d08a4e;
-  --isl-sea-dot: rgba(255, 236, 214, 0.045);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sage'] {
@@ -233,7 +171,6 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sage'] {
   --isl-border: rgba(214, 236, 204, 0.1);
   --isl-border-strong: rgba(214, 236, 204, 0.17);
   --isl-accent: #7fb886;
-  --isl-sea-dot: rgba(214, 236, 204, 0.05);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='clay'] {
@@ -247,7 +184,6 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='clay'] {
   --isl-border: rgba(250, 232, 220, 0.1);
   --isl-border-strong: rgba(250, 232, 220, 0.17);
   --isl-accent: #d98a6b;
-  --isl-sea-dot: rgba(250, 232, 220, 0.05);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='lilac'] {
@@ -261,7 +197,6 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='lilac'] {
   --isl-border: rgba(234, 228, 255, 0.11);
   --isl-border-strong: rgba(234, 228, 255, 0.18);
   --isl-accent: #9b8bff;
-  --isl-sea-dot: rgba(234, 228, 255, 0.055);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='graphite'] {
@@ -275,7 +210,6 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='graphite'] {
   --isl-border: rgba(240, 242, 245, 0.1);
   --isl-border-strong: rgba(240, 242, 245, 0.16);
   --isl-accent: #a7b0bd;
-  --isl-sea-dot: rgba(240, 242, 245, 0.05);
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='ink'] {
@@ -286,10 +220,9 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='ink'] {
   --isl-surface-muted: #1f232b;
   --isl-surface-sunken: #13161b;
   --isl-accent: #7d98ff;
-  --isl-sea-dot: rgba(255, 255, 255, 0.05);
 }
 
-/* ---- 6. Row age mark ---------------------------------------------------- */
+/* ---- 5. Row age mark ---------------------------------------------------- */
 
 /* Recency rides the same 14px dot: solid today, half this week, hollow later.
    It stays neutral on purpose — the accent belongs to state, and a running
@@ -308,7 +241,7 @@ body[data-islands-ui] .isl-rowStatus[data-islands-age='old'] .isl-pinnedDot::aft
   box-shadow: inset 0 0 0 1.5px var(--isl-border-strong);
 }
 
-/* ---- 7. A running pin breathes ------------------------------------------ */
+/* ---- 6. A running pin breathes ------------------------------------------ */
 
 .isl-pinnedRow {
   position: relative;
@@ -345,7 +278,7 @@ body[data-islands-ui] .isl-rowStatus[data-islands-age='old'] .isl-pinnedDot::aft
   }
 }
 
-/* ---- 8. Command palette ------------------------------------------------ */
+/* ---- 7. Command palette ------------------------------------------------ */
 
 .isl-palette {
   position: fixed;
@@ -485,7 +418,7 @@ body[data-islands-ui] .isl-paletteFoot {
   font-size: 11px;
 }
 
-/* ---- 9. Contract inspector --------------------------------------------- */
+/* ---- 8. Contract inspector --------------------------------------------- */
 
 .isl-debug {
   position: fixed;
@@ -533,7 +466,7 @@ body[data-islands-ui] .isl-paletteFoot {
   white-space: pre-wrap;
   word-break: break-all;
 }
-/* ---- 10. Numbers and the theme chips ----------------------------------- */
+/* ---- 9. Numbers and the theme chips ----------------------------------- */
 
 /* Digits that change while you watch should not shift the text around them. */
 body[data-islands-ui] .isl-pinnedCount,

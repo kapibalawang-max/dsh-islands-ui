@@ -55,8 +55,8 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
-| ⌘K | **Command palette** | `⌘K` opens a centered island: sessions jump and locate, commands toggle the skin, texture, density, theme and accent |
-| 🌊 | **Texture and density** | Sea dot-matrix texture (three layers pooling into a horizon band, faded top and bottom, off by default) and compact rows (32 → 26), both on the settings page |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: sessions jump and locate, commands toggle the skin, density, theme and accent |
+| 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 68 parts and 13 regions are actually mounted, so a host upgrade shows up immediately |
@@ -122,7 +122,6 @@ Stored in `localStorage`; clear these keys to reset:
 | `dsh-islands-ui:accent` | Custom accent color; absent means follow theme |
 | `dsh-islands-ui:pinned-collapsed` | Whether the pinned group is collapsed |
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
-| `dsh-islands-ui:sea` | `1` / `0`, sea dot-matrix texture (off by default) |
 | `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
 | `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite` theme preset |
 
@@ -140,7 +139,7 @@ src/
   20-sidebar.css       workspace island, pinned shelf, session row states
   30-conversation.css  conversation page, composer, top tool group
   40-settings.css      settings dialog and section shell
-  48-islands-next.css  ridge and altitude, composer wake-up, texture, density, presets, age marks, palette, self-check
+  48-islands-next.css  ridge and altitude, composer wake-up, density, presets, age marks, palette, self-check
   50-components.css    preference rows, switches, accent picker
   60-peers.css         third-party plugin adapters ([class*=...] is allowed only here)
   host/runtime.js      host contracts, local-name extraction, part table, walker

@@ -78,8 +78,6 @@ window.__ModuleLoader__.load({
         accentDesc: '用于选中状态、滑块、发送按钮等。',
         accentDefault: '跟随主题',
         accentCustom: '自定义颜色',
-        texture: '海面点阵',
-        textureDesc: '画布与岛屿铺一层极淡的点阵，像打光的水面。',
         density: '紧凑行高',
         densityDesc: '会话行从 32px 收到 26px，一屏多看几条。',
         theme: '主题预设',
@@ -97,7 +95,6 @@ window.__ModuleLoader__.load({
         paletteEmpty: '没有匹配项',
         paletteHint: '↓ 选择 · ↵ 打开 · esc 关闭',
         paletteNew: '新建会话',
-        paletteSea: '海面点阵',
         paletteDensity: '紧凑行高',
         paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
@@ -199,8 +196,6 @@ window.__ModuleLoader__.load({
         accentDesc: 'Used for selected states, sliders, the send button and more.',
         accentDefault: 'Follow theme',
         accentCustom: 'Custom color',
-        texture: 'Sea texture',
-        textureDesc: 'A very light dot field on the canvas and the islands.',
         density: 'Compact rows',
         densityDesc: 'Session rows drop from 32px to 26px; more per screen.',
         theme: 'Theme preset',
@@ -218,7 +213,6 @@ window.__ModuleLoader__.load({
         paletteEmpty: 'Nothing matches',
         paletteHint: '↓ select · ↵ open · esc close',
         paletteNew: 'New session',
-        paletteSea: 'Sea texture',
         paletteDensity: 'Compact rows',
         paletteTheme: 'Cycle theme preset',
         paletteAccent: 'Cycle accent colour',
@@ -303,7 +297,6 @@ window.__ModuleLoader__.load({
     const ACCENT_KEY = 'dsh-islands-ui:accent';
     const DEFAULT_ACCENT = '#4176e6';
     const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
-    const SEA_KEY = 'dsh-islands-ui:sea';
     const DENSITY_KEY = 'dsh-islands-ui:density';
     const THEME_KEY = 'dsh-islands-ui:theme';
     const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite'];
@@ -479,14 +472,6 @@ window.__ModuleLoader__.load({
     /** Preferences that live beside the accent: texture, rhythm, palette. */
     const prefListeners = new Set();
 
-    function readFlag(key) {
-      try {
-        return window.localStorage.getItem(key) === '1';
-      } catch {
-        return false;
-      }
-    }
-
     function readDensity() {
       try {
         return window.localStorage.getItem(DENSITY_KEY) === 'compact' ? 'compact' : 'comfortable';
@@ -505,7 +490,7 @@ window.__ModuleLoader__.load({
     }
 
     function prefsSnapshot() {
-      return `${readFlag(SEA_KEY) ? 1 : 0}${readDensity() === 'compact' ? 1 : 0}${readTheme()}`;
+      return `${readDensity() === 'compact' ? 1 : 0}${readTheme()}`;
     }
 
     function subscribePrefs(listener) {
@@ -520,8 +505,6 @@ window.__ModuleLoader__.load({
     function applyPrefs() {
       const body = document.body;
       if (body === null) return;
-      if (readFlag(SEA_KEY)) body.setAttribute('data-islands-sea', '');
-      else body.removeAttribute('data-islands-sea');
       if (readDensity() === 'compact') body.setAttribute('data-islands-density', 'compact');
       else body.removeAttribute('data-islands-density');
       const theme = readTheme();
@@ -2400,12 +2383,6 @@ window.__ModuleLoader__.load({
           run: () => document.querySelector('[data-islands-part~="new-session"]')?.click(),
         },
         {
-          id: 'sea',
-          label: copy.paletteSea,
-          hint: readFlag(SEA_KEY) ? 'on' : 'off',
-          run: () => storePref(SEA_KEY, readFlag(SEA_KEY) ? '0' : '1'),
-        },
-        {
           id: 'density',
           label: copy.paletteDensity,
           hint: readDensity() === 'compact' ? 'on' : 'off',
@@ -2680,9 +2657,8 @@ window.__ModuleLoader__.load({
       const blocked = compat.status === 'missing';
       const [accent, setAccent] = React.useState(readAccent);
       const prefs = usePrefsSnapshot();
-      const seaOn = prefs[0] === '1';
-      const compactOn = prefs[1] === '1';
-      const themeName = prefs.slice(2);
+      const compactOn = prefs[0] === '1';
+      const themeName = prefs.slice(1);
       const chooseAccent = (color) => {
         setAccent(color);
         applyAccent(color);
@@ -2784,28 +2760,6 @@ window.__ModuleLoader__.load({
                 onChange: (event) => chooseAccent(event.target.value),
               }),
             ),
-          ),
-        ),
-        h(
-          'div',
-          { className: 'isl-prefRow' },
-          h(
-            'div',
-            { className: 'isl-prefText' },
-            h('div', { className: 'isl-prefTitle' }, copy.texture),
-            h('div', { className: 'isl-prefDesc' }, copy.textureDesc),
-          ),
-          h(
-            'button',
-            {
-              type: 'button',
-              role: 'switch',
-              className: 'isl-switch',
-              'aria-checked': seaOn,
-              'aria-label': copy.texture,
-              onClick: () => storePref(SEA_KEY, seaOn ? '0' : '1'),
-            },
-            h('span', { className: 'isl-switchThumb' }),
           ),
         ),
         h(
