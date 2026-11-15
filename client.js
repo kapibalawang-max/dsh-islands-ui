@@ -530,6 +530,7 @@ function installParts() {
         statusApproval: '等待审批',
         statusPlanReview: '等待确认计划',
         statusQuestion: '等待回答',
+        statusPending: '等待处理',
         statusDone: '已完成，未查看',
         statusIdle: '空闲',
         untitled: '未命名会话',
@@ -622,6 +623,7 @@ function installParts() {
         statusApproval: 'Waiting for approval',
         statusPlanReview: 'Waiting for plan review',
         statusQuestion: 'Waiting for an answer',
+        statusPending: 'Waiting for you',
         statusDone: 'Finished, not viewed',
         statusIdle: 'Idle',
         untitled: 'Untitled session',
@@ -2469,26 +2471,41 @@ function installParts() {
       );
     }
 
-    /** Pending-interaction kinds the workspace rows present, and their copy keys. */
-    const PINNED_PENDING_STATUS = {
-      approval: 'statusApproval',
-      'plan-review': 'statusPlanReview',
-      question: 'statusQuestion',
-    };
-
     const EMPTY_SESSION_STATUS = new Map();
+
+    /**
+     * Pending-interaction kinds are host vocabulary, so match on the word the
+     * kind carries instead of pinning an exact spelling: an unknown kind still
+     * turns the row amber rather than reporting the session as idle.
+     */
+    function pinnedPendingKey(pending) {
+      const kind = String(pending?.kind ?? pending?.type ?? '').toLowerCase();
+      if (kind.includes('approval')) return 'statusApproval';
+      if (kind.includes('plan')) return 'statusPlanReview';
+      if (kind.includes('question') || kind.includes('ask')) return 'statusQuestion';
+      return 'statusPending';
+    }
 
     /**
      * One pinned row status, with the precedence the workspace rows use:
      * pending interaction, live turn, unviewed completion, then idle.
      */
     function pinnedStatusOf(status, copy) {
-      const pending = status?.pendingInteraction;
-      const pendingKey = pending === undefined ? undefined : PINNED_PENDING_STATUS[pending.kind];
-      if (pendingKey !== undefined) return { state: 'warning', label: copy[pendingKey] };
-      if (status?.running === true) return { state: 'ongoing', label: copy.statusRunning };
-      if (status?.completionUnread === true) return { state: 'done', label: copy.statusDone };
+      if (status === null || status === undefined) return { state: 'idle', label: copy.statusIdle };
+      if (status.pendingInteraction !== null && status.pendingInteraction !== undefined) {
+        return { state: 'warning', label: copy[pinnedPendingKey(status.pendingInteraction)] };
+      }
+      if (status.running === true || status.busy === true || status.activity === 'running') {
+        return { state: 'ongoing', label: copy.statusRunning };
+      }
+      if (status.completionUnread === true) return { state: 'done', label: copy.statusDone };
       return { state: 'idle', label: copy.statusIdle };
+    }
+
+    /** The status snapshot is keyed by Session id; accept a Map or a plain record. */
+    function pinnedStatusFor(statuses, id) {
+      if (statuses === null || statuses === undefined) return undefined;
+      return typeof statuses.get === 'function' ? statuses.get(id) : statuses[id];
     }
 
     /** The shell draws live turns as a spinner and everything else as a dot. */
@@ -2743,7 +2760,7 @@ function installParts() {
                   return h(PinnedRow, {
                     key: id,
                     session,
-                    status: pinnedStatusOf(statuses?.get(id), copy),
+                    status: pinnedStatusOf(pinnedStatusFor(statuses, id), copy),
                     copy,
                     pinIcon,
                   });
