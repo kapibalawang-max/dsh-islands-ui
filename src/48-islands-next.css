@@ -40,17 +40,57 @@ body[data-islands-ui] [data-composer-card]:focus-within {
 
 /* ---- 3. Sea texture (opt-in) -------------------------------------------- */
 
-/* A calm 12px dot field. Off by default: it is a taste, not a rule. */
-body[data-islands-ui][data-islands-sea] [data-islands-part~="layout-frame"] {
-  background-image: radial-gradient(var(--isl-sea-dot) 1px, transparent 1px);
-  background-size: 12px 12px;
-  background-position: 3px 3px;
+/* A horizon, not wallpaper: three soft dot layers on prime pitches, then a
+   canvas-coloured band that fades them out at the top and bottom, so the field
+   pools behind the middle of the page and never becomes dust on a card. The
+   sidebar stays crisp; only the canvas and the conversation column carry it. */
+body[data-islands-ui][data-islands-sea] [data-islands-part~="layout-frame"],
+body[data-islands-ui][data-islands-sea] [data-islands-part~="center-column"] {
+  background-image:
+    linear-gradient(
+      to bottom,
+      var(--isl-canvas) 0%,
+      transparent 30%,
+      transparent 72%,
+      var(--isl-canvas) 100%
+    ),
+    radial-gradient(circle at center, var(--isl-sea-glow) 0, var(--isl-sea-glow) 0.9px, transparent 2.4px),
+    radial-gradient(circle at center, var(--isl-sea-dot) 0, var(--isl-sea-dot) 0.7px, transparent 1.9px),
+    radial-gradient(circle at center, var(--isl-sea-dot) 0, var(--isl-sea-dot) 0.5px, transparent 1.4px);
+  background-size:
+    auto,
+    41px 41px,
+    23px 23px,
+    17px 17px;
+  background-position:
+    0 0,
+    13px 5px,
+    7px 11px,
+    0 0;
+  background-repeat: no-repeat, repeat, repeat, repeat;
 }
 
-body[data-islands-ui][data-islands-sea] [data-islands-part~="sidebar-root"]::after,
+/* The conversation card gets the field at half strength: it holds text. */
 body[data-islands-ui][data-islands-sea] [data-islands-part~="center-column"] {
-  background-image: radial-gradient(var(--isl-sea-dot) 1px, transparent 1px);
-  background-size: 12px 12px;
+  background-image:
+    linear-gradient(
+      to bottom,
+      var(--isl-surface) 0%,
+      transparent 34%,
+      transparent 76%,
+      var(--isl-surface) 100%
+    ),
+    radial-gradient(circle at center, color-mix(in srgb, var(--isl-sea-glow) 60%, transparent) 0, color-mix(in srgb, var(--isl-sea-glow) 60%, transparent) 0.9px, transparent 2.2px),
+    radial-gradient(circle at center, color-mix(in srgb, var(--isl-sea-dot) 55%, transparent) 0, color-mix(in srgb, var(--isl-sea-dot) 55%, transparent) 0.7px, transparent 1.7px);
+  background-size:
+    auto,
+    41px 41px,
+    23px 23px;
+  background-position:
+    0 0,
+    18px 9px,
+    4px 6px;
+  background-repeat: no-repeat, repeat, repeat;
 }
 
 /* ---- 4. Density --------------------------------------------------------- */
@@ -77,6 +117,9 @@ body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
 
 /* Mist is the shipped palette; these two are whole token sets, not accents. */
 body[data-islands-ui][data-islands-theme='sand'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
   --isl-canvas: #ece7df;
   --isl-surface: #fffdf8;
   --isl-surface-muted: #f6f1e8;
@@ -90,7 +133,70 @@ body[data-islands-ui][data-islands-theme='sand'] {
   --isl-sea-dot: rgba(60, 42, 22, 0.06);
 }
 
+body[data-islands-ui][data-islands-theme='sage'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #e8ebe4;
+  --isl-surface: #fdfefb;
+  --isl-surface-muted: #f1f4ec;
+  --isl-surface-sunken: #e2e7dc;
+  --isl-border-soft: rgba(34, 52, 30, 0.1);
+  --isl-border: rgba(34, 52, 30, 0.15);
+  --isl-border-strong: rgba(34, 52, 30, 0.22);
+  --isl-accent: #4c7a4f;
+  --isl-sea-dot: rgba(34, 52, 30, 0.06);
+}
+
+body[data-islands-ui][data-islands-theme='clay'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #f0e8e3;
+  --isl-surface: #fffcf9;
+  --isl-surface-muted: #f7efea;
+  --isl-surface-sunken: #eae1da;
+  --isl-border-soft: rgba(58, 36, 26, 0.1);
+  --isl-border: rgba(58, 36, 26, 0.15);
+  --isl-border-strong: rgba(58, 36, 26, 0.22);
+  --isl-accent: #a8583f;
+  --isl-sea-dot: rgba(58, 36, 26, 0.065);
+}
+
+body[data-islands-ui][data-islands-theme='lilac'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #eae7f1;
+  --isl-surface: #fdfcff;
+  --isl-surface-muted: #f3f1f8;
+  --isl-surface-sunken: #e4e0ee;
+  --isl-border-soft: rgba(42, 34, 66, 0.1);
+  --isl-border: rgba(42, 34, 66, 0.15);
+  --isl-border-strong: rgba(42, 34, 66, 0.23);
+  --isl-accent: #6f5bd1;
+  --isl-sea-dot: rgba(42, 34, 66, 0.06);
+}
+
+body[data-islands-ui][data-islands-theme='graphite'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #e5e6e8;
+  --isl-surface: #fcfcfd;
+  --isl-surface-muted: #f0f1f3;
+  --isl-surface-sunken: #dfe1e4;
+  --isl-border-soft: rgba(17, 24, 39, 0.12);
+  --isl-border: rgba(17, 24, 39, 0.17);
+  --isl-border-strong: rgba(17, 24, 39, 0.25);
+  --isl-accent: #3f4652;
+  --isl-sea-dot: rgba(17, 24, 39, 0.07);
+}
+
 body[data-islands-ui][data-islands-theme='ink'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
   --isl-canvas: #e9ebef;
   --isl-surface: #fbfcfd;
   --isl-surface-muted: #eef1f5;
@@ -103,6 +209,8 @@ body[data-islands-ui][data-islands-theme='ink'] {
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
   --isl-canvas: #14110e;
   --isl-surface: #201b16;
   --isl-surface-muted: #2a241d;
@@ -114,7 +222,65 @@ body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
   --isl-sea-dot: rgba(255, 236, 214, 0.045);
 }
 
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sage'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #0d110d;
+  --isl-surface: #171c16;
+  --isl-surface-muted: #1f261d;
+  --isl-surface-sunken: #121712;
+  --isl-border-soft: rgba(214, 236, 204, 0.07);
+  --isl-border: rgba(214, 236, 204, 0.1);
+  --isl-border-strong: rgba(214, 236, 204, 0.17);
+  --isl-accent: #7fb886;
+  --isl-sea-dot: rgba(214, 236, 204, 0.05);
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='clay'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #14100e;
+  --isl-surface: #1f1a17;
+  --isl-surface-muted: #282220;
+  --isl-surface-sunken: #181412;
+  --isl-border-soft: rgba(250, 232, 220, 0.07);
+  --isl-border: rgba(250, 232, 220, 0.1);
+  --isl-border-strong: rgba(250, 232, 220, 0.17);
+  --isl-accent: #d98a6b;
+  --isl-sea-dot: rgba(250, 232, 220, 0.05);
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='lilac'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #100e17;
+  --isl-surface: #1a1724;
+  --isl-surface-muted: #221e2e;
+  --isl-surface-sunken: #141220;
+  --isl-border-soft: rgba(234, 228, 255, 0.08);
+  --isl-border: rgba(234, 228, 255, 0.11);
+  --isl-border-strong: rgba(234, 228, 255, 0.18);
+  --isl-accent: #9b8bff;
+  --isl-sea-dot: rgba(234, 228, 255, 0.055);
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='graphite'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #0b0c0e;
+  --isl-surface: #15171a;
+  --isl-surface-muted: #1d2024;
+  --isl-surface-sunken: #101214;
+  --isl-border-soft: rgba(240, 242, 245, 0.07);
+  --isl-border: rgba(240, 242, 245, 0.1);
+  --isl-border-strong: rgba(240, 242, 245, 0.16);
+  --isl-accent: #a7b0bd;
+  --isl-sea-dot: rgba(240, 242, 245, 0.05);
+}
+
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='ink'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
   --isl-canvas: #0d0f14;
   --isl-surface: #171a21;
   --isl-surface-muted: #1f232b;
@@ -378,7 +544,9 @@ body[data-islands-ui] .isl-paletteRowHint {
 
 .isl-themePicker {
   display: flex;
-  flex: none;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
   padding: 3px;
   border: 1px solid var(--isl-border-soft);
@@ -387,7 +555,7 @@ body[data-islands-ui] .isl-paletteRowHint {
 }
 
 body[data-islands-ui] .isl-themeChip {
-  padding: 4px 10px;
+  padding: 4px 9px;
   border: 0;
   border-radius: var(--isl-radius-xs);
   background: transparent;

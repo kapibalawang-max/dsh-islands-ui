@@ -8,3 +8,6 @@ promo/
 
 # 截图回归：基线入库，每次运行的结果不入库
 shots/*.png
+
+# shots 自动发现的端口缓存
+.shots-origin

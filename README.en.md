@@ -48,6 +48,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | :---: | --- | --- |
 | 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; flat, no drop shadows, separated by color and a 1px hairline |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
+| 🎨 | **Theme presets** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite, each with its own light and dark set (14 combinations); the accent can still override |
 | ⚙️ | **Settings page** | Settings → Islands UI: on/off, accent presets, custom color and follow-theme |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
@@ -55,7 +56,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
 | ⌘K | **Command palette** | `⌘K` opens a centered island: sessions jump and locate, commands toggle the skin, texture, density, theme and accent |
-| 🌊 | **Texture and density** | Sea dot-matrix texture (off by default) and compact rows (32 → 26), both on the settings page |
+| 🌊 | **Texture and density** | Sea dot-matrix texture (three layers pooling into a horizon band, faded top and bottom, off by default) and compact rows (32 → 26), both on the settings page |
 | 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 68 parts and 13 regions are actually mounted, so a host upgrade shows up immediately |
@@ -123,7 +124,7 @@ Stored in `localStorage`; clear these keys to reset:
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
 | `dsh-islands-ui:sea` | `1` / `0`, sea dot-matrix texture (off by default) |
 | `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
-| `dsh-islands-ui:theme` | `mist` / `sand` / `ink` theme preset |
+| `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite` theme preset |
 
 ---
 

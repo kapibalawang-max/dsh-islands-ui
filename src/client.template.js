@@ -83,10 +83,14 @@ window.__ModuleLoader__.load({
         density: '紧凑行高',
         densityDesc: '会话行从 32px 收到 26px，一屏多看几条。',
         theme: '主题预设',
-        themeDesc: '整套底色与强调色，不是单个颜色。',
+        themeDesc: '七套整体色板：画布、岛屿、描边与强调色一起变，深浅各一套。',
         themeMist: '雾',
         themeSand: '沙',
+        themeSage: '苔',
+        themeClay: '陶',
+        themeLilac: '紫',
         themeInk: '墨',
+        themeGraphite: '石',
         palettePlaceholder: '跳到会话，或输入命令',
         paletteSessions: '会话',
         paletteCommands: '命令',
@@ -200,10 +204,14 @@ window.__ModuleLoader__.load({
         density: 'Compact rows',
         densityDesc: 'Session rows drop from 32px to 26px; more per screen.',
         theme: 'Theme preset',
-        themeDesc: 'A whole palette, not a single colour.',
+        themeDesc: 'Seven whole palettes — canvas, islands, hairlines and accent, light and dark.',
         themeMist: 'Mist',
         themeSand: 'Sand',
+        themeSage: 'Sage',
+        themeClay: 'Clay',
+        themeLilac: 'Lilac',
         themeInk: 'Ink',
+        themeGraphite: 'Graphite',
         palettePlaceholder: 'Jump to a session, or type a command',
         paletteSessions: 'Sessions',
         paletteCommands: 'Commands',
@@ -298,7 +306,7 @@ window.__ModuleLoader__.load({
     const SEA_KEY = 'dsh-islands-ui:sea';
     const DENSITY_KEY = 'dsh-islands-ui:density';
     const THEME_KEY = 'dsh-islands-ui:theme';
-    const THEMES = ['mist', 'sand', 'ink'];
+    const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite'];
     const listeners = new Set();
 
     function readStored() {

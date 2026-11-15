@@ -13,6 +13,7 @@
  */
 import { createRequire } from 'node:module';
 import { mkdirSync, existsSync, writeFileSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash, createHmac } from 'node:crypto';
@@ -29,8 +30,35 @@ const BASE = join(SHOTS, 'baseline');
 const TOLERANCE = Number(process.env.SHOT_TOLERANCE ?? '0.002');
 const UPDATE = process.argv.includes('--update');
 
-const ORIGIN = process.env.DSH_ORIGIN ?? 'http://127.0.0.1:55574';
 const SECRET = process.env.DSH_AUTH_SECRET ?? '';
+
+/** The web port is chosen per launch, so discover it instead of hard-coding one.
+ *  Order: DSH_ORIGIN, the last origin this script found, then whatever local
+ *  server answers with the shell's auth challenge. */
+async function discoverOrigin() {
+  if (process.env.DSH_ORIGIN) return process.env.DSH_ORIGIN;
+  const cache = join(ROOT, '.shots-origin');
+  const candidates = [];
+  if (existsSync(cache)) candidates.push(readFileSync(cache, 'utf8').trim());
+  const lsof = spawnSync('lsof', ['-nP', '-iTCP', '-sTCP:LISTEN'], { encoding: 'utf8' });
+  for (const line of (lsof.stdout ?? '').split('\n')) {
+    const m = /127\.0\.0\.1:(\d+)/.exec(line);
+    if (m && !candidates.includes(`http://127.0.0.1:${m[1]}`)) candidates.push(`http://127.0.0.1:${m[1]}`);
+  }
+  for (const origin of candidates) {
+    try {
+      const res = await fetch(origin + '/', { signal: AbortSignal.timeout(1200) });
+      const text = await res.text();
+      if (res.status === 401 && text.includes('dsh web authentication')) {
+        writeFileSync(cache, origin);
+        return origin;
+      }
+    } catch {
+      /* not this one */
+    }
+  }
+  throw new Error('no DSH web server found; set DSH_ORIGIN (e.g. http://127.0.0.1:61287)');
+}
 
 if (SECRET === '') {
   console.error('set DSH_AUTH_SECRET (the browser-session secret) before running shots');
@@ -49,6 +77,8 @@ function authCookie() {
   const mac = createHmac('sha256', key).update(body).digest('base64url');
   return { name, value: `v1.${body}.${mac}`, url: ORIGIN };
 }
+
+let ORIGIN = process.env.DSH_ORIGIN ?? '';
 
 const shots = [
   {
@@ -86,6 +116,8 @@ const shots = [
     },
   },
 ];
+
+ORIGIN = await discoverOrigin();
 
 mkdirSync(BASE, { recursive: true });
 

@@ -78,8 +78,8 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | ⌨️ | **快捷键** | `⌘B` 折叠工作区、`⌥⌘B` 右侧栏、`⌘,` 设置；按钮悬停显示当前键位 |
 | 🪟 | **岛脊与海拔** | 每座岛顶部一条 1px 内高光收住边缘；被内容压住的面板叠一圈柔和投影，滚动后再抬一档，层级不再只靠色块 |
 | ⌘K | **浮岛命令面板** | `⌘K` 打开居中面板：会话即跳即定位，命令行切皮肤、纹理、紧凑、主题与强调色 |
-| 🌊 | **纹理与密度** | 海面点阵纹理（默认关）、紧凑行高（32 → 26），都在设置页 |
-| 🎨 | **主题预设** | Mist / Sand / Ink 三套，深浅各自成套；强调色仍可单独覆盖 |
+| 🌊 | **纹理与密度** | 海面点阵纹理（三层点阵在中段聚成地平线，上下渐隐，默认关）、紧凑行高（32 → 26），都在设置页 |
+| 🎨 | **主题预设** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite 七套，深浅各自成套（14 种组合）；强调色仍可单独覆盖 |
 | 🕰 | **行龄点** | 会话行首的点按“今天 / 本周 / 更早”变为实心、混色、空心；状态色仍归状态 |
 | 🩺 | **契约自检** | `?islands-debug=1` 在右下角列出 68 个部件、13 个区域的实际命中，宿主升级后一眼看出哪块失效 |
 | 📸 | **视觉回归** | `npm run shots` 拍四张基线图并做像素比对，改样式前先看差分 |
@@ -136,7 +136,7 @@ Windows 下不渲染插件顶栏，岛屿直接接在原生标题栏下方；工
 | `dsh-islands-ui:rail` | 左侧栏图标的顺序与隐藏列表 |
 | `dsh-islands-ui:sea` | `1` / `0`，海面点阵纹理（默认关） |
 | `dsh-islands-ui:density` | `compact` 表示紧凑行高，缺省为标准 |
-| `dsh-islands-ui:theme` | `mist` / `sand` / `ink`，主题预设 |
+| `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite`，主题预设 |
 
 清除这些 key 即可恢复默认。
 
@@ -173,7 +173,7 @@ docs/                  发布、商店收录与宿主契约说明
 npm run build        # 修改 src/*.css 或模板后重新生成 client.js
 npm run check        # 校验 client.js、CSS/部件门禁、单元测试和 npm 包
 npm run pack:check   # npm pack --dry-run
-npm run shots        # 截图并比对基线（-- --update 重写）
+npm run shots        # 截图并比对基线（-- --update 重写；端口自动发现，可用 DSH_ORIGIN 覆盖）
 npm pack             # 生成 dsh-islands-ui-<version>.tgz
 ```
 

@@ -37,6 +37,9 @@ body[data-islands-ui] {
   --isl-shadow-float: 0 18px 48px -20px rgba(17, 24, 39, 0.3), 0 2px 6px rgba(17, 24, 39, 0.06);
   --isl-ring-accent: 0 0 0 1px color-mix(in srgb, var(--isl-accent) 34%, transparent);
   --isl-sea-dot: rgba(17, 24, 39, 0.055);
+  /* The sparse, larger dots take the accent, so the field reads as light on
+     water instead of noise. */
+  --isl-sea-glow: color-mix(in srgb, var(--isl-accent) 10%, transparent);
   /* Row rhythm: density mode only moves these two numbers. */
   --isl-row-h: 32px;
   --isl-row-h-compact: 26px;
@@ -158,6 +161,7 @@ body[data-islands-ui][data-ds-dark-theme] {
   --isl-shadow-island-raised: 0 16px 36px -20px rgba(0, 0, 0, 0.75);
   --isl-shadow-float: 0 20px 52px -20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
   --isl-sea-dot: rgba(255, 255, 255, 0.045);
+  --isl-sea-glow: color-mix(in srgb, var(--isl-accent) 12%, transparent);
   --isl-active: rgba(255, 255, 255, 0.1);
   --dsw-alias-label-tertiary: #adb2b8;
   --dsw-alias-label-caption: #81858c;
