@@ -50,6 +50,30 @@ body[data-islands-ui] [data-islands-part~="hero-headline"] {
   letter-spacing: -0.01em;
 }
 
+/* New-session hero: the question replaces the shipped headline. Both spans of
+   the title group step aside (the headline text and the preview badge) so the
+   replacement inherits the host's type scale instead of restating it. The
+   group is found structurally: it is the box whose direct child carries the
+   headline part, so no host class name is involved. */
+body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]) > span {
+  display: none;
+}
+
+body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]):after {
+  content: '你今天要做些什么？';
+}
+
+html[lang^='en'] body[data-islands-ui] [data-slot='conversation.hero.frame'] *:has(> [data-islands-part~="hero-headline"]):after {
+  content: 'What would you like to do today?';
+}
+
+/* The hero brand seat keeps the host's square geometry; only the artwork
+   changes, so the mark inherits the shipped hover sway. */
+body[data-islands-ui] .isl-heroMark {
+  display: block;
+  object-fit: contain;
+}
+
 body[data-islands-ui] [data-islands-part~="hero-workspace"] {
   border-radius: 999px;
   background: var(--isl-surface-muted);

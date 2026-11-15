@@ -487,7 +487,7 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   gap: 6px;
   width: 100%;
   height: 32px;
-  padding: 0 8px 0 34px;
+  padding: 0 8px 0 14px;
   border: 0;
   border-radius: var(--isl-radius-sm);
   background: transparent;
@@ -625,4 +625,102 @@ body[data-islands-ui] [data-islands-part~="sidebar-root"]:not([data-islands-part
 body[data-islands-ui] [data-islands-part~="sidebar-root"] [data-islands-part~="panel-entry-active"] [data-islands-part~="panel-row"] {
   background: var(--dsw-specific-sidebar-nav-item-active-accent);
   color: var(--dsw-alias-state-business-primary);
+}
+
+/* The pinned row leads with the same live status the workspace rows carry. The
+   14px cell keeps the title indented where the workspace rows start it. */
+.isl-pinnedStatus {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--dsw-alias-state-idle-primary);
+}
+
+.isl-pinnedStatus[data-islands-state=ongoing] {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.isl-pinnedStatus[data-islands-state=warning] {
+  color: var(--dsw-alias-state-warn-primary);
+}
+
+.isl-pinnedStatus[data-islands-state=done] {
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.isl-pinnedDot {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.isl-pinnedDot::after {
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.isl-pinnedSpinner {
+  flex: none;
+}
+
+.isl-pinnedSpinnerMotion {
+  transform-origin: center;
+  animation: isl-pinned-spin 1.5s linear infinite;
+}
+
+.isl-pinnedSpinnerTrack,
+.isl-pinnedSpinnerArc {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.isl-pinnedSpinnerTrack {
+  opacity: 0.25;
+}
+
+.isl-pinnedSpinnerArc {
+  stroke-dasharray: 12 150;
+  animation: isl-pinned-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes isl-pinned-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes isl-pinned-dash {
+  0% {
+    stroke-dasharray: 12 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 24 150;
+    stroke-dashoffset: -6;
+  }
+  100% {
+    stroke-dasharray: 12 150;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isl-pinnedSpinnerMotion,
+  .isl-pinnedSpinnerArc {
+    animation: none;
+  }
+
+  .isl-pinnedSpinnerArc {
+    stroke-dasharray: 18 150;
+    stroke-dashoffset: -3;
+  }
 }

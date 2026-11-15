@@ -268,29 +268,11 @@ body[data-islands-ui] .isl-railMenuEmpty {
   font-size: 12px;
 }
 
-/* Settings gear pinned above the account avatar. */
-body[data-islands-ui] .isl-railSettings {
-  display: none;
-}
-
-body[data-islands-ui] .isl-railSettings {
-  position: fixed;
-  left: calc(var(--isl-gap) + (var(--isl-rail-width) - 36px) / 2);
-  bottom: 56px;
-  z-index: 26;
-  display: grid;
-  place-items: center;
-}
-
 /* Narrow desktop: the rail is the persistent navigation; the workspace is a
    drawer opened from its home button. Both the rail and its menus must sit
    above the drawer (71) and the drawer mask (70). */
 @media (width <= 767px) {
   body[data-islands-ui] .isl-rail {
-    z-index: 72;
-  }
-
-  body[data-islands-ui] .isl-railSettings {
     z-index: 72;
   }
 
