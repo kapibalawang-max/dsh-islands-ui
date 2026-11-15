@@ -757,14 +757,19 @@ window.__ModuleLoader__.load({
 
     function revealPinnedSession(sessionId, title) {
       const projectRows = () => [...document.querySelectorAll(HOST.WORKSPACE_ROW)];
-      const stateOf = (row) =>
-        row.getAttribute('aria-expanded') ??
-        row.querySelector('[aria-expanded]')?.getAttribute('aria-expanded');
-      const expanded = (row) => stateOf(row) === 'true';
-      const toggle = (row) => {
-        const chevron = row.querySelector('[aria-expanded]');
-        if (chevron instanceof HTMLElement) chevron.click();
-        else row.click();
+      const expanded = (row) => row.getAttribute('aria-expanded') === 'true';
+      // Click the row itself: its own aria-expanded is the group state, while the
+      // row's action menu button also exposes aria-expanded and opens that menu
+      // when clicked, which used to swallow the whole gesture.
+      const toggle = (row) => row.click();
+      const matches = () => {
+        const wanted = (title ?? '').trim();
+        const rows = [...document.querySelectorAll(HOST.SESSION_ROW)];
+        const exact = rows.find((row) => (row.textContent ?? '').trim() === wanted);
+        const loose = wanted === ''
+          ? undefined
+          : rows.find((row) => (row.textContent ?? '').includes(wanted));
+        return exact ?? loose;
       };
 
       // Expand every workspace briefly so the target session exists in the DOM.
@@ -772,12 +777,17 @@ window.__ModuleLoader__.load({
         if (!expanded(row)) toggle(row);
       }
 
-      window.setTimeout(() => {
-        const candidates = [...document.querySelectorAll(HOST.SESSION_ROW)].filter((row) =>
-          (row.textContent ?? '').includes(title),
-        );
-        if (candidates.length === 0) return;
-        const row = candidates[0];
+      let attempts = 0;
+      const locate = () => {
+        const found = matches();
+        if (found === undefined) {
+          if (attempts < 8) {
+            attempts += 1;
+            window.setTimeout(locate, 120);
+          }
+          return;
+        }
+        const row = found;
 
         // The owner is the nearest preceding Workspace row; nested ancestors stay open.
         let owner = null;
@@ -801,7 +811,8 @@ window.__ModuleLoader__.load({
           row.classList.add('isl-located');
           window.setTimeout(() => row.classList.remove('isl-located'), 1400);
         }, 140);
-      }, 180);
+      };
+      window.setTimeout(locate, 180);
     }
 
     function PinGlyph() {
