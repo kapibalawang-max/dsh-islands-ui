@@ -2500,6 +2500,11 @@ window.__ModuleLoader__.load({
         const onKey = (event) => {
           if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return;
           if (event.key !== 'k' && event.key !== 'K') return;
+          // A modal dialog owns the keyboard: opening a palette on top of it
+          // would let one Escape close both.
+          const paletteOpen = document.querySelector('[role="dialog"].isl-palette') !== null;
+          const otherModal = document.querySelector('[role="dialog"][aria-modal="true"]:not(.isl-palette)') !== null;
+          if (!paletteOpen && otherModal) return;
           event.preventDefault();
           event.stopPropagation();
           setOpen((value) => {
@@ -2512,6 +2517,20 @@ window.__ModuleLoader__.load({
         window.addEventListener('keydown', onKey, true);
         return () => window.removeEventListener('keydown', onKey, true);
       }, [enabled]);
+
+      // Escape is handled in the capture phase, while the palette is open, so a
+      // dialog underneath never sees the same keystroke.
+      React.useEffect(() => {
+        if (!open) return undefined;
+        const onEscape = (event) => {
+          if (event.key !== 'Escape') return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          close();
+        };
+        window.addEventListener('keydown', onEscape, true);
+        return () => window.removeEventListener('keydown', onEscape, true);
+      }, [open]);
 
       // Remember where the user was, so closing hands the keyboard back.
       React.useEffect(() => {
@@ -2585,6 +2604,11 @@ window.__ModuleLoader__.load({
           const card = event.currentTarget;
           const focusables = card.querySelectorAll('input, button');
           if (focusables.length === 0) return;
+          if (focusables.length === 1) {
+            event.preventDefault();
+            focusables[0].focus();
+            return;
+          }
           const first = focusables[0];
           const last = focusables[focusables.length - 1];
           if (event.shiftKey && document.activeElement === first) {
@@ -2639,11 +2663,11 @@ window.__ModuleLoader__.load({
                   seen += 1;
                   const position = seen;
                   return h(
-                    'button',
+                    'div',
                     {
                       key: item.id,
-                      type: 'button',
                       role: 'option',
+                      tabIndex: -1,
                       'aria-selected': position === index,
                       className: 'isl-paletteRow',
                       'data-on': position === index ? 'true' : 'false',
