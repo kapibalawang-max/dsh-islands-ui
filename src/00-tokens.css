@@ -15,9 +15,9 @@ body[data-islands-ui] {
   --isl-surface-muted: #f3f5f8;
   --isl-surface-sunken: #eceef3;
   /* Hairlines: Islands uses tinted, very quiet borders. */
-  --isl-border-soft: rgba(17, 24, 39, 0.06);
-  --isl-border: rgba(17, 24, 39, 0.09);
-  --isl-border-strong: rgba(17, 24, 39, 0.14);
+  --isl-border-soft: rgba(17, 24, 39, 0.10);
+  --isl-border: rgba(17, 24, 39, 0.14);
+  --isl-border-strong: rgba(17, 24, 39, 0.20);
   --isl-hover: rgba(17, 24, 39, 0.055);
   --isl-active: rgba(17, 24, 39, 0.09);
   --isl-accent: #4176e6;
