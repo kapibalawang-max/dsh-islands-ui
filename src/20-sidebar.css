@@ -640,7 +640,7 @@ body[data-islands-ui] [data-islands-part~="sidebar-root"] [data-islands-part~="p
 }
 
 .isl-pinnedStatus[data-islands-state=ongoing] {
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--dsw-alias-state-business-primary);
 }
 
 .isl-pinnedStatus[data-islands-state=warning] {
@@ -667,6 +667,34 @@ body[data-islands-ui] [data-row-key^="session:"] > span:first-child {
   align-items: center;
   justify-content: center;
   width: 14px;
+}
+
+/* The shell paints the running ring in the neutral label colour, so a busy row
+   looked exactly like an idle one. State marks take the dot's seat: the running
+   ring wears the accent, and the finished or waiting states keep the hues the
+   pinned block uses. A slightly heavier stroke keeps a 14px ring legible. */
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state] {
+  color: var(--dsw-alias-state-idle-primary);
+}
+
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state=ongoing] {
+  color: var(--dsw-alias-state-business-primary);
+}
+
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state=warning] {
+  color: var(--dsw-alias-state-warn-primary);
+}
+
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state=done] {
+  color: var(--dsw-alias-state-success-primary);
+}
+
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state=error] {
+  color: var(--dsw-alias-state-error-primary);
+}
+
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-state] circle {
+  stroke-width: 2.6;
 }
 
 .isl-pinnedDot::after {
