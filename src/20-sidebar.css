@@ -452,7 +452,7 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   flex: none;
   color: var(--dsw-alias-label-tertiary);
   transform: rotate(-90deg);
-  transition: transform 0.12s var(--ds-ease-in-out);
+  transition: transform var(--isl-dur-fast) var(--ds-ease-in-out);
 }
 
 .isl-pinned[data-open] .isl-pinnedChevron {
@@ -548,8 +548,8 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   color: var(--dsw-alias-label-tertiary);
   cursor: pointer;
   transition:
-    background-color 0.12s var(--ds-ease-in-out),
-    color 0.12s var(--ds-ease-in-out);
+    background-color var(--isl-dur-fast) var(--ds-ease-in-out),
+    color var(--isl-dur-fast) var(--ds-ease-in-out);
 }
 
 .isl-pinnedRow:hover .isl-pinnedPinBtn,

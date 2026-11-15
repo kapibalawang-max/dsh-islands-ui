@@ -49,9 +49,9 @@ body[data-islands-ui] .isl-railBtn {
   cursor: pointer;
   touch-action: none;
   transition:
-    background-color 0.12s var(--ds-ease-in-out),
-    color 0.12s var(--ds-ease-in-out),
-    opacity 0.12s var(--ds-ease-in-out);
+    background-color var(--isl-dur-fast) var(--ds-ease-in-out),
+    color var(--isl-dur-fast) var(--ds-ease-in-out),
+    opacity var(--isl-dur-fast) var(--ds-ease-in-out);
 }
 
 body[data-islands-ui] .isl-railBtn:hover {
@@ -243,7 +243,7 @@ body[data-islands-ui] .isl-railMenuCheck {
   width: 18px;
   height: 18px;
   border: 1px solid var(--isl-border-soft);
-  border-radius: 6px;
+  border-radius: var(--isl-radius-xs);
   color: transparent;
 }
 

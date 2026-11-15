@@ -16,7 +16,7 @@ body[data-islands-ui] [data-islands-part~="settings-panel"] {
   width: 860px;
   background: var(--isl-surface);
   border: 1px solid var(--isl-border-soft);
-  border-radius: 24px;
+  border-radius: var(--isl-radius-2xl);
   box-shadow: var(--isl-shadow-float);
   padding: 10px;
   gap: 8px;
@@ -25,7 +25,7 @@ body[data-islands-ui] [data-islands-part~="settings-panel"] {
 
 body[data-islands-ui] [data-islands-part~="settings-nav-title"] {
   padding: 8px 8px 6px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }

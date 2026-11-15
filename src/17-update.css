@@ -47,10 +47,10 @@ body[data-islands-ui] .isl-updateButton {
     0 2px 6px -1px color-mix(in srgb, var(--isl-update-bg) 38%, transparent),
     0 8px 18px -10px color-mix(in srgb, var(--isl-update-bg) 62%, transparent);
   transition:
-    background-color 0.15s var(--ds-ease-in-out),
-    box-shadow 0.15s var(--ds-ease-in-out),
-    transform 0.15s var(--ds-ease-in-out),
-    border-color 0.15s var(--ds-ease-in-out);
+    background-color var(--isl-dur-base) var(--ds-ease-in-out),
+    box-shadow var(--isl-dur-base) var(--ds-ease-in-out),
+    transform var(--isl-dur-base) var(--ds-ease-in-out),
+    border-color var(--isl-dur-base) var(--ds-ease-in-out);
 }
 
 body[data-islands-ui] .isl-updateButton.is-clickable {
