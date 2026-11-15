@@ -174,7 +174,7 @@ body[data-islands-ui] .isl-railMenu {
 body[data-islands-ui] .isl-railMenuTitle {
   padding: 4px 8px 6px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 
@@ -228,7 +228,7 @@ body[data-islands-ui] .isl-railMenuLabel {
 
 body[data-islands-ui] .isl-railMenuSub {
   color: var(--dsw-alias-label-tertiary);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 14px;
   white-space: nowrap;
   overflow: hidden;
@@ -258,7 +258,7 @@ body[data-islands-ui] .isl-railMenuHint {
   padding: 6px 8px 2px;
   border-top: 1px solid var(--isl-border-soft);
   color: var(--dsw-alias-label-tertiary);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 14px;
 }
 

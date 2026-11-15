@@ -161,7 +161,7 @@ body[data-islands-ui] :focus-visible {
   gap: 6px;
   margin-top: 10px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 
@@ -171,7 +171,7 @@ body[data-islands-ui] :focus-visible {
   background: var(--isl-surface-muted);
   color: var(--dsw-alias-label-secondary);
   font-family: var(--dsw-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .isl-settingsMetaSeparator {
@@ -257,9 +257,8 @@ body[data-islands-ui] :focus-visible {
   align-items: flex-start;
   gap: 6px;
   width: min(380px, calc(100vw - 32px));
-  padding: 12px 10px 12px 14px;
+  padding: 12px 14px;
   border: 1px solid rgba(224, 160, 24, 0.5);
-  border-left: 3px solid #e0a018;
   border-radius: var(--isl-radius-lg, 16px);
   background: var(--dsw-alias-bg-overlay, #ffffff);
   color: var(--dsw-alias-label-primary, #1f2328);
@@ -386,7 +385,7 @@ body[data-islands-ui] :focus-visible {
   border-radius: 4px;
   background: rgba(17, 24, 39, 0.06);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .isl-compatBannerAction {

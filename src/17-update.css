@@ -17,8 +17,8 @@ body[data-islands-ui] [data-islands-part~="update-badge"] {
 }
 
 body[data-islands-ui] {
-  --isl-update-bg: #4176e6;
-  --isl-update-bg-hover: #3264d4;
+  --isl-update-bg: var(--isl-accent);
+  --isl-update-bg-hover: color-mix(in srgb, var(--isl-accent) 86%, #000);
   --isl-update-danger: #d93a40;
 }
 
@@ -375,6 +375,6 @@ body[data-islands-ui] .isl-updateShowcaseLabel {
 body[data-islands-ui] .isl-updateShowcasePhase {
   color: var(--dsw-alias-label-tertiary);
   font-family: var(--ds-font-family-code, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 14px;
 }
