@@ -76,6 +76,13 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🌙 | **深色模式** | 完整深色 token：近黑画布、深灰岛屿、白色透明交互层与深色阴影 |
 | 🔄 | **桌面更新入口** | 设置齿轮上方常驻；发现新版本、下载、校验、安装与失败各有独立状态，加载态使用强调色 3×3 点阵动效 |
 | ⌨️ | **快捷键** | `⌘B` 折叠工作区、`⌥⌘B` 右侧栏、`⌘,` 设置；按钮悬停显示当前键位 |
+| 🪟 | **岛脊与海拔** | 每座岛顶部一条 1px 内高光收住边缘；被内容压住的面板叠一圈柔和投影，滚动后再抬一档，层级不再只靠色块 |
+| ⌘K | **浮岛命令面板** | `⌘K` 打开居中面板：会话即跳即定位，命令行切皮肤、纹理、紧凑、主题与强调色 |
+| 🌊 | **纹理与密度** | 海面点阵纹理（默认关）、紧凑行高（32 → 26），都在设置页 |
+| 🎨 | **主题预设** | Mist / Sand / Ink 三套，深浅各自成套；强调色仍可单独覆盖 |
+| 🕰 | **行龄点** | 会话行首的点按“今天 / 本周 / 更早”变为实心、混色、空心；状态色仍归状态 |
+| 🩺 | **契约自检** | `?islands-debug=1` 在右下角列出 68 个部件、13 个区域的实际命中，宿主升级后一眼看出哪块失效 |
+| 📸 | **视觉回归** | `npm run shots` 拍四张基线图并做像素比对，改样式前先看差分 |
 
 皮肤是纯客户端样式层；左侧栏图标排序与显隐、置顶聚合、定位与设置页也都在浏览器端完成，不新增 host 工具、服务或会话数据。
 
@@ -84,7 +91,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 层级 | 规则 |
 | --- | --- |
 | 画布 | 纯色 `#f2f2f2`（深色 `#0f1012`），不透明、无毛玻璃 |
-| 岛屿 | 白色 / 深灰表面，16–20px 圆角，1px 发丝描边，无投影 |
+| 岛屿 | 白色 / 深灰表面，16–20px 圆角，1px 发丝描边；顶部 1px 内高光当“脊”，被内容压住时加柔和投影 |
 | 间距 | 所有岛屿统一 5px 间隙，左右、顶部、底部、底部面板四周一致 |
 | 字号 | 最小 12px，12 / 13 / 14px 为主力档位，层级靠字重与颜色区分 |
 | 顶部栏 | 40px 窗口栏，承载对话工具组和右侧栏开关；macOS 避开红绿灯，Linux 从 8px 开始。Windows 不渲染该顶栏：标题栏保留原生侧栏开关，右侧工具回到会话头原生位置 |
@@ -98,7 +105,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | `⌥⌘B` / `Ctrl+Alt+B` | 打开 / 关闭右侧栏 |
 | `⌘,` / `Ctrl+,` | 打开设置 |
 | `⌘N` / `Ctrl+N` | 新会话 |
-| `⌘K` / `Ctrl+K` | 搜索会话 |
+| `⌘K` / `Ctrl+K` | 浮岛命令面板：会话跳转与皮肤开关（皮肤接管，`↩` 执行、`esc` 关闭） |
 | `⌘/` / `Ctrl+/` | 快捷键向导 |
 
 > 快捷键沿用 Harness 的绑定系统，可在「设置 → 快捷键」里重新绑定；悬停对应按钮会显示当前键位。
@@ -127,6 +134,9 @@ Windows 下不渲染插件顶栏，岛屿直接接在原生标题栏下方；工
 | `dsh-islands-ui:accent` | 自定义强调色（不存在表示跟随主题） |
 | `dsh-islands-ui:pinned-collapsed` | 置顶分类是否折叠 |
 | `dsh-islands-ui:rail` | 左侧栏图标的顺序与隐藏列表 |
+| `dsh-islands-ui:sea` | `1` / `0`，海面点阵纹理（默认关） |
+| `dsh-islands-ui:density` | `compact` 表示紧凑行高，缺省为标准 |
+| `dsh-islands-ui:theme` | `mist` / `sand` / `ink`，主题预设 |
 
 清除这些 key 即可恢复默认。
 
@@ -143,6 +153,7 @@ src/
   20-sidebar.css       工作区岛屿、置顶聚合、会话行状态
   30-conversation.css  会话页、输入框、顶部工具组
   40-settings.css      设置弹窗、设置页外壳
+  48-islands-next.css  岛脊与海拔、输入卡唤醒、纹理、密度、主题预设、行龄、命令面板、自检浮层
   50-components.css    偏好行、开关、强调色选择器等共享组件
   60-peers.css         第三方插件适配（仅此文件允许 [class*=...]）
   host/runtime.js      宿主契约、本地名提取、区域/部件表、遍历器
@@ -152,6 +163,7 @@ client.js              构建产物（自包含，运行时无法读文件）
 scripts/check-css.mjs  选择器门禁
 scripts/check-parts.mjs 部件表门禁
 scripts/check-package.mjs  发布前包内容校验
+scripts/shots.mjs     无头截图与像素回归（`npm run shots`）
 test/                 本地名与表完整性测试
 skin.json              主题管理器清单
 docs/                  发布、商店收录与宿主契约说明
@@ -161,6 +173,7 @@ docs/                  发布、商店收录与宿主契约说明
 npm run build        # 修改 src/*.css 或模板后重新生成 client.js
 npm run check        # 校验 client.js、CSS/部件门禁、单元测试和 npm 包
 npm run pack:check   # npm pack --dry-run
+npm run shots        # 截图并比对基线（-- --update 重写）
 npm pack             # 生成 dsh-islands-ui-<version>.tgz
 ```
 

@@ -5,3 +5,6 @@ npm-debug.log*
 promo/
 
 .debug/
+
+# 截图回归：基线入库，每次运行的结果不入库
+shots/*.png

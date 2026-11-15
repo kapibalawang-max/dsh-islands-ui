@@ -78,6 +78,30 @@ window.__ModuleLoader__.load({
         accentDesc: '用于选中状态、滑块、发送按钮等。',
         accentDefault: '跟随主题',
         accentCustom: '自定义颜色',
+        texture: '海面点阵',
+        textureDesc: '画布与岛屿铺一层极淡的点阵，像打光的水面。',
+        density: '紧凑行高',
+        densityDesc: '会话行从 32px 收到 26px，一屏多看几条。',
+        theme: '主题预设',
+        themeDesc: '整套底色与强调色，不是单个颜色。',
+        themeMist: '雾',
+        themeSand: '沙',
+        themeInk: '墨',
+        palettePlaceholder: '跳到会话，或输入命令',
+        paletteSessions: '会话',
+        paletteCommands: '命令',
+        paletteEmpty: '没有匹配项',
+        paletteHint: '↓ 选择 · ↵ 打开 · esc 关闭',
+        paletteNew: '新建会话',
+        paletteSea: '海面点阵',
+        paletteDensity: '紧凑行高',
+        paletteTheme: '切换主题预设',
+        paletteAccent: '切换强调色',
+        paletteEnable: '启用 Islands 界面',
+        debugTitle: '契约自检',
+        debugOk: '全部命中',
+        debugMiss: '缺失',
+        debugRegions: '区域',
         models: '选择模型',
         effort: '推理等级',
         back: '返回',
@@ -171,6 +195,30 @@ window.__ModuleLoader__.load({
         accentDesc: 'Used for selected states, sliders, the send button and more.',
         accentDefault: 'Follow theme',
         accentCustom: 'Custom color',
+        texture: 'Sea texture',
+        textureDesc: 'A very light dot field on the canvas and the islands.',
+        density: 'Compact rows',
+        densityDesc: 'Session rows drop from 32px to 26px; more per screen.',
+        theme: 'Theme preset',
+        themeDesc: 'A whole palette, not a single colour.',
+        themeMist: 'Mist',
+        themeSand: 'Sand',
+        themeInk: 'Ink',
+        palettePlaceholder: 'Jump to a session, or type a command',
+        paletteSessions: 'Sessions',
+        paletteCommands: 'Commands',
+        paletteEmpty: 'Nothing matches',
+        paletteHint: '↓ select · ↵ open · esc close',
+        paletteNew: 'New session',
+        paletteSea: 'Sea texture',
+        paletteDensity: 'Compact rows',
+        paletteTheme: 'Cycle theme preset',
+        paletteAccent: 'Cycle accent colour',
+        paletteEnable: 'Enable Islands UI',
+        debugTitle: 'Contract inspector',
+        debugOk: 'all present',
+        debugMiss: 'missing',
+        debugRegions: 'regions',
         models: 'Select model',
         effort: 'Reasoning',
         back: 'Back',
@@ -247,6 +295,10 @@ window.__ModuleLoader__.load({
     const ACCENT_KEY = 'dsh-islands-ui:accent';
     const DEFAULT_ACCENT = '#4176e6';
     const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
+    const SEA_KEY = 'dsh-islands-ui:sea';
+    const DENSITY_KEY = 'dsh-islands-ui:density';
+    const THEME_KEY = 'dsh-islands-ui:theme';
+    const THEMES = ['mist', 'sand', 'ink'];
     const listeners = new Set();
 
     function readStored() {
@@ -414,6 +466,69 @@ window.__ModuleLoader__.load({
       } catch {
         /* private mode: keep the session choice. */
       }
+    }
+
+    /** Preferences that live beside the accent: texture, rhythm, palette. */
+    const prefListeners = new Set();
+
+    function readFlag(key) {
+      try {
+        return window.localStorage.getItem(key) === '1';
+      } catch {
+        return false;
+      }
+    }
+
+    function readDensity() {
+      try {
+        return window.localStorage.getItem(DENSITY_KEY) === 'compact' ? 'compact' : 'comfortable';
+      } catch {
+        return 'comfortable';
+      }
+    }
+
+    function readTheme() {
+      try {
+        const stored = window.localStorage.getItem(THEME_KEY);
+        return THEMES.includes(stored) ? stored : 'mist';
+      } catch {
+        return 'mist';
+      }
+    }
+
+    function prefsSnapshot() {
+      return `${readFlag(SEA_KEY) ? 1 : 0}${readDensity() === 'compact' ? 1 : 0}${readTheme()}`;
+    }
+
+    function subscribePrefs(listener) {
+      prefListeners.add(listener);
+      return () => prefListeners.delete(listener);
+    }
+
+    function usePrefsSnapshot() {
+      return React.useSyncExternalStore(subscribePrefs, prefsSnapshot, prefsSnapshot);
+    }
+
+    function applyPrefs() {
+      const body = document.body;
+      if (body === null) return;
+      if (readFlag(SEA_KEY)) body.setAttribute('data-islands-sea', '');
+      else body.removeAttribute('data-islands-sea');
+      if (readDensity() === 'compact') body.setAttribute('data-islands-density', 'compact');
+      else body.removeAttribute('data-islands-density');
+      const theme = readTheme();
+      if (theme === 'mist') body.removeAttribute('data-islands-theme');
+      else body.setAttribute('data-islands-theme', theme);
+    }
+
+    function storePref(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch {
+        /* private mode: the choice still applies for this page. */
+      }
+      applyPrefs();
+      for (const listener of prefListeners) listener();
     }
 
     function useLocale() {
@@ -1736,9 +1851,26 @@ window.__ModuleLoader__.load({
         static dot in front of every row keeps the list aligned with the pinned
         block above it, where idle rows keep the same hollow mark. */
     function IslandsRowStatus() {
+      const ref = React.useRef(null);
+      const [age, setAge] = React.useState('none');
+      React.useEffect(() => {
+        const node = ref.current;
+        if (node === null || typeof node.closest !== 'function') return undefined;
+        const row = node.closest('[data-row-key]');
+        const measure = () => setAge(rowAgeOf(row));
+        measure();
+        const timer = window.setTimeout(measure, 1400);
+        return () => window.clearTimeout(timer);
+      }, []);
       return h(
         'span',
-        { className: 'isl-pinnedStatus isl-rowStatus', 'data-islands-state': 'idle', 'aria-hidden': true },
+        {
+          ref,
+          className: 'isl-pinnedStatus isl-rowStatus',
+          'data-islands-state': 'idle',
+          'data-islands-age': age,
+          'aria-hidden': true,
+        },
         h('span', { className: 'isl-pinnedDot', 'aria-hidden': true }),
       );
     }
@@ -2109,6 +2241,7 @@ window.__ModuleLoader__.load({
       activated = true;
       syncAttribute();
       applyAccent(readAccent());
+      applyPrefs();
       try {
         skinRegistrar();
       } catch (error) {
@@ -2195,6 +2328,342 @@ window.__ModuleLoader__.load({
     }
 
     /** Islands settings page: skin switch + accent color. */
+    /** How recently a session was touched, read from the row's own timestamp. */
+    function rowAgeOf(row) {
+      if (row === null) return 'none';
+      const seat = row.querySelector('[data-slot="sidebar.session.row.trailing"]');
+      const seatText = String(seat?.textContent ?? '').trim();
+      // The trailing seat is often an empty `display: contents` wrapper and the
+      // timestamp sits earlier in the row, so read the row and keep the LAST
+      // match: the clock always trails the title.
+      const text = (seatText === '' ? String(row.textContent ?? '') : seatText).trim();
+      if (/^(now|just now|刚刚)$/iu.test(text)) return 'fresh';
+      const matches = [...text.matchAll(/(\d+)\s*(mo|min|m|分|s|sec|秒|h|小时|d|天|w|周|月)/giu)];
+      if (matches.length === 0) return 'none';
+      const match = matches[matches.length - 1];
+      const value = Number(match[1]);
+      const unit = match[2].toLowerCase();
+      if (unit === 's' || unit === 'sec' || unit === '秒') return 'fresh';
+      if (unit === 'min' || unit === 'm' || unit === '分') return value < 45 ? 'fresh' : 'recent';
+      if (unit === 'h' || unit === '小时') return value < 12 ? 'fresh' : 'recent';
+      if (unit === 'd' || unit === '天') return value < 7 ? 'recent' : 'old';
+      return 'old';
+    }
+
+    /**
+     * Sessions the palette can jump to, read from the rows the user actually
+     * sees. The sidebar owns that order (pinned first, then by workspace), so
+     * copying it beats re-deriving it from services the skin does not have.
+     */
+    function collectPaletteSessions(query) {
+      const rows = Array.from(document.querySelectorAll('[data-row-key^="session:"]'));
+      const out = [];
+      const seen = new Set();
+      for (const row of rows) {
+        const key = row.getAttribute('data-row-key') ?? '';
+        const id = key.slice('session:'.length);
+        if (id === '' || seen.has(id)) continue;
+        const clone = row.cloneNode(true);
+        for (const seat of clone.querySelectorAll(
+          '[data-slot="sidebar.session.row.trailing"], [data-slot="sidebar.session.row.leading"]',
+        )) {
+          seat.remove();
+        }
+        const title = String(clone.textContent ?? '')
+          .replace(/\s+/gu, ' ')
+          .replace(/\s*\d+\s*(?:mo|min|m|h|d|w)\s*$/iu, '')
+          .trim();
+        if (title === '') continue;
+        if (query !== '' && !title.toLowerCase().includes(query)) continue;
+        seen.add(id);
+        out.push({ id, kind: 'session', label: title, title, age: rowAgeOf(row) });
+      }
+      return out.slice(0, 8);
+    }
+
+    /** The command list, rebuilt on each open so the labels follow the locale. */
+    function paletteCommands(copy) {
+      const nextTheme = () => THEMES[(THEMES.indexOf(readTheme()) + 1) % THEMES.length];
+      return [
+        {
+          id: 'new-session',
+          label: copy.paletteNew,
+          hint: '',
+          run: () => document.querySelector('[data-islands-part~="new-session"]')?.click(),
+        },
+        {
+          id: 'sea',
+          label: copy.paletteSea,
+          hint: readFlag(SEA_KEY) ? 'on' : 'off',
+          run: () => storePref(SEA_KEY, readFlag(SEA_KEY) ? '0' : '1'),
+        },
+        {
+          id: 'density',
+          label: copy.paletteDensity,
+          hint: readDensity() === 'compact' ? 'on' : 'off',
+          run: () => storePref(DENSITY_KEY, readDensity() === 'compact' ? 'comfortable' : 'compact'),
+        },
+        {
+          id: 'theme',
+          label: copy.paletteTheme,
+          hint: copy[`theme${nextTheme().replace(/^./u, (c) => c.toUpperCase())}`] ?? nextTheme(),
+          run: () => storePref(THEME_KEY, nextTheme()),
+        },
+        {
+          id: 'accent',
+          label: copy.paletteAccent,
+          hint: readAccent() ?? copy.accentDefault,
+          run: () => {
+            const current = readAccent() ?? DEFAULT_ACCENT;
+            const index = ACCENT_PRESETS.findIndex((color) => color.toLowerCase() === current.toLowerCase());
+            const color = ACCENT_PRESETS[(index + 1) % ACCENT_PRESETS.length];
+            applyAccent(color);
+            storeAccent(color);
+          },
+        },
+        {
+          id: 'enable',
+          label: copy.paletteEnable,
+          hint: '',
+          run: () => setEnabled(!enabled),
+        },
+      ];
+    }
+
+    /**
+     * ⌘K palette. It costs one overlay and no new data source: the rows are
+     * already on screen, so the palette reads them and reuses the locate path.
+     */
+    function IslandsPalette() {
+      const lang = useLocale() ?? 'en';
+      const copy = String(lang).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
+      const snapshot = usePrefsSnapshot();
+      const [open, setOpen] = React.useState(false);
+      const [query, setQuery] = React.useState('');
+      const [cursor, setCursor] = React.useState(0);
+
+      const close = () => {
+        setOpen(false);
+        setQuery('');
+        setCursor(0);
+      };
+
+      React.useEffect(() => {
+        const onKey = (event) => {
+          if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return;
+          if (event.key !== 'k' && event.key !== 'K') return;
+          event.preventDefault();
+          event.stopPropagation();
+          setOpen((value) => {
+            if (value) setQuery('');
+            return !value;
+          });
+          setCursor(0);
+        };
+        window.addEventListener('keydown', onKey, true);
+        return () => window.removeEventListener('keydown', onKey, true);
+      }, []);
+
+      const items = React.useMemo(() => {
+        if (!open) return [];
+        const text = query.trim().toLowerCase();
+        const sessions = collectPaletteSessions(text);
+        const commands = paletteCommands(copy).filter(
+          (command) => text === '' || command.label.toLowerCase().includes(text),
+        );
+        const rows = [];
+        if (sessions.length > 0) {
+          rows.push({ id: 'group-sessions', kind: 'group', label: copy.paletteSessions });
+          for (const session of sessions) rows.push(session);
+        }
+        if (commands.length > 0) {
+          rows.push({ id: 'group-commands', kind: 'group', label: copy.paletteCommands });
+          for (const command of commands) rows.push({ ...command, kind: 'command' });
+        }
+        return rows;
+      }, [open, query, snapshot, copy]);
+
+      const selectable = items.filter((item) => item.kind !== 'group');
+      const index = Math.min(cursor, Math.max(selectable.length - 1, 0));
+
+      const run = (item) => {
+        if (item === undefined || item.kind === 'group') return;
+        close();
+        if (item.kind === 'session') {
+          revealPinnedSession(item.id, item.title);
+          return;
+        }
+        item.run();
+      };
+
+      React.useEffect(() => {
+        if (!open) return;
+        const node = document.querySelector('[data-on="true"]');
+        node?.scrollIntoView?.({ block: 'nearest' });
+      }, [open, cursor, query]);
+
+      const onKeyDown = (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          close();
+          return;
+        }
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          if (selectable.length === 0) return;
+          const step = event.key === 'ArrowDown' ? 1 : -1;
+          setCursor((index + step + selectable.length) % selectable.length);
+          return;
+        }
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          run(selectable[index]);
+        }
+      };
+
+      if (!open) return null;
+
+      let seen = -1;
+      return h(
+        'div',
+        {
+          className: 'isl-palette',
+          role: 'dialog',
+          'aria-modal': true,
+          'aria-label': copy.palettePlaceholder,
+          onMouseDown: (event) => {
+            if (event.target === event.currentTarget) close();
+          },
+          onKeyDown,
+        },
+        h(
+          'div',
+          { className: 'isl-paletteCard' },
+          h('input', {
+            className: 'isl-paletteInput',
+            type: 'search',
+            value: query,
+            placeholder: copy.palettePlaceholder,
+            'aria-label': copy.palettePlaceholder,
+            autoFocus: true,
+            onChange: (event) => {
+              setQuery(event.target.value);
+              setCursor(0);
+            },
+          }),
+          h(
+            'div',
+            { className: 'isl-paletteList', role: 'listbox' },
+            items.length === 0
+              ? h('div', { className: 'isl-paletteEmpty' }, copy.paletteEmpty)
+              : items.map((item) => {
+                  if (item.kind === 'group') {
+                    return h('div', { key: item.id, className: 'isl-paletteGroup' }, item.label);
+                  }
+                  seen += 1;
+                  const position = seen;
+                  return h(
+                    'button',
+                    {
+                      key: item.id,
+                      type: 'button',
+                      role: 'option',
+                      'aria-selected': position === index,
+                      className: 'isl-paletteRow',
+                      'data-on': position === index ? 'true' : 'false',
+                      onMouseMove: () => setCursor(position),
+                      onClick: () => run(item),
+                    },
+                    h('span', { className: 'isl-paletteRowMark' }, item.kind === 'session' ? '↗' : ''),
+                    h('span', { className: 'isl-paletteRowText' }, item.label),
+                    item.hint === '' ? null : h('span', { className: 'isl-paletteRowHint' }, item.hint),
+                  );
+                }),
+          ),
+          h('div', { className: 'isl-paletteFoot' }, copy.paletteHint),
+        ),
+      );
+    }
+
+    /** What the walker promised versus what this build actually marks. */
+    function inspectContract() {
+      const regions = Array.isArray(PART_REGIONS) ? PART_REGIONS : [];
+      const known = new Set();
+      const lines = [];
+      for (const region of regions) {
+        const names = Object.values(region.parts ?? {});
+        for (const name of [...names, ...Object.values(region.rootParts ?? {})]) known.add(name);
+        const scope = document.querySelector(region.within);
+        // A region that never mounted (the settings dialog, the search field) is
+        // reported as absent, not as broken: those surfaces build on demand.
+        const found = scope === null
+          ? 0
+          : names.filter((name) => scope.querySelector(partSelector(name)) !== null).length;
+        lines.push({ id: region.id, count: names.length, found, scope: scope !== null });
+      }
+      const seen = new Set();
+      const unknown = new Set();
+      for (const node of document.querySelectorAll(`[${PART_ATTR}]`)) {
+        for (const token of (node.getAttribute(PART_ATTR) ?? '').split(/\s+/u)) {
+          if (token === '') continue;
+          seen.add(token);
+          if (!known.has(token)) unknown.add(token);
+        }
+      }
+      return {
+        total: known.size,
+        onScreen: seen.size,
+        regionCount: regions.length,
+        mounted: lines.filter((line) => line.scope).length,
+        lines,
+        unknown: [...unknown].slice(0, 8),
+        marked: document.body !== null && document.body.hasAttribute(ATTRIBUTE),
+      };
+    }
+
+    /** `?islands-debug=1` shows the contract diff in the corner. */
+    function IslandsDebug() {
+      const [report, setReport] = React.useState(inspectContract);
+      React.useEffect(() => {
+        const refresh = () => setReport(inspectContract());
+        const timer = window.setTimeout(refresh, 600);
+        window.addEventListener('resize', refresh);
+        return () => {
+          window.clearTimeout(timer);
+          window.removeEventListener('resize', refresh);
+        };
+      }, []);
+      const ok = report.unknown.length === 0 && report.marked;
+      return h(
+        'div',
+        { className: 'isl-debug' },
+        h(
+          'div',
+          { className: 'isl-debugHead' },
+          h('span', null, 'islands-ui'),
+          h(
+            'span',
+            { className: 'isl-debugState' },
+            `${report.onScreen}/${report.total} parts · ${report.mounted}/${report.regionCount} regions · `,
+            h('span', { className: ok ? 'isl-debugOk' : 'isl-debugMiss' }, ok ? 'ok' : 'drift'),
+          ),
+        ),
+        h('div', { className: 'isl-debugLine' }, `skin: ${report.marked ? 'on' : 'off'}`),
+        ...report.lines.map((line) =>
+          h(
+            'div',
+            { key: line.id, className: 'isl-debugLine' },
+            line.scope
+              ? `${line.found === line.count ? '✓' : '·'} ${line.id} (${line.found}/${line.count} on screen)`
+              : `· ${line.id} not mounted`,
+          ),
+        ),
+        report.unknown.length === 0
+          ? null
+          : h('div', { className: 'isl-debugLine isl-debugMiss' }, `unknown parts: ${report.unknown.join(', ')}`),
+      );
+    }
+
     function IslandsSettingsPage() {
       const on = useEnabled();
       const compat = useCompat();
@@ -2202,6 +2671,10 @@ window.__ModuleLoader__.load({
       const copy = String(lang).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
       const blocked = compat.status === 'missing';
       const [accent, setAccent] = React.useState(readAccent);
+      const prefs = usePrefsSnapshot();
+      const seaOn = prefs[0] === '1';
+      const compactOn = prefs[1] === '1';
+      const themeName = prefs.slice(2);
       const chooseAccent = (color) => {
         setAccent(color);
         applyAccent(color);
@@ -2305,6 +2778,78 @@ window.__ModuleLoader__.load({
             ),
           ),
         ),
+        h(
+          'div',
+          { className: 'isl-prefRow' },
+          h(
+            'div',
+            { className: 'isl-prefText' },
+            h('div', { className: 'isl-prefTitle' }, copy.texture),
+            h('div', { className: 'isl-prefDesc' }, copy.textureDesc),
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              role: 'switch',
+              className: 'isl-switch',
+              'aria-checked': seaOn,
+              'aria-label': copy.texture,
+              onClick: () => storePref(SEA_KEY, seaOn ? '0' : '1'),
+            },
+            h('span', { className: 'isl-switchThumb' }),
+          ),
+        ),
+        h(
+          'div',
+          { className: 'isl-prefRow' },
+          h(
+            'div',
+            { className: 'isl-prefText' },
+            h('div', { className: 'isl-prefTitle' }, copy.density),
+            h('div', { className: 'isl-prefDesc' }, copy.densityDesc),
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              role: 'switch',
+              className: 'isl-switch',
+              'aria-checked': compactOn,
+              'aria-label': copy.density,
+              onClick: () => storePref(DENSITY_KEY, compactOn ? 'comfortable' : 'compact'),
+            },
+            h('span', { className: 'isl-switchThumb' }),
+          ),
+        ),
+        h(
+          'div',
+          { className: 'isl-prefRow' },
+          h(
+            'div',
+            { className: 'isl-prefText' },
+            h('div', { className: 'isl-prefTitle' }, copy.theme),
+            h('div', { className: 'isl-prefDesc' }, copy.themeDesc),
+          ),
+          h(
+            'div',
+            { className: 'isl-themePicker' },
+            THEMES.map((name) =>
+              h(
+                'button',
+                {
+                  type: 'button',
+                  key: name,
+                  className: 'isl-themeChip' + (themeName === name ? ' is-selected' : ''),
+                  'data-islands-theme-chip': name,
+                  'aria-pressed': themeName === name,
+                  onClick: () => storePref(THEME_KEY, name),
+                },
+                copy[`theme${name.replace(/^./u, (c) => c.toUpperCase())}`] ?? name,
+              ),
+            ),
+          ),
+        ),
         // Preview hidden on request. The component and its styles stay in place;
         // restore the next line to show the state gallery again.
         // h(IslandsUpdateShowcase, { copy }),
@@ -2335,6 +2880,7 @@ window.__ModuleLoader__.load({
         layoutService = ctx.layout;
         slotsService = ctx.slots;
         applyAccent(readAccent());
+        applyPrefs();
 
         // The stylesheet is one sheet for every build. Structure differences
         // are expressed by the parts the walker writes, not by a release map.
@@ -2453,6 +2999,19 @@ window.__ModuleLoader__.load({
             ctx.slots.register({ name: 'shell.overlay', id: 'islands-pinned', order: -88 }, IslandsPinnedSection),
           );
 
+          // The palette and the inspector are the skin's own surfaces: both ride
+          // the overlay slot, so they float above every island without moving
+          // the host layout.
+          ctx.slots.inject('shell.overlay', () =>
+            ctx.slots.register({ name: 'shell.overlay', id: 'islands-palette', order: -86 }, IslandsPalette),
+          );
+
+          if (new URLSearchParams(window.location.search).has('islands-debug')) {
+            ctx.slots.inject('shell.overlay', () =>
+              ctx.slots.register({ name: 'shell.overlay', id: 'islands-debug', order: -85 }, IslandsDebug),
+            );
+          }
+
           // The row's leading seat shows the shell's status dot while a session
           // is busy and hands the seat to slots only when idle: filling it with
           // the same static dot means every row leads with a mark, like the
@@ -2476,32 +3035,6 @@ window.__ModuleLoader__.load({
           ctx.inject(['shortcuts'], (scope) => {
             shortcutsService = scope.shortcuts;
 
-            ctx.effect(
-              () => {
-                try {
-                  return scope.shortcuts.register({
-                    id: 'islands.model.open',
-                    label: () => 'Model picker',
-                    aliases: [],
-                    defaults: {
-                      'desktop:macos': { code: 'KeyM', modifiers: ['primary', 'shift'] },
-                      'desktop:windows': { code: 'KeyM', modifiers: ['primary', 'shift'] },
-                      'desktop:linux': { code: 'KeyM', modifiers: ['primary', 'shift'] },
-                    },
-                    regions: ['page', 'editable'],
-                    modals: [],
-                    resolve: () => ({
-                      status: 'handled',
-                      run: () => window.dispatchEvent(new CustomEvent('islands:model-open')),
-                    }),
-                  });
-                } catch (error) {
-                  console.warn('[islands-ui] model picker shortcut unavailable', error);
-                  return undefined;
-                }
-              },
-              'dsh-islands-ui: model picker shortcut',
-            );
 
             if (typeof scope.shortcuts.observeFixedInput !== 'function') return;
           const off = scope.shortcuts.observeFixedInput((input) => {

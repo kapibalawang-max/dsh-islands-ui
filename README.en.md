@@ -53,6 +53,13 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
+| 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: sessions jump and locate, commands toggle the skin, texture, density, theme and accent |
+| 🌊 | **Texture and density** | Sea dot-matrix texture (off by default) and compact rows (32 → 26), both on the settings page |
+| 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
+| 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
+| 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 68 parts and 13 regions are actually mounted, so a host upgrade shows up immediately |
+| 📸 | **Visual regression** | `npm run shots` captures four baselines and diffs them pixel by pixel |
 
 The skin is a client-only style layer. Pinning helpers, the pinned shelf and the settings page are also implemented in the browser bundle; no host tool, service or session data is added.
 
@@ -62,8 +69,8 @@ The skin is a client-only style layer. Pinning helpers, the pinned shelf and the
 
 | Layer | Rule |
 | --- | --- |
-| Canvas | Solid `#f7f7f7` (dark `#0f1012`), opaque, no blur |
-| Islands | White / dark-gray surfaces, 16–20px radius, 1px hairline, no shadows |
+| Canvas | Solid `#f2f2f2` (dark `#0f1012`), opaque, no blur |
+| Islands | White / dark-gray surfaces, 16–20px radius, 1px hairline; a 1px inner highlight along the top edge, soft shadow where content presses |
 | Spacing | 5px between every island, including the bottom panel |
 | Top bar | 40px window strip hosting the conversation tools and the right-panel toggle; macOS clears the traffic lights, Linux starts at 8px below the native title bar. Windows renders no island top bar: the caption row keeps the native sidebar toggle and the right-hand tools stay in the conversation header |
 | Accent | Brand blue by default; purple / green / orange / pink / red presets or any custom color |
@@ -114,6 +121,9 @@ Stored in `localStorage`; clear these keys to reset:
 | `dsh-islands-ui:accent` | Custom accent color; absent means follow theme |
 | `dsh-islands-ui:pinned-collapsed` | Whether the pinned group is collapsed |
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
+| `dsh-islands-ui:sea` | `1` / `0`, sea dot-matrix texture (off by default) |
+| `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
+| `dsh-islands-ui:theme` | `mist` / `sand` / `ink` theme preset |
 
 ---
 
@@ -129,7 +139,7 @@ src/
   20-sidebar.css       workspace island, pinned shelf, session row states
   30-conversation.css  conversation page, composer, top tool group
   40-settings.css      settings dialog and section shell
-  45-model-picker.css  model / reasoning popover
+  48-islands-next.css  ridge and altitude, composer wake-up, texture, density, presets, age marks, palette, self-check
   50-components.css    preference rows, switches, accent picker
   60-peers.css         third-party plugin adapters ([class*=...] is allowed only here)
   host/runtime.js      host contracts, local-name extraction, part table, walker

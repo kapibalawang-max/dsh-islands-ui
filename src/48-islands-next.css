@@ -1,0 +1,404 @@
+/* ==========================================================================
+   Islands UI · 48 depth, rhythm and floating panels
+   The shell already draws the islands; this layer gives them thickness (a seam
+   instead of a flat outline), a rhythm that can tighten, and the surfaces the
+   skin owns itself: the command palette and the contract inspector.
+   ========================================================================== */
+
+/* ---- 1. Seam + elevation ------------------------------------------------ */
+
+/* Every island catches the light on its top edge. The highlight is the whole
+   trick: a 1.12:1 fill difference reads as a panel only when the edge glints. */
+body[data-islands-ui] [data-islands-part~="center-column"],
+body[data-islands-ui] [data-sidebar-right-panel][data-sidebar-right-open]:not([data-sidebar-right-panel='fullscreen']) {
+  box-shadow: var(--isl-shadow-island), var(--isl-seam);
+}
+
+body[data-islands-ui] [data-islands-part~="sidebar-root"]:not([data-islands-part~="sidebar-collapsed"])::after {
+  box-shadow: var(--isl-shadow-island), var(--isl-seam);
+}
+
+/* The conversation island is the one that carries content, so scrolling inside
+   it lifts it a step above the sidebar's flush plane. */
+body[data-islands-ui] [data-islands-part~="center-column"] {
+  transition: box-shadow var(--isl-dur-base) var(--ds-ease-in-out);
+}
+
+/* ---- 2. The composer as a seated card ----------------------------------- */
+
+body[data-islands-ui] [data-composer-card] {
+  box-shadow: var(--isl-seam), var(--isl-shadow-card);
+  transition:
+    box-shadow var(--isl-dur-base) var(--ds-ease-in-out),
+    border-color var(--isl-dur-base) var(--ds-ease-in-out);
+}
+
+body[data-islands-ui] [data-composer-card]:focus-within {
+  border-color: color-mix(in srgb, var(--isl-accent) 30%, transparent);
+  box-shadow: var(--isl-seam), var(--isl-ring-accent), var(--isl-shadow-card-focus);
+}
+
+/* ---- 3. Sea texture (opt-in) -------------------------------------------- */
+
+/* A calm 12px dot field. Off by default: it is a taste, not a rule. */
+body[data-islands-ui][data-islands-sea] [data-islands-part~="layout-frame"] {
+  background-image: radial-gradient(var(--isl-sea-dot) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-position: 3px 3px;
+}
+
+body[data-islands-ui][data-islands-sea] [data-islands-part~="sidebar-root"]::after,
+body[data-islands-ui][data-islands-sea] [data-islands-part~="center-column"] {
+  background-image: radial-gradient(var(--isl-sea-dot) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* ---- 4. Density --------------------------------------------------------- */
+
+body[data-islands-ui][data-islands-density='compact'] [data-row-key^='session:'] {
+  height: var(--isl-row-h-compact);
+  min-height: 0;
+}
+
+body[data-islands-ui][data-islands-density='compact'] [data-row-key^='session:'] [data-slot] {
+  line-height: var(--isl-row-h-compact);
+}
+
+body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRow,
+body[data-islands-ui][data-islands-density='compact'] .isl-rowStatus {
+  height: var(--isl-row-h-compact);
+}
+
+body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
+  gap: 0;
+}
+
+/* ---- 5. Theme presets --------------------------------------------------- */
+
+/* Mist is the shipped palette; these two are whole token sets, not accents. */
+body[data-islands-ui][data-islands-theme='sand'] {
+  --isl-canvas: #ece7df;
+  --isl-surface: #fffdf8;
+  --isl-surface-muted: #f6f1e8;
+  --isl-surface-sunken: #efe9de;
+  --isl-border-soft: rgba(60, 42, 22, 0.1);
+  --isl-border: rgba(60, 42, 22, 0.15);
+  --isl-border-strong: rgba(60, 42, 22, 0.22);
+  --isl-hover: rgba(60, 42, 22, 0.05);
+  --isl-active: rgba(60, 42, 22, 0.08);
+  --isl-accent: #a4632a;
+  --isl-sea-dot: rgba(60, 42, 22, 0.06);
+}
+
+body[data-islands-ui][data-islands-theme='ink'] {
+  --isl-canvas: #e9ebef;
+  --isl-surface: #fbfcfd;
+  --isl-surface-muted: #eef1f5;
+  --isl-surface-sunken: #e3e7ed;
+  --isl-border-soft: rgba(17, 24, 39, 0.11);
+  --isl-border: rgba(17, 24, 39, 0.16);
+  --isl-border-strong: rgba(17, 24, 39, 0.24);
+  --isl-accent: #2f4bb8;
+  --isl-sea-dot: rgba(17, 24, 39, 0.06);
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
+  --isl-canvas: #14110e;
+  --isl-surface: #201b16;
+  --isl-surface-muted: #2a241d;
+  --isl-surface-sunken: #191510;
+  --isl-border-soft: rgba(255, 236, 214, 0.07);
+  --isl-border: rgba(255, 236, 214, 0.1);
+  --isl-border-strong: rgba(255, 236, 214, 0.17);
+  --isl-accent: #d08a4e;
+  --isl-sea-dot: rgba(255, 236, 214, 0.045);
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='ink'] {
+  --isl-canvas: #0d0f14;
+  --isl-surface: #171a21;
+  --isl-surface-muted: #1f232b;
+  --isl-surface-sunken: #13161b;
+  --isl-accent: #7d98ff;
+  --isl-sea-dot: rgba(255, 255, 255, 0.05);
+}
+
+/* ---- 6. Row age mark ---------------------------------------------------- */
+
+/* Recency rides the same 14px dot: solid today, half this week, hollow later.
+   It stays neutral on purpose — the accent belongs to state, and a running
+   session already wears it. The skin reads the row's own clock, so nothing new
+   is asked of the host. */
+body[data-islands-ui] .isl-rowStatus[data-islands-age='fresh'] .isl-pinnedDot::after {
+  background: var(--dsw-alias-label-secondary);
+}
+
+body[data-islands-ui] .isl-rowStatus[data-islands-age='recent'] .isl-pinnedDot::after {
+  background: color-mix(in srgb, var(--dsw-alias-label-secondary) 42%, transparent);
+}
+
+body[data-islands-ui] .isl-rowStatus[data-islands-age='old'] .isl-pinnedDot::after {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--isl-border-strong);
+}
+
+/* ---- 7. A running pin breathes ------------------------------------------ */
+
+.isl-pinnedRow {
+  position: relative;
+}
+
+.isl-pinnedRow[data-islands-state='ongoing']::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 8px;
+  bottom: 0;
+  height: 1.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--isl-accent), transparent);
+  opacity: 0.4;
+  animation: isl-pin-breathe 2.6s var(--ds-ease-in-out) infinite;
+  pointer-events: none;
+}
+
+@keyframes isl-pin-breathe {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isl-pinnedRow[data-islands-state='ongoing']::after {
+    animation: none;
+    opacity: 0.45;
+  }
+}
+
+/* ---- 8. Command palette ------------------------------------------------ */
+
+.isl-palette {
+  position: fixed;
+  z-index: 260;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: max(12vh, 88px) 16px 16px;
+  background: color-mix(in srgb, var(--isl-canvas) 55%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+body[data-islands-ui] .isl-paletteCard {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--isl-palette-width));
+  max-height: 62vh;
+  overflow: hidden;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-palette-radius);
+  background: var(--isl-surface);
+  box-shadow: var(--isl-seam), var(--isl-shadow-float);
+  animation: isl-palette-in var(--isl-dur-base) var(--ds-ease-in-out);
+}
+
+@keyframes isl-palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.994);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-islands-ui] .isl-paletteCard {
+    animation: none;
+  }
+}
+
+body[data-islands-ui] .isl-paletteInput {
+  flex: none;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--isl-border-soft);
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+body[data-islands-ui] .isl-paletteInput::placeholder {
+  color: var(--dsw-alias-label-caption);
+}
+
+body[data-islands-ui] .isl-paletteList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.isl-paletteGroup {
+  padding: 8px 10px 4px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.isl-paletteRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--isl-radius-sm);
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.isl-paletteRow[data-on='true'] {
+  background: color-mix(in srgb, var(--isl-accent) 12%, transparent);
+  color: var(--dsw-alias-label-primary);
+}
+
+.isl-paletteRowText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.isl-paletteRowHint {
+  flex: none;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+}
+
+.isl-paletteRowMark {
+  flex: none;
+  width: 28px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 11px;
+  text-align: center;
+}
+
+.isl-paletteEmpty {
+  padding: 22px 12px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+  text-align: center;
+}
+
+body[data-islands-ui] .isl-paletteFoot {
+  flex: none;
+  display: flex;
+  gap: 14px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--isl-border-soft);
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+}
+
+.isl-paletteFoot kbd {
+  padding: 0 4px;
+  border-radius: var(--isl-radius-2xs);
+  background: var(--isl-surface-muted);
+  font-family: var(--dsw-font-mono, ui-monospace, monospace);
+  font-size: 11px;
+}
+
+/* ---- 9. Contract inspector --------------------------------------------- */
+
+.isl-debug {
+  position: fixed;
+  z-index: 300;
+  right: 12px;
+  bottom: 12px;
+  width: 360px;
+  max-height: 54vh;
+  overflow: auto;
+  padding: 10px 12px;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-radius-md);
+  background: var(--isl-surface);
+  box-shadow: var(--isl-seam), var(--isl-shadow-float);
+  color: var(--dsw-alias-label-secondary);
+  font-family: var(--dsw-font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.isl-debugHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  color: var(--dsw-alias-label-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.isl-debugState {
+  font-weight: 500;
+}
+
+.isl-debugOk {
+  color: #7a9b00;
+}
+
+.isl-debugMiss {
+  color: #c0392b;
+}
+
+.isl-debugLine {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+/* ---- 10. Numbers and the theme chips ----------------------------------- */
+
+/* Digits that change while you watch should not shift the text around them. */
+body[data-islands-ui] .isl-pinnedCount,
+body[data-islands-ui] .isl-settingsMetaValue,
+body[data-islands-ui] .isl-paletteRowHint {
+  font-variant-numeric: tabular-nums;
+}
+
+.isl-themePicker {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--isl-border-soft);
+  border-radius: var(--isl-radius-sm);
+  background: var(--isl-surface-muted);
+}
+
+body[data-islands-ui] .isl-themeChip {
+  padding: 4px 10px;
+  border: 0;
+  border-radius: var(--isl-radius-xs);
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+body[data-islands-ui] .isl-themeChip.is-selected {
+  background: var(--isl-surface);
+  color: var(--dsw-alias-label-primary);
+  box-shadow: var(--isl-seam), 0 1px 2px rgba(17, 24, 39, 0.08);
+}

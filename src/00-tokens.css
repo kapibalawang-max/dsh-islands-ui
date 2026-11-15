@@ -27,6 +27,21 @@ body[data-islands-ui] {
      step deeper. Dark already passes and repeats the host values below. */
   --dsw-alias-label-tertiary: #666b73;
   --dsw-alias-label-caption: #71767f;
+  /* Depth: a 1px inner highlight on each island's top edge sells the panel,
+     and the seated card gets a real drop shadow instead of a flat outline. */
+  --isl-seam: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --isl-shadow-card: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --isl-shadow-card-focus:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 10px rgba(17, 24, 39, 0.1);
+  --isl-shadow-island-raised: 0 14px 32px -18px rgba(17, 24, 39, 0.24);
+  --isl-shadow-float: 0 18px 48px -20px rgba(17, 24, 39, 0.3), 0 2px 6px rgba(17, 24, 39, 0.06);
+  --isl-ring-accent: 0 0 0 1px color-mix(in srgb, var(--isl-accent) 34%, transparent);
+  --isl-sea-dot: rgba(17, 24, 39, 0.055);
+  /* Row rhythm: density mode only moves these two numbers. */
+  --isl-row-h: 32px;
+  --isl-row-h-compact: 26px;
+  --isl-palette-width: 560px;
+  --isl-palette-radius: var(--isl-radius-xl);
   /* Motion: two speeds cover every transition in the skin. */
   --isl-dur-fast: 120ms;
   --isl-dur-base: 150ms;
@@ -45,7 +60,9 @@ body[data-islands-ui] {
   --isl-rail-collapsed-width: 56px;
   --isl-rail-width: 48px;
   /* Elevation: a hairline ring plus one soft, deep shadow. */
-  --isl-shadow-island: none;
+  /* A zero shadow, not `none`: the seam appends to this value, and a shadow
+     list cannot start with `none`. */
+  --isl-shadow-island: 0 0 0 0 rgba(0, 0, 0, 0);
   --isl-shadow-float:
     0 0 0 1px rgba(17, 24, 39, 0.05), 0 10px 24px -10px rgba(17, 24, 39, 0.14),
     0 28px 64px -32px rgba(17, 24, 39, 0.3);
@@ -134,10 +151,19 @@ body[data-islands-ui][data-ds-dark-theme] {
   --isl-border: rgba(255, 255, 255, 0.09);
   --isl-border-strong: rgba(255, 255, 255, 0.16);
   --isl-hover: rgba(255, 255, 255, 0.06);
+  --isl-seam: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --isl-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --isl-shadow-card-focus:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 2px 12px rgba(0, 0, 0, 0.45);
+  --isl-shadow-island-raised: 0 16px 36px -20px rgba(0, 0, 0, 0.75);
+  --isl-shadow-float: 0 20px 52px -20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --isl-sea-dot: rgba(255, 255, 255, 0.045);
   --isl-active: rgba(255, 255, 255, 0.1);
   --dsw-alias-label-tertiary: #adb2b8;
   --dsw-alias-label-caption: #81858c;
-  --isl-shadow-island: none;
+  /* A zero shadow, not `none`: the seam appends to this value, and a shadow
+     list cannot start with `none`. */
+  --isl-shadow-island: 0 0 0 0 rgba(0, 0, 0, 0);
   --isl-shadow-float:
     0 0 0 1px rgba(0, 0, 0, 0.55), 0 12px 28px -12px rgba(0, 0, 0, 0.6),
     0 32px 72px -36px rgba(0, 0, 0, 0.85);
