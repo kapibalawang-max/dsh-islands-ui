@@ -1546,7 +1546,6 @@ window.__ModuleLoader__.load({
       const [draft, setDraft] = React.useState(null);
       const [busy, setBusy] = React.useState(false);
       const [error, setError] = React.useState('');
-      const [query, setQuery] = React.useState('');
       const rootRef = React.useRef(null);
       const triggerRef = React.useRef(null);
       const panelRef = React.useRef(null);
@@ -1565,24 +1564,10 @@ window.__ModuleLoader__.load({
         ? state.status === 'loading' ? copy.loading : copy.pick
         : modelIn(groups, current)?.name ?? current.model;
 
-      const searchQuery = query.trim().toLowerCase();
-      const searchPlaceholder = String(active).toLowerCase().startsWith('zh') ? '搜索模型' : 'Search models';
-      const visibleGroups = searchQuery === ''
-        ? groups
-        : groups
-            .map((group) => ({
-              ...group,
-              models: group.models.filter((entry) =>
-                String(entry.name ?? entry.id).toLowerCase().includes(searchQuery),
-              ),
-            }))
-            .filter((group) => group.models.length > 0);
-
       const close = () => {
         setOpen(false);
         setError('');
         setDraft(null);
-        setQuery('');
       };
 
       const openMenu = () => {
@@ -1594,10 +1579,9 @@ window.__ModuleLoader__.load({
           right: Math.max(8, window.innerWidth - rect.right),
           width: Math.min(300, window.innerWidth - 24),
         });
-        setPane('model');
+        setPane('effort');
         setDraft(null);
         setError('');
-        setQuery('');
         setOpen(true);
         directory.load().catch(() => {});
       };
@@ -1718,24 +1702,10 @@ window.__ModuleLoader__.load({
         ),
         h(
           'div',
-          { className: 'isl-modelSearch' },
-          h('input', {
-            className: 'isl-modelSearchInput',
-            type: 'search',
-            value: query,
-            placeholder: searchPlaceholder,
-            spellCheck: false,
-            autoFocus: true,
-            onChange: (event) => setQuery(event.target.value),
-            onKeyDown: (event) => event.stopPropagation(),
-          }),
-        ),
-        h(
-          'div',
           { className: 'isl-modelGroups' },
-          visibleGroups.length === 0
+          groups.length === 0
             ? h('div', { className: 'isl-modelEmpty' }, state.status === 'loading' ? copy.loading : copy.empty)
-            : visibleGroups.map((group) =>
+            : groups.map((group) =>
                 h(
                   'div',
                   { className: 'isl-modelGroup', key: group.id },
@@ -2777,13 +2747,10 @@ window.__ModuleLoader__.load({
             ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: 0 }, IslandsHeroMark),
           );
 
-          ctx.inject(['slots', 'modelDirectories'], (scope) => {
+          // The composer keeps the shipped model selector: the slot is left
+          // alone so DSH's own picker stays in charge of model and effort.
+          ctx.inject(['modelDirectories'], (scope) => {
             modelDirectories = scope.modelDirectories;
-            // Single slots render the lowest priority; a negative priority shadows
-            // the shipped selector without colliding with it.
-            scope.slots.inject('conversation.input.model', () =>
-              scope.slots.register({ name: 'conversation.input.model', priority: -1 }, ModelPicker),
-            );
           });
 
           // Take the workspace shortcut over at the shortcut service layer: fixed

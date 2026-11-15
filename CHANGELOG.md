@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.3 — 2026-11-15
+
+### 界面
+
+- 输入框的模型选择器交回 DSH 原生：撤掉 `conversation.input.model` 上 priority -1 的注册，删除 1.1.2 里那套 Claude Code 观感（`src/46-model-picker-claude.css`、`src/47-effort-pane-claude.css`、菜单顶部搜索框与默认落在模型列表的改动），`ModelPicker` 回到上游原样。模型与推理等级从此由 DSH 自带的选择器负责，皮肤不再参与。
+- 首屏文案、品牌标记、置顶状态、侧栏首页与设置入口的改动保持不变。
+
 ## 1.1.2 — 2026-11-15
 
 ### 界面
