@@ -1736,7 +1736,7 @@ window.__ModuleLoader__.load({
       return h(
         'header',
         { className: 'isl-topbar' },
-        h('div', { className: 'isl-topbarLead', 'aria-hidden': true }),
+        h('div', { className: 'isl-topbarGrip', 'aria-hidden': true }),
         h(
           'button',
           {
@@ -1748,7 +1748,6 @@ window.__ModuleLoader__.load({
           },
           h(PanelGlyph),
         ),
-        h('div', { className: 'isl-topbarDrag', 'aria-hidden': true }),
         h(RightPanelToggle),
       );
     }

@@ -27,39 +27,26 @@ body[data-islands-ui] .isl-topbar {
   font-size: 13px;
   line-height: 20px;
   /* The bar itself must never swallow clicks meant for controls that are
-     docked over it; only the toggle and the drag handle opt back in. */
+     docked over it; the grip (below) is the only pointer target, and every
+     control in the band opts back in with `no-drag`. */
   pointer-events: none;
   -webkit-app-region: no-drag;
   user-select: none;
 }
 
-/* Left lead (traffic-light strip) and the centre of the bar are draggable;
-   both stop short of the docked controls so clicks keep working. */
-/* The 88px lead exists only for the macOS traffic lights. */
-body[data-islands-ui] .isl-topbarLead {
-  display: none;
+/* One grip for the whole chrome band. The window is draggable from any point
+   in it — including the bar's own top padding and the traffic-light strip —
+   instead of only from a 30px sash between the controls. */
+body[data-islands-ui] .isl-topbarGrip {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  -webkit-app-region: drag;
 }
 
+/* macOS draws its traffic lights inside the first 88px of this band. */
 html[data-platform='darwin'] body[data-islands-ui] .isl-topbar {
   padding-left: 88px;
-}
-
-html[data-platform='darwin'] body[data-islands-ui] .isl-topbarLead {
-  position: absolute;
-  inset: 0 auto 0 0;
-  display: block;
-  width: 88px;
-  pointer-events: auto;
-  -webkit-app-region: drag;
-}
-
-body[data-islands-ui] .isl-topbarDrag {
-  flex: 1;
-  align-self: stretch;
-  min-width: 0;
-  margin-right: 250px;
-  pointer-events: auto;
-  -webkit-app-region: drag;
 }
 
 /* Windows has no island top bar: every control lives in the native caption row
@@ -69,6 +56,8 @@ html[data-windows-titlebar] body[data-islands-ui] .isl-topbar {
 }
 
 body[data-islands-ui] .isl-topbarToggle {
+  position: relative;
+  z-index: 1;
   box-sizing: border-box;
   flex: none;
   display: grid;
@@ -105,9 +94,5 @@ body[data-islands-ui] .isl-topbarToggle:focus-visible {
 
   body[data-islands-ui] .isl-topbarToggle {
     display: none;
-  }
-
-  body[data-islands-ui] .isl-topbarDrag {
-    margin-right: 40px;
   }
 }
