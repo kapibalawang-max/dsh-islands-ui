@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.13 — 2026-11-15
+
+### 移除
+
+- 自绘的模型 / 推理弹层彻底下线。1.1.3 起这个槽位已交回 DSH 原生选择器，组件与样式表就成了不再渲染的死代码：删除 `src/45-model-picker.css`、`client.js` 里的 `ModelPicker` 与 `ModelGlyph`、以及只为它存在的 `modelDirectories` 注入。快捷键 `⌘⇧M` 随之消失，README 中对应的说明与文件表条目一并移除。
+
 ## 1.1.12 — 2026-11-15
 
 ### 界面
