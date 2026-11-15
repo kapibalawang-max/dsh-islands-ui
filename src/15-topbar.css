@@ -44,10 +44,17 @@ body[data-islands-ui] .isl-topbar {
    on `no-drag` punching a hole: Electron only lets a drag region's own
    descendants opt back in, and a control sitting under a drag region becomes
    dead — the window starts a drag instead of delivering the click. Keeping the
-   controls outside the region's geometry sidesteps that rule entirely. */
+   controls outside the region's geometry sidesteps that rule entirely.
+
+   The right edge is measured at runtime: the conversation header docks its own
+   toolbar over this band (panel toggle, layout switch, the actions menu), and a
+   fixed inset either leaves that cluster under the grip — dead clicks — or
+   wastes draggable width. `--isl-topbar-grip-right` is the distance from the
+   window's right edge to the first control found there; the fallback covers the
+   moment before the first measurement. */
 body[data-islands-ui] .isl-topbarGrip {
   position: absolute;
-  inset: 0 calc(var(--isl-gap) + 36px) 0 44px;
+  inset: 0 var(--isl-topbar-grip-right, calc(var(--isl-gap) + 36px)) 0 44px;
   pointer-events: auto;
   -webkit-app-region: drag;
 }

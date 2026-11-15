@@ -1728,14 +1728,63 @@ window.__ModuleLoader__.load({
     }
 
     /** Window chrome strip above the islands; owns the workspace toggle. */
+    /**
+     * The chrome band shares its strip with controls the host docks over it:
+     * the panel toggle, the layout switch and the actions menu all sit at the
+     * same height, painted by the conversation header. Electron only honours
+     * `no-drag` inside a drag region's own subtree, so any host control under
+     * our grip goes dead — the window starts a drag instead of delivering the
+     * click. Measure where that cluster begins and stop the grip short of it,
+     * which also keeps future host buttons clickable without a skin release.
+     */
+    function useChromeGripInset(bandRef) {
+      React.useEffect(() => {
+        const target = document.body;
+        let frame = 0;
+        const measure = () => {
+          frame = 0;
+          const band = bandRef.current;
+          const width = window.innerWidth;
+          let left = width;
+          const nodes = document.querySelectorAll('button, [role="button"], input, a[href]');
+          for (const node of nodes) {
+            if (band !== null && band.contains(node)) continue;
+            const rect = node.getBoundingClientRect();
+            if (rect.width < 4 || rect.height < 4) continue;
+            if (rect.top > 44 || rect.bottom < 0) continue;
+            if (rect.left <= width * 0.5) continue;
+            if (rect.left < left) left = rect.left;
+          }
+          const inset = left >= width ? 0 : Math.max(0, Math.round(width - left + 10));
+          target.style.setProperty('--isl-topbar-grip-right', `${inset}px`);
+        };
+        const schedule = () => {
+          if (frame !== 0) return;
+          frame = requestAnimationFrame(measure);
+        };
+        schedule();
+        const observer = new MutationObserver(schedule);
+        observer.observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('resize', schedule);
+        return () => {
+          if (frame !== 0) cancelAnimationFrame(frame);
+          observer.disconnect();
+          window.removeEventListener('resize', schedule);
+          target.style.removeProperty('--isl-topbar-grip-right');
+        };
+      }, [bandRef]);
+    }
+
     function IslandsTopBar() {
       const active = useLocale() ?? 'en';
       const copy = String(active).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
       const enabled = useEnabled();
+      const bandRef = React.useRef(null);
+      useChromeGripInset(bandRef);
       if (!enabled) return null;
       return h(
         'header',
-        { className: 'isl-topbar' },
+        { className: 'isl-topbar', ref: bandRef },
         h('div', { className: 'isl-topbarGrip', 'aria-hidden': true }),
         h(
           'button',
