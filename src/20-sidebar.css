@@ -699,8 +699,10 @@ body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-sta
 
 /* A session with scheduled work leads with the shell's clock badge, which the
    host renders into the same seat as our idle dot. Only one mark fits a 14px
-   column, so the badge keeps the seat and the dot steps aside. */
-body[data-islands-ui] [data-row-key^="session:"] > span:first-child:has(> [data-session-schedule-mark]) > .isl-rowStatus {
+   column, so the badge keeps the seat and the dot steps aside. The marks sit
+   side by side inside the seat's slot span, so the dot yields to a following
+   badge rather than to an ancestor. */
+body[data-islands-ui] [data-row-key^="session:"] .isl-rowStatus:has(~ [data-session-schedule-mark]) {
   display: none;
 }
 
