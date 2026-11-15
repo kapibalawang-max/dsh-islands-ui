@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.3 — 2026-11-15
+
+### 修正
+
+- **关闭开关后不再留下 chrome**：侧栏导航、命令面板、契约自检、行首圆点都在皮肤关闭时渲染 `null`，不再往宿主界面里塞未样式化的按钮；`⌘K` 监听也只在皮肤开启时挂载。`.isl-rail` / `.isl-palette` / `.isl-debug` / `.isl-rowStatus` 各补一条未作用域的 `display: none` 基线 + 作用域开启规则，首帧也不会闪出未样式化的界面。此前 `16-rail.css` 里 `body[data-islands-ui] .isl-rail{display:none}` 被同作用域的 `display:flex` 抵消，关闭开关后仍在侧栏顶部横着一排 34×27 的裸按钮。
+- **`⌘K` 的 ↵ 真的打开会话**：会话项改走 `uiWorkspaceService.openSession(id)`（置顶行一直用的入口），再定位过去；此前只滚动并高亮，对话没有切换。
+- **面板能搜到收起工作区里的会话**：行来自 DOM，另外合并会话 store 里未渲染的部分（按最近更新排序，总计上限 12 条，跳过草稿与已归档）。五个工作区全收起时，面板不再只剩命令。
+- **面板焦点不再漏出去**：`Tab` / `Shift+Tab` 在面板内循环，打开时记住原焦点、关闭后还回去。
+- **置顶行不再是按钮套按钮**：行本身改回容器，标题与状态点包进 `.isl-pinnedOpen` 按钮，取消与定位两个按钮成为兄弟节点；焦点环移到打开按钮上。
+- **行龄点会跟着时间走**：`IslandsRowStatus` 之前只挂载时采样一次、再补一次 1400ms 重测，相对时间跨档后点不会变；改为 `MutationObserver` 跟随行文本重算。
+- 关闭开关时 `⌘K` 里的启用/关闭命令会照实写成「关闭 Islands 界面」，并带上 `on` / `off` 标记。
+- `package.json` 的 `repository` / `bugs` / `homepage` 指向本 fork（作者的 `author` 字段保留上游署名，新增 `contributors`），`scripts/check-package.mjs` 相应放宽为「必须是 GitHub 上的 dsh-islands-ui 仓库」，不再写死上游账号。
+- 清掉模型选择器下线后的遗留：重复的 `CheckGlyph`（前者无人调用）、`EMPTY_MENU_STATE`、`modelIn`、`COPY` 里九个模型文案键，以及 `apply()` 里那行未声明的 `pluginCtx = ctx`（非严格模式下会落到 `window` 上）。
+
 ## 1.2.2 — 2026-11-15
 
 ### 移除

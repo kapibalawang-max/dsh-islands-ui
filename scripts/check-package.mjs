@@ -37,7 +37,10 @@ check(/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(pkg.version), `version is not 
 check(typeof pkg.description === 'string' && pkg.description.length >= 40, 'description is too short for a store listing');
 check(pkg.license === 'MIT', 'license must be MIT');
 check(typeof pkg.repository?.url === 'string', 'repository.url is required and must point at the GitHub repo');
-check(pkg.repository?.url?.includes('DawnCHL/dsh-islands-ui'), 'repository.url must point at DawnCHL/dsh-islands-ui');
+check(
+  /github\.com\/[^/]+\/dsh-islands-ui(?:\.git)?$/u.test(pkg.repository?.url ?? ''),
+  'repository.url must point at a dsh-islands-ui repository on GitHub',
+);
 check(Array.isArray(pkg.keywords) && pkg.keywords.includes('dsh-plugin'), 'keywords must include dsh-plugin');
 check(Array.isArray(pkg.keywords) && pkg.keywords.includes('theme'), 'keywords must include theme');
 check(pkg.engines?.node !== undefined, 'engines.node is required');

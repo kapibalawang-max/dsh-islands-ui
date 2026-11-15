@@ -4,7 +4,10 @@
  * A rule that touches the host must be scoped to the skin, may only match a
  * host contract or a skin part, and may not name a hashed class or a class
  * substring. Skin-only rules (`.isl-*`) stay unscoped because the components
- * that carry them are mounted only while the skin is on.
+ * that carry them render nothing while the skin is off. Surfaces that mount
+ * unconditionally (the rail, the palette, the inspector, the row dot) carry an
+ * unscoped `display: none` base plus a scoped rule that turns them on, so a
+ * disabled skin can never paint chrome or swallow a click.
  */
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';

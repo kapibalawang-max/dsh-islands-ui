@@ -99,6 +99,7 @@ window.__ModuleLoader__.load({
         paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
         paletteEnable: '启用 Islands 界面',
+        paletteDisable: '关闭 Islands 界面',
         debugTitle: '契约自检',
         debugOk: '全部命中',
         debugMiss: '缺失',
@@ -217,6 +218,7 @@ window.__ModuleLoader__.load({
         paletteTheme: 'Cycle theme preset',
         paletteAccent: 'Cycle accent colour',
         paletteEnable: 'Enable Islands UI',
+        paletteDisable: 'Turn off Islands UI',
         debugTitle: 'Contract inspector',
         debugOk: 'all present',
         debugMiss: 'missing',
@@ -562,14 +564,6 @@ window.__ModuleLoader__.load({
           strokeWidth: 1.5,
         }),
         h('path', { d: 'M12.5 4v12', stroke: 'currentColor', strokeWidth: 1.5 }),
-      );
-    }
-
-    function CheckGlyph() {
-      return h(
-        'svg',
-        { width: 14, height: 14, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
-        h('path', { d: 'm3.5 8.5 3 3 6-6.5', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' }),
       );
     }
 
@@ -922,6 +916,7 @@ window.__ModuleLoader__.load({
      */
     function IslandsRail({ usePanelInfo }) {
       const active = usePanelInfo((info) => info.activePanelId ?? null);
+      const enabled = useEnabled();
       const [config, setConfig] = React.useState(readRailConfig);
       const [menu, setMenu] = React.useState(null);
       const [dragId, setDragId] = React.useState(null);
@@ -1332,6 +1327,10 @@ window.__ModuleLoader__.load({
           )
         : null;
 
+      // The rail is skin chrome: while the skin is off the plugin keeps the
+      // registration (the settings sheet still needs it) but renders nothing.
+      if (!enabled) return null;
+
       return h(
         'nav',
         {
@@ -1609,16 +1608,6 @@ window.__ModuleLoader__.load({
       );
     }
 
-    const EMPTY_MENU_STATE = Object.freeze({ current: null, groups: [], status: 'idle', retainedEffort: undefined, error: null });
-
-    function modelIn(groups, selection) {
-      for (const group of groups) {
-        if (group.id !== selection.provider) continue;
-        const model = group.models.find((entry) => entry.id === selection.model);
-        if (model !== undefined) return model;
-      }
-      return undefined;
-    }
 
     /** Live open/closed state of the native right sidebar, read from its attribute. */
     function useRightPanelOpen() {
@@ -1742,6 +1731,8 @@ window.__ModuleLoader__.load({
     function IslandsTopBar() {
       const active = useLocale() ?? 'en';
       const copy = String(active).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
+      const enabled = useEnabled();
+      if (!enabled) return null;
       return h(
         'header',
         { className: 'isl-topbar' },
@@ -1842,6 +1833,7 @@ window.__ModuleLoader__.load({
         static dot in front of every row keeps the list aligned with the pinned
         block above it, where idle rows keep the same hollow mark. */
     function IslandsRowStatus() {
+      const enabled = useEnabled();
       const ref = React.useRef(null);
       const [age, setAge] = React.useState('none');
       React.useEffect(() => {
@@ -1850,9 +1842,26 @@ window.__ModuleLoader__.load({
         const row = node.closest('[data-row-key]');
         const measure = () => setAge(rowAgeOf(row));
         measure();
+        // The host paints the relative time a beat after the row mounts and
+        // then rewrites it as the session ages: follow the row, don't sample it
+        // once (a single 1400ms retry left the bucket frozen for the page life).
         const timer = window.setTimeout(measure, 1400);
-        return () => window.clearTimeout(timer);
+        let frame = 0;
+        const observer = new MutationObserver(() => {
+          if (frame !== 0) return;
+          frame = requestAnimationFrame(() => {
+            frame = 0;
+            measure();
+          });
+        });
+        observer.observe(row, { childList: true, characterData: true, subtree: true });
+        return () => {
+          window.clearTimeout(timer);
+          observer.disconnect();
+          if (frame !== 0) cancelAnimationFrame(frame);
+        };
       }, []);
+      if (!enabled) return null;
       return h(
         'span',
         {
@@ -1925,24 +1934,28 @@ window.__ModuleLoader__.load({
         place(0, 0);
       };
 
+      // The row is a container, not a button: the open target is its own
+      // <button>, so the two actions beside it are siblings rather than
+      // nested interactive elements.
       return h(
         'div',
         {
           className: 'isl-pinnedRow',
-          role: 'button',
-          tabIndex: 0,
-          title: rowTitle,
-          onClick: () => uiWorkspaceService?.openSession(id),
-          onKeyDown: (event) => {
-            if (event.key !== 'Enter' && event.key !== ' ') return;
-            event.preventDefault();
-            uiWorkspaceService?.openSession(id);
-          },
           onPointerEnter: enter,
           onPointerLeave: leave,
         },
-        h(PinnedStatusMark, { status: statusMark }),
-        h('span', { className: 'isl-pinnedName', ref: titleRef }, title),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'isl-pinnedOpen',
+            title: rowTitle,
+            'aria-label': title,
+            onClick: () => uiWorkspaceService?.openSession(id),
+          },
+          h(PinnedStatusMark, { status: statusMark }),
+          h('span', { className: 'isl-pinnedName', ref: titleRef }, title),
+        ),
         h(
           'button',
           {
@@ -2017,9 +2030,11 @@ window.__ModuleLoader__.load({
       });
       const lang = useLocale() ?? 'en';
       const copy = String(lang).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
+      const enabled = useEnabled();
 
       React.useEffect(() => {
         let current = null;
+        if (!enabled) return undefined;
         const attach = () => {
           const header = document.querySelector(partSelector('section-header'));
           const tree = document.querySelector(partSelector('tree-body')) ?? document.querySelector(partSelector('list'));
@@ -2049,11 +2064,11 @@ window.__ModuleLoader__.load({
           window.clearInterval(timer);
           current?.remove();
         };
-      }, []);
+      }, [enabled]);
 
       const rows = pinnedIds.map((id) => sessions[id]).filter((session) => session !== undefined);
       const pinIcon = defaultPinIcon();
-      if (host === null || rows.length === 0) return null;
+      if (!enabled || host === null || rows.length === 0) return null;
 
       const toggle = () => {
         const next = !collapsed;
@@ -2342,14 +2357,43 @@ window.__ModuleLoader__.load({
     }
 
     /**
+     * Open a session the palette picked. `openSession` is the service the
+     * pinned rows already use, so the palette works even when the row is not
+     * rendered (collapsed workspace); the locate pass then shows where it is.
+     */
+    function openSessionFromPalette(id, title) {
+      const result = uiWorkspaceService?.openSession?.(id);
+      if (result !== null && typeof result === 'object' && typeof result.catch === 'function') {
+        result.catch(() => {});
+      }
+      window.setTimeout(() => revealPinnedSession(id, title), 60);
+    }
+
+    /**
      * Sessions the palette can jump to, read from the rows the user actually
      * sees. The sidebar owns that order (pinned first, then by workspace), so
      * copying it beats re-deriving it from services the skin does not have.
      */
-    function collectPaletteSessions(query) {
+    const PALETTE_STATUS_PREFIX = new RegExp(
+      `^(?:${[
+        ...['statusRunning', 'statusApproval', 'statusPlanReview', 'statusQuestion', 'statusPending', 'statusDone', 'statusIdle'].flatMap(
+          (key) => [COPY.zh[key], COPY.en[key]],
+        ),
+        'Running',
+        'Completed, unread',
+      ]
+        .filter((value) => typeof value === 'string' && value !== '')
+        .map((value) => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'))
+        .join('|')})\\s*`,
+      'iu',
+    );
+
+    function collectPaletteSessions(query, sessions) {
+      const limit = 12;
       const rows = Array.from(document.querySelectorAll('[data-row-key^="session:"]'));
       const out = [];
       const seen = new Set();
+      const matches = (title) => query === '' || title.toLowerCase().includes(query);
       for (const row of rows) {
         const key = row.getAttribute('data-row-key') ?? '';
         const id = key.slice('session:'.length);
@@ -2363,17 +2407,33 @@ window.__ModuleLoader__.load({
         const title = String(clone.textContent ?? '')
           .replace(/\s+/gu, ' ')
           .replace(/\s*\d+\s*(?:mo|min|m|h|d|w)\s*$/iu, '')
-          .trim();
+          .trim()
+          .replace(PALETTE_STATUS_PREFIX, '');
         if (title === '') continue;
-        if (query !== '' && !title.toLowerCase().includes(query)) continue;
         seen.add(id);
+        if (!matches(title)) continue;
         out.push({ id, kind: 'session', label: title, title, age: rowAgeOf(row) });
       }
-      return out.slice(0, 8);
+      if (out.length >= limit || sessions === null || typeof sessions !== 'object') return out.slice(0, limit);
+      // Collapsed workspaces keep their rows out of the DOM: read the rest from
+      // the session store so the palette still reaches them, newest first.
+      const extra = Object.values(sessions)
+        .filter((session) => session !== null && typeof session === 'object')
+        .filter((session) => typeof session.id === 'string' && !seen.has(session.id))
+        .filter((session) => session.blank !== true && session.archived !== true)
+        .filter((session) => typeof session.title === 'string' && session.title.trim() !== '')
+        .filter((session) => matches(session.title.trim()))
+        .sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0));
+      for (const session of extra) {
+        if (out.length >= limit) break;
+        const title = session.title.trim();
+        out.push({ id: session.id, kind: 'session', label: title, title, age: 'none' });
+      }
+      return out;
     }
 
     /** The command list, rebuilt on each open so the labels follow the locale. */
-    function paletteCommands(copy) {
+    function paletteCommands(copy, enabled) {
       const nextTheme = () => THEMES[(THEMES.indexOf(readTheme()) + 1) % THEMES.length];
       return [
         {
@@ -2408,8 +2468,8 @@ window.__ModuleLoader__.load({
         },
         {
           id: 'enable',
-          label: copy.paletteEnable,
-          hint: '',
+          label: enabled ? copy.paletteDisable : copy.paletteEnable,
+          hint: enabled ? 'on' : 'off',
           run: () => setEnabled(!enabled),
         },
       ];
@@ -2419,13 +2479,16 @@ window.__ModuleLoader__.load({
      * ⌘K palette. It costs one overlay and no new data source: the rows are
      * already on screen, so the palette reads them and reuses the locate path.
      */
-    function IslandsPalette() {
+    function IslandsPalette({ useSessions }) {
       const lang = useLocale() ?? 'en';
       const copy = String(lang).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
+      const enabled = useEnabled();
+      const sessions = typeof useSessions === 'function' ? useSessions((state) => state.byId ?? {}) : null;
       const snapshot = usePrefsSnapshot();
       const [open, setOpen] = React.useState(false);
       const [query, setQuery] = React.useState('');
       const [cursor, setCursor] = React.useState(0);
+      const previousFocus = React.useRef(null);
 
       const close = () => {
         setOpen(false);
@@ -2445,28 +2508,41 @@ window.__ModuleLoader__.load({
           });
           setCursor(0);
         };
+        if (!enabled) return undefined;
         window.addEventListener('keydown', onKey, true);
         return () => window.removeEventListener('keydown', onKey, true);
-      }, []);
+      }, [enabled]);
+
+      // Remember where the user was, so closing hands the keyboard back.
+      React.useEffect(() => {
+        if (open) {
+          previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          return undefined;
+        }
+        const node = previousFocus.current;
+        previousFocus.current = null;
+        if (node !== null && node.isConnected) node.focus();
+        return undefined;
+      }, [open]);
 
       const items = React.useMemo(() => {
         if (!open) return [];
         const text = query.trim().toLowerCase();
-        const sessions = collectPaletteSessions(text);
-        const commands = paletteCommands(copy).filter(
+        const sessionRows = collectPaletteSessions(text, sessions);
+        const commands = paletteCommands(copy, enabled).filter(
           (command) => text === '' || command.label.toLowerCase().includes(text),
         );
         const rows = [];
-        if (sessions.length > 0) {
+        if (sessionRows.length > 0) {
           rows.push({ id: 'group-sessions', kind: 'group', label: copy.paletteSessions });
-          for (const session of sessions) rows.push(session);
+          for (const session of sessionRows) rows.push(session);
         }
         if (commands.length > 0) {
           rows.push({ id: 'group-commands', kind: 'group', label: copy.paletteCommands });
           for (const command of commands) rows.push({ ...command, kind: 'command' });
         }
         return rows;
-      }, [open, query, snapshot, copy]);
+      }, [open, query, snapshot, copy, enabled, sessions]);
 
       const selectable = items.filter((item) => item.kind !== 'group');
       const index = Math.min(cursor, Math.max(selectable.length - 1, 0));
@@ -2475,7 +2551,7 @@ window.__ModuleLoader__.load({
         if (item === undefined || item.kind === 'group') return;
         close();
         if (item.kind === 'session') {
-          revealPinnedSession(item.id, item.title);
+          openSessionFromPalette(item.id, item.title);
           return;
         }
         item.run();
@@ -2504,9 +2580,24 @@ window.__ModuleLoader__.load({
           event.preventDefault();
           run(selectable[index]);
         }
+        if (event.key === 'Tab') {
+          // aria-modal promises the keyboard stays here.
+          const card = event.currentTarget;
+          const focusables = card.querySelectorAll('input, button');
+          if (focusables.length === 0) return;
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        }
       };
 
-      if (!open) return null;
+      if (!open || !enabled) return null;
 
       let seen = -1;
       return h(
@@ -2618,7 +2709,9 @@ window.__ModuleLoader__.load({
           window.removeEventListener('resize', refresh);
         };
       }, []);
+      const enabled = useEnabled();
       const ok = report.unknown.length === 0 && report.marked;
+      if (!enabled) return null;
       return h(
         'div',
         { className: 'isl-debug' },
@@ -2837,7 +2930,6 @@ window.__ModuleLoader__.load({
           workspacesService = scope.workspaces;
         });
 
-        pluginCtx = ctx;
         localeService = ctx.locale;
         layoutService = ctx.layout;
         slotsService = ctx.slots;

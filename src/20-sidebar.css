@@ -503,6 +503,30 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   background: var(--dsw-alias-interactive-bg-hover);
 }
 
+/* The open target fills the row; the two actions keep their own hit areas. */
+.isl-pinnedOpen {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.isl-pinnedOpen:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 2px;
+  border-radius: var(--isl-radius-xs);
+}
+
 .isl-pinnedName {
   flex: 1;
   min-width: 0;
@@ -526,11 +550,6 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
 
 .isl-pinnedRow .isl-pinnedName[data-scrolled][data-clipped] {
   mask-image: linear-gradient(90deg, #0000, #000 12px calc(100% - 12px), #0000);
-}
-
-.isl-pinnedRow:focus-visible {
-  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
-  outline-offset: -2px;
 }
 
 .isl-pinnedPinBtn,
@@ -704,6 +723,16 @@ body[data-islands-ui] [data-row-key^="session:"] > span:first-child svg[data-sta
    badge rather than to an ancestor. */
 body[data-islands-ui] [data-row-key^="session:"] .isl-rowStatus:has(~ [data-session-schedule-mark]) {
   display: none;
+}
+
+/* The leading dot mounts on every idle session row; the base rule keeps it
+   invisible while the skin is off so the host rows stay untouched. */
+.isl-rowStatus {
+  display: none;
+}
+
+body[data-islands-ui] .isl-rowStatus {
+  display: inline-flex;
 }
 
 .isl-pinnedDot::after {

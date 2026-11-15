@@ -1,6 +1,6 @@
 {
   "name": "dsh-islands-ui",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Islands UI — a floating-island interface skin for DeepSeek Harness: rounded panels, a persistent left rail, a pinned-session shelf and an adjustable accent color.",
   "icon": "./assets/icon-180.png",
   "type": "module",
@@ -9,14 +9,20 @@
     "name": "DawnCHL",
     "url": "https://github.com/DawnCHL"
   },
+  "contributors": [
+    {
+      "name": "kapibalawang-max",
+      "url": "https://github.com/kapibalawang-max"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DawnCHL/dsh-islands-ui.git"
+    "url": "git+https://github.com/kapibalawang-max/dsh-islands-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/DawnCHL/dsh-islands-ui/issues"
+    "url": "https://github.com/kapibalawang-max/dsh-islands-ui/issues"
   },
-  "homepage": "https://github.com/DawnCHL/dsh-islands-ui#readme",
+  "homepage": "https://github.com/kapibalawang-max/dsh-islands-ui#readme",
   "keywords": [
     "deepseek",
     "deepseek-harness",

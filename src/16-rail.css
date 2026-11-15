@@ -4,7 +4,9 @@
    reorder it; right-click the rail to show or hide launchers.
    ========================================================================== */
 
-body[data-islands-ui] .isl-rail {
+/* Mounted unconditionally by the plugin: the base rule keeps it out of the way
+   while the skin is off, the scoped rule below lays it out while it is on. */
+.isl-rail {
   display: none;
 }
 

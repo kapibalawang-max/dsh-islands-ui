@@ -281,6 +281,10 @@ body[data-islands-ui] .isl-rowStatus[data-islands-age='old'] .isl-pinnedDot::aft
 /* ---- 7. Command palette ------------------------------------------------ */
 
 .isl-palette {
+  display: none;
+}
+
+body[data-islands-ui] .isl-palette {
   position: fixed;
   z-index: 260;
   inset: 0;
@@ -421,6 +425,11 @@ body[data-islands-ui] .isl-paletteFoot {
 /* ---- 8. Contract inspector --------------------------------------------- */
 
 .isl-debug {
+  display: none;
+}
+
+body[data-islands-ui] .isl-debug {
+  display: block;
   position: fixed;
   z-index: 300;
   right: 12px;

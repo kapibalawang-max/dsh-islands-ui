@@ -55,7 +55,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
-| ⌘K | **Command palette** | `⌘K` opens a centered island: sessions jump and locate, commands toggle the skin, density, theme and accent |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, theme and accent |
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
