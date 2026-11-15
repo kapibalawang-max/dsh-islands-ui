@@ -1,5 +1,7 @@
 # 把 10–11px 的文字提到 12px 下限
 
+> **状态**：已落地 — 1.1.12。十条规则提高；1.1.13 下线模型弹层后 `.isl-modelGroupName` / `.isl-modelError` 两条随样式表一并删除，实际改动 8 条。
+
 Written against: `955902ccf19c307062088e0d8824233b0d2603a8`
 
 ## Evidence chain

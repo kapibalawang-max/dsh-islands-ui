@@ -1,5 +1,7 @@
 # 更新入口跟随用户强调色
 
+> **状态**：已落地 — 1.1.12。`--isl-update-bg` 改为 `var(--isl-accent)`，悬停走 `color-mix`；实测绿/紫强调色下按钮底色随之变化。
+
 Written against: `955902ccf19c307062088e0d8824233b0d2603a8`
 
 ## Evidence chain
