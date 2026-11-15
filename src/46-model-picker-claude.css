@@ -1,0 +1,167 @@
+/* Model picker, after the Claude Code desktop treatment: a flat text seat
+   with no chip chrome, and a card menu with a search field, inverse chip
+   group labels, compact rows and one check on the selected row.
+   Overrides 45-model-picker.css by load order. */
+
+body[data-islands-ui] .isl-modelTrigger {
+  gap: 0;
+  max-width: 280px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.12s var(--ds-ease-in-out);
+}
+
+body[data-islands-ui] .isl-modelTrigger:hover:not(:disabled) {
+  background: var(--isl-hover);
+}
+
+body[data-islands-ui] .isl-modelTrigger[aria-expanded='true'] {
+  background: var(--isl-active);
+}
+
+body[data-islands-ui] .isl-modelIcon {
+  display: none;
+}
+
+body[data-islands-ui] .isl-modelEffort {
+  margin-left: 6px;
+  color: var(--dsw-alias-label-tertiary);
+  font-weight: 400;
+}
+
+body[data-islands-ui] .isl-modelChevron {
+  margin-left: 4px;
+  opacity: 0.65;
+}
+
+body[data-islands-ui] .isl-modelMenu {
+  min-width: 248px;
+  padding: 6px;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-radius-md);
+  background: var(--isl-surface);
+  box-shadow: var(--isl-shadow-float);
+}
+
+body[data-islands-ui] .isl-modelPaneHead {
+  padding: 0 2px 6px;
+}
+
+body[data-islands-ui] .isl-modelMenuTitle {
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+body[data-islands-ui] .isl-modelBack {
+  width: 22px;
+  height: 22px;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+body[data-islands-ui] .isl-modelBack:hover {
+  background: var(--isl-hover);
+  color: var(--dsw-alias-label-primary);
+}
+
+body[data-islands-ui] .isl-modelSearch {
+  padding: 0 0 6px;
+}
+
+body[data-islands-ui] .isl-modelSearchInput {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-radius-sm);
+  background: var(--isl-surface-muted);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+  appearance: none;
+}
+
+body[data-islands-ui] .isl-modelSearchInput::placeholder {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+body[data-islands-ui] .isl-modelSearchInput:focus {
+  border-color: var(--isl-accent);
+  background: var(--isl-surface);
+}
+
+body[data-islands-ui] .isl-modelGroups {
+  gap: 1px;
+}
+
+body[data-islands-ui] .isl-modelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+body[data-islands-ui] .isl-modelGroup + .isl-modelGroup {
+  margin-top: 10px;
+}
+
+body[data-islands-ui] .isl-modelGroupName {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin: 2px 0 3px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: var(--dsw-alias-label-primary);
+  color: var(--isl-surface);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+body[data-islands-ui] .isl-modelOption {
+  min-height: 27px;
+  padding: 1px 7px;
+  gap: 8px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font-size: 13px;
+}
+
+body[data-islands-ui] .isl-modelOption:hover {
+  background: var(--isl-hover);
+}
+
+body[data-islands-ui] .isl-modelOption.is-selected {
+  background: transparent;
+}
+
+body[data-islands-ui] .isl-modelOptionName {
+  font-weight: 500;
+}
+
+body[data-islands-ui] .isl-modelCheck {
+  margin-left: auto;
+  color: var(--isl-accent);
+}
+
+body[data-islands-ui] .isl-modelEmpty {
+  padding: 10px 8px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 13px;
+}
+
+body[data-islands-ui] .isl-modelError {
+  margin-top: 4px;
+  font-size: 12px;
+}

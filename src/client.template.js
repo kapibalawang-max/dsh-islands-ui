@@ -1537,6 +1537,7 @@ window.__ModuleLoader__.load({
       const [draft, setDraft] = React.useState(null);
       const [busy, setBusy] = React.useState(false);
       const [error, setError] = React.useState('');
+      const [query, setQuery] = React.useState('');
       const rootRef = React.useRef(null);
       const triggerRef = React.useRef(null);
       const panelRef = React.useRef(null);
@@ -1555,10 +1556,24 @@ window.__ModuleLoader__.load({
         ? state.status === 'loading' ? copy.loading : copy.pick
         : modelIn(groups, current)?.name ?? current.model;
 
+      const searchQuery = query.trim().toLowerCase();
+      const searchPlaceholder = String(active).toLowerCase().startsWith('zh') ? '搜索模型' : 'Search models';
+      const visibleGroups = searchQuery === ''
+        ? groups
+        : groups
+            .map((group) => ({
+              ...group,
+              models: group.models.filter((entry) =>
+                String(entry.name ?? entry.id).toLowerCase().includes(searchQuery),
+              ),
+            }))
+            .filter((group) => group.models.length > 0);
+
       const close = () => {
         setOpen(false);
         setError('');
         setDraft(null);
+        setQuery('');
       };
 
       const openMenu = () => {
@@ -1570,9 +1585,10 @@ window.__ModuleLoader__.load({
           right: Math.max(8, window.innerWidth - rect.right),
           width: Math.min(300, window.innerWidth - 24),
         });
-        setPane('effort');
+        setPane('model');
         setDraft(null);
         setError('');
+        setQuery('');
         setOpen(true);
         directory.load().catch(() => {});
       };
@@ -1693,10 +1709,24 @@ window.__ModuleLoader__.load({
         ),
         h(
           'div',
+          { className: 'isl-modelSearch' },
+          h('input', {
+            className: 'isl-modelSearchInput',
+            type: 'search',
+            value: query,
+            placeholder: searchPlaceholder,
+            spellCheck: false,
+            autoFocus: true,
+            onChange: (event) => setQuery(event.target.value),
+            onKeyDown: (event) => event.stopPropagation(),
+          }),
+        ),
+        h(
+          'div',
           { className: 'isl-modelGroups' },
-          groups.length === 0
+          visibleGroups.length === 0
             ? h('div', { className: 'isl-modelEmpty' }, state.status === 'loading' ? copy.loading : copy.empty)
-            : groups.map((group) =>
+            : visibleGroups.map((group) =>
                 h(
                   'div',
                   { className: 'isl-modelGroup', key: group.id },

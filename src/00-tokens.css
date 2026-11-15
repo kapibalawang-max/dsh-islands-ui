@@ -8,7 +8,7 @@
 
 body[data-islands-ui] {
   /* Canvas: the unified background all islands float on. */
-  --isl-canvas: #f7f7f7;
+  --isl-canvas: #e8e8e8;
   --isl-canvas-veil: rgba(232, 234, 239, 0.72);
   /* Island surfaces. */
   --isl-surface: #ffffff;
