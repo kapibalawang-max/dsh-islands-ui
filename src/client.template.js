@@ -2031,6 +2031,18 @@ window.__ModuleLoader__.load({
       );
     }
 
+    /** The workspace rows carry the shell's own status dot whenever a session is
+        busy; the leading seat only renders our slot while the row is idle. One
+        static dot in front of every row keeps the list aligned with the pinned
+        block above it, where idle rows keep the same hollow mark. */
+    function IslandsRowStatus() {
+      return h(
+        'span',
+        { className: 'isl-pinnedStatus isl-rowStatus', 'data-islands-state': 'idle', 'aria-hidden': true },
+        h('span', { className: 'isl-pinnedDot', 'aria-hidden': true }),
+      );
+    }
+
     /** One pinned row: hover reveals unpin + locate, and a clipped title marquees. */
     function PinnedRow({ session, status, copy, pinIcon }) {
       const titleRef = React.useRef(null);
@@ -2739,6 +2751,14 @@ window.__ModuleLoader__.load({
 
           ctx.slots.inject('shell.overlay', () =>
             ctx.slots.register({ name: 'shell.overlay', id: 'islands-pinned', order: -88 }, IslandsPinnedSection),
+          );
+
+          // The row's leading seat shows the shell's status dot while a session
+          // is busy and hands the seat to slots only when idle: filling it with
+          // the same static dot means every row leads with a mark, like the
+          // pinned block, instead of the indent collapsing on idle rows.
+          ctx.slots.inject('sidebar.session.row.leading', () =>
+            ctx.slots.register({ name: 'sidebar.session.row.leading', id: 'islands-row-status', order: 0 }, IslandsRowStatus),
           );
 
           // The hero brand slot is a single seat the blank session fills with

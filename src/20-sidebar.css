@@ -658,6 +658,17 @@ body[data-islands-ui] [data-islands-part~="sidebar-root"] [data-islands-part~="p
   height: 10px;
 }
 
+/* The workspace rows lead with the same 14px cell as the pinned rows: the
+   shell's live dot and our idle mark both center in one column, so titles sit
+   at the same x whether a session is running or at rest. */
+body[data-islands-ui] [data-row-key^="session:"] > span:first-child {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+}
+
 .isl-pinnedDot::after {
   content: '';
   position: absolute;
