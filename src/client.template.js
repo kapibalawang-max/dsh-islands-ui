@@ -2801,6 +2801,7 @@ window.__ModuleLoader__.load({
                       tabIndex: -1,
                       'aria-selected': position === index,
                       className: 'isl-paletteRow',
+                      title: item.label,
                       'data-on': position === index ? 'true' : 'false',
                       onMouseMove: () => setCursor(position),
                       onClick: () => run(item),
