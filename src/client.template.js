@@ -95,6 +95,9 @@ window.__ModuleLoader__.load({
         themeLilac: '紫',
         themeInk: '墨',
         themeGraphite: '石',
+        themeJade: '青玉',
+        themeRose: '玫瑰',
+        themeOlive: '橄榄',
         tipsTitle: '小提示',
         tipsDesc: '按 ⌘K 快速跳会话或执行命令；在「主题预设」里换整套配色；「紧凑行高」让列表一屏多看几条。',
         palettePlaceholder: '跳到会话，或输入命令',
@@ -221,6 +224,9 @@ window.__ModuleLoader__.load({
         themeLilac: 'Lilac',
         themeInk: 'Ink',
         themeGraphite: 'Graphite',
+        themeJade: 'Jade',
+        themeRose: 'Rose',
+        themeOlive: 'Olive',
         tipsTitle: 'Quick tips',
         tipsDesc: 'Press ⌘K to jump to a session or run a command; pick a theme preset for a whole new palette; compact rows fit more on screen.',
         palettePlaceholder: 'Jump to a session, or type a command',
@@ -318,7 +324,7 @@ window.__ModuleLoader__.load({
     const DENSITY_KEY = 'dsh-islands-ui:density';
     const THEME_KEY = 'dsh-islands-ui:theme';
     const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
-    const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite'];
+    const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite', 'jade', 'rose', 'olive'];
     const listeners = new Set();
 
     function readStored() {

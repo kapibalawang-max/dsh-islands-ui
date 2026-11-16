@@ -60,7 +60,7 @@ body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
 
 /* ---- 4. Theme presets --------------------------------------------------- */
 
-/* Mist is the shipped palette; these two are whole token sets, not accents. */
+/* Mist is the shipped palette; every preset is a whole token set, not an accent swap. */
 body[data-islands-ui][data-islands-theme='sand'] {
   /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
@@ -145,6 +145,87 @@ body[data-islands-ui][data-islands-theme='ink'] {
   --isl-border: rgba(17, 24, 39, 0.16);
   --isl-border-strong: rgba(17, 24, 39, 0.24);
   --isl-accent: #2f4bb8;
+}
+
+body[data-islands-ui][data-islands-theme='jade'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #e6eeeb;
+  --isl-surface: #fbfefc;
+  --isl-surface-muted: #eff5f2;
+  --isl-surface-sunken: #dde8e4;
+  --isl-border-soft: rgba(20, 54, 48, 0.1);
+  --isl-border: rgba(20, 54, 48, 0.15);
+  --isl-border-strong: rgba(20, 54, 48, 0.22);
+  --isl-accent: #1f6f63;
+}
+
+body[data-islands-ui][data-islands-theme='rose'] {
+  /* Darker canvases need a firmer label ladder to stay at AA. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #f1e8ea;
+  --isl-surface: #fffbfc;
+  --isl-surface-muted: #f8eff1;
+  --isl-surface-sunken: #ece0e3;
+  --isl-border-soft: rgba(72, 28, 44, 0.1);
+  --isl-border: rgba(72, 28, 44, 0.15);
+  --isl-border-strong: rgba(72, 28, 44, 0.22);
+  --isl-accent: #a84463;
+}
+
+body[data-islands-ui][data-islands-theme='olive'] {
+  /* The yellowest canvas of the set; the ladder moves with it. */
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
+  --isl-canvas: #ececdf;
+  --isl-surface: #fcfcf6;
+  --isl-surface-muted: #f2f2e8;
+  --isl-surface-sunken: #e4e4d5;
+  --isl-border-soft: rgba(46, 48, 20, 0.1);
+  --isl-border: rgba(46, 48, 20, 0.15);
+  --isl-border-strong: rgba(46, 48, 20, 0.22);
+  --isl-accent: #5f6b2f;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='jade'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #0b1211;
+  --isl-surface: #151e1c;
+  --isl-surface-muted: #1d2725;
+  --isl-surface-sunken: #101817;
+  --isl-border-soft: rgba(200, 235, 228, 0.07);
+  --isl-border: rgba(200, 235, 228, 0.1);
+  --isl-border-strong: rgba(200, 235, 228, 0.17);
+  --isl-accent: #6cc0b0;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='rose'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #130d10;
+  --isl-surface: #1d1619;
+  --isl-surface-muted: #261e21;
+  --isl-surface-sunken: #181113;
+  --isl-border-soft: rgba(255, 225, 232, 0.07);
+  --isl-border: rgba(255, 225, 232, 0.1);
+  --isl-border-strong: rgba(255, 225, 232, 0.17);
+  --isl-accent: #e58fa3;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='olive'] {
+  --dsw-alias-label-tertiary: #adb2b8;
+  --dsw-alias-label-caption: #81858c;
+  --isl-canvas: #10120a;
+  --isl-surface: #1a1d14;
+  --isl-surface-muted: #22261a;
+  --isl-surface-sunken: #14170e;
+  --isl-border-soft: rgba(232, 238, 205, 0.07);
+  --isl-border: rgba(232, 238, 205, 0.1);
+  --isl-border-strong: rgba(232, 238, 205, 0.17);
+  --isl-accent: #b6c46e;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
