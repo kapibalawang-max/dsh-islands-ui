@@ -3025,7 +3025,7 @@ function installParts() {
         {
           id: 'density',
           label: copy.paletteDensity,
-          hint: compact ? '32px → 26px' : '26px → 32px',
+          hint: compact ? '26px → 32px' : '32px → 26px',
           run: () => storePref(DENSITY_KEY, compact ? 'comfortable' : 'compact'),
         },
         {
