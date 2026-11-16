@@ -30,7 +30,7 @@ dsh plugin --profile desktop add dsh-islands-ui
 dsh plugin --profile web add dsh-islands-ui
 ```
 
-Then refresh (`⌘R` / `Ctrl+R`). The skin is enabled by default. Turn it off at **Settings → Islands UI** to restore the stock appearance immediately; your preference and accent are kept.
+Then refresh (`⌘R` / `Ctrl+R`). The skin is enabled by default. Turn it off at **Settings → Floating island theme** to restore the stock appearance immediately; your preference and accent are kept.
 
 > Requires DeepSeek Harness `0.2.2-rc.1` or `0.2.2-rc.2`. The client reads the running release (`window.__DSH_BOOT__.release.version`) and injects the sidebar structure stylesheet for that build; older `0.2.x` builds fall back to the base stylesheet. The package declares `dsh.bundle` + `dsh.client`, so `dsh plugin add` installs and mounts it without editing the profile by hand.
 
@@ -49,7 +49,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; flat, no drop shadows, separated by color and a 1px hairline |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
 | 🎨 | **Theme presets** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite, each with its own light and dark set (14 combinations); the accent can still override |
-| ⚙️ | **Settings page** | Settings → Islands UI: on/off, accent presets, custom color and follow-theme |
+| ⚙️ | **Settings page** | Settings → Floating island theme: on/off, accent presets, custom color and follow-theme |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
@@ -196,8 +196,8 @@ Repository settings: `main` requires a PR, the `check (Node 20/22/24)` CI jobs a
 
 - The skin is a pure client style layer and does not replace session, settings or plugin data or behavior.
 - Styles depend on two stable layers only: host contracts (`data-slot`, `data-phase`, `data-conversation-scroll`, `data-composer-card`, `data-row-key`, `role` / `aria-*`) and the skin's own part marks in `data-islands-part`. Host class names appear only as local names in the tables in `src/host/runtime.js`; a hash segment never enters a selector. A Harness rebuild that changes hashes needs no update, and a host rename makes the affected rule go quiet until one table line changes.
-- On startup the plugin verifies the core contracts (`[data-slot="root"]`, `[data-slot="sidebar"]`) and the core parts (frame, center column, sidebar root). Only a missing core contract leaves the skin **off**; DSH keeps its default look, a toast explains why (5s auto-dismiss, manual close, click to open the plugin settings) and Settings → Islands UI carries a persistent amber notice plus a session-scoped "Enable anyway". A missing decorative part only silences its own rules.
-- Settings → Islands UI shows the detected DSH release and sidebar structure (`flat` / `scroll`, inferred from the parts present) for support triage.
+- On startup the plugin verifies the core contracts (`[data-slot="root"]`, `[data-slot="sidebar"]`) and the core parts (frame, center column, sidebar root). Only a missing core contract leaves the skin **off**; DSH keeps its default look, a toast explains why (5s auto-dismiss, manual close, click to open the plugin settings) and Settings → Floating island theme carries a persistent amber notice plus a session-scoped "Enable anyway". A missing decorative part only silences its own rules.
+- Settings → Floating island theme shows the detected DSH release and sidebar structure (`flat` / `scroll`, inferred from the parts present) for support triage.
 - Dark mode follows `data-ds-dark-theme`; the accent remaps `--dsw-alias-state-business-primary`, so it affects both the skin and native buttons.
 - Windows uses `data-windows-titlebar` and `--dsh-windows-titlebar-height` and renders no island top bar; Linux currently follows native window decorations.
 - `dsh.engines.dsh` / `engines.dsh` pin the tested line to `>=0.2.2-rc.1 <0.3.0-0`; outside that range the plugin manager refuses to install or upgrade. Structure drift inside the line is handled by one stylesheet keyed on the parts present, no longer by a version-selected variant. `skin.json` gives theme managers the id, accent and mount row.
@@ -216,7 +216,7 @@ No. The skin injects CSS and registers browser-side slots only. Rail pins, the p
 
 **How do I fully reset the skin?**
 
-Turn off **Settings → Islands UI**. To clear the saved preferences too, delete the `dsh-islands-ui:*` localStorage keys (see [State](#state)).
+Turn off **Settings → Floating island theme**. To clear the saved preferences too, delete the `dsh-islands-ui:*` localStorage keys (see [State](#state)).
 
 **Can I run it with another theme?**
 

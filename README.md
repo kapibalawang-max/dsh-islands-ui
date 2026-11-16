@@ -33,7 +33,7 @@ dsh plugin --profile desktop add dsh-islands-ui
 dsh plugin --profile web add dsh-islands-ui
 ```
 
-安装后刷新页面（`⌘R` / `Ctrl+R`）。皮肤默认开启；可在 **设置 → Islands UI** 关闭，关闭后立即恢复 Harness 默认外观，偏好和强调色会保留。
+安装后刷新页面（`⌘R` / `Ctrl+R`）。皮肤默认开启；可在 **设置 → 浮岛主题** 关闭，关闭后立即恢复 Harness 默认外观，偏好和强调色会保留。
 
 > 适用于 DSH `0.2.2-rc.1` 与 `0.2.2-rc.2`。客户端会读取运行中的 DSH 版本（`window.__DSH_BOOT__.release.version`），自动选用对应的侧栏结构样式；更早的 `0.2.x` 构建回退到基础样式。包内声明了完整的 `dsh.bundle` + `dsh.client` manifest，`dsh plugin add` 会自动写入 profile 的 bundle 栈，不需要手工改 `cordis.patch.yml`。
 
@@ -71,7 +71,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | :---: | --- | --- |
 | 🏝 | **浮岛布局** | 画布、主会话、工作区、右侧栏、底部面板各自独立；扁平无投影，以色块 + 1px 发丝线分隔 |
 | 🧭 | **常驻左侧栏** | 工作区与全部插件图标直接排列；首页按钮只作会话 / 工作区抽屉触发器、不占选中态（hover 浅色反馈、点击半透明涟漪）；面板图标点击切换，按住拖动排序（浮动预览跟随鼠标），右键显示 / 隐藏图标 |
-| ⚙️ | **独立设置页** | 设置 → Islands UI：一键开关皮肤、强调色（预设 + 自定义 + 跟随主题） |
+| ⚙️ | **独立设置页** | 设置 → 浮岛主题：一键开关皮肤、强调色（预设 + 自定义 + 跟随主题） |
 | 📌 | **置顶聚合** | 置顶会话同时保留在原工作区，并聚合到「新会话」与「工作区」标题之间；分类可折叠 |
 | 🌙 | **深色模式** | 完整深色 token：近黑画布、深灰岛屿、白色透明交互层与深色阴影 |
 | 🔄 | **桌面更新入口** | 设置齿轮上方常驻；发现新版本、下载、校验、安装与失败各有独立状态，加载态使用强调色 3×3 点阵动效 |
@@ -212,8 +212,8 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 
 - 皮肤是**纯客户端样式层**，不替换会话、设置或插件的数据与交互；左侧栏图标排序与显隐、置顶聚合、定位等额外能力也只在客户端完成。
 - 样式只依赖两层稳定信息：Harness 公开的契约（`data-slot`、`data-phase`、`data-conversation-scroll`、`data-composer-card`、`data-row-key`、`role` / `aria-*`），以及皮肤写回的部件标记 `data-islands-part`。宿主类名只在 `src/host/runtime.js` 的部件表里以本地名出现，哈希段不进入任何选择器；Harness 重新构建改变哈希时无需更新，宿主改本地名时对应规则安静失效，改表一行即可恢复。
-- 启动时只校验核心契约（`[data-slot="root"]`、`[data-slot="sidebar"]`）和核心部件（frame、center column、sidebar root）；核心契约缺失时才**不启用皮肤**，DSH 保持默认外观，右下角弹出说明（5 秒自动关闭、可手动关闭、点击进入插件设置），设置 → Islands UI 里也常驻一条黄色说明，并提供会话级的「仍然启用」。单个装饰部件缺失只让对应规则失效，不会关掉整个皮肤。
-- 设置 → Islands UI 显示检测到的 DSH 版本与侧栏结构（`flat` / `scroll`，由部件是否存在推断），便于排查升级后的样式问题。
+- 启动时只校验核心契约（`[data-slot="root"]`、`[data-slot="sidebar"]`）和核心部件（frame、center column、sidebar root）；核心契约缺失时才**不启用皮肤**，DSH 保持默认外观，右下角弹出说明（5 秒自动关闭、可手动关闭、点击进入插件设置），设置 → 浮岛主题 里也常驻一条黄色说明，并提供会话级的「仍然启用」。单个装饰部件缺失只让对应规则失效，不会关掉整个皮肤。
+- 设置 → 浮岛主题 显示检测到的 DSH 版本与侧栏结构（`flat` / `scroll`，由部件是否存在推断），便于排查升级后的样式问题。
 - 深色模式跟随 Harness 的 `data-ds-dark-theme`；强调色通过重映射 `--dsw-alias-state-business-primary` 生效，会同时影响皮肤和原生按钮。
 - Windows 使用 `data-windows-titlebar` 与 `--dsh-windows-titlebar-height` 适配原生标题栏，并且不渲染插件顶栏；Linux 暂无专用标题栏变量，按原生窗口装饰处理。
 - `dsh.engines.dsh` / `engines.dsh` 把兼容线钉在 `>=0.2.2-rc.1 <0.3.0-0`，越界时插件管理器会拒绝安装或升级；同一兼容线内部的结构差异由同一张样式表按部件是否存在处理，不再按版本注入方言。`skin.json` 为主题管理器提供 id、强调色和挂载行。
@@ -232,7 +232,7 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 
 **怎么彻底恢复默认外观？**
 
-设置 → Islands UI 关闭总开关即可立即恢复：侧栏导航、命令面板、行首圆点与 `⌘K` 监听同时停用，界面上不留任何未样式化的残留。需要连偏好一起清空时，删除 `dsh-islands-ui:*` 这几个 `localStorage` key（见[状态存储](#状态存储)）。
+设置 → 浮岛主题 关闭总开关即可立即恢复：侧栏导航、命令面板、行首圆点与 `⌘K` 监听同时停用，界面上不留任何未样式化的残留。需要连偏好一起清空时，删除 `dsh-islands-ui:*` 这几个 `localStorage` key（见[状态存储](#状态存储)）。
 
 **可以和别的主题/皮肤同时开吗？**
 
@@ -240,7 +240,7 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 
 **为什么某些界面还是旧样式？**
 
-说明皮肤**检测到核心宿主契约缺失，已自动关闭**。DSH 升级可能改掉 `data-slot`、`data-phase` 等公开契约；半启用会变成双栏重叠，所以插件宁可保持默认外观：右下角会有提示，设置 → Islands UI 顶部有黄色说明条并列出缺失的契约。把 Islands UI 更新到适配当前 DSH 的版本即可恢复；确认界面正常也可以点「仍然启用」临时开启（下次启动重新检测）。
+说明皮肤**检测到核心宿主契约缺失，已自动关闭**。DSH 升级可能改掉 `data-slot`、`data-phase` 等公开契约；半启用会变成双栏重叠，所以插件宁可保持默认外观：右下角会有提示，设置 → 浮岛主题 顶部有黄色说明条并列出缺失的契约。把 Islands UI 更新到适配当前 DSH 的版本即可恢复；确认界面正常也可以点「仍然启用」临时开启（下次启动重新检测）。
 
 **Windows / Linux 能用吗？**
 

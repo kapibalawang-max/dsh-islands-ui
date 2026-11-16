@@ -16,6 +16,8 @@ window.__ModuleLoader__.load({
     const CSS = '__ISLANDS_CSS__';
 
     const ATTRIBUTE = SKIN_ATTR;
+    /* One name in every locale: the settings entry and the page heading match. */
+    const SECTION_TITLE = '浮岛主题';
     const STORAGE_KEY = 'dsh-islands-ui:enabled';
     const WORKSPACE_ATTR = 'data-islands-workspace-collapsed';
     /** Escape hatch, session scoped so the next launch re-runs the check. */
@@ -46,7 +48,7 @@ window.__ModuleLoader__.load({
     /** Copy for the preference row; the row is the only user-facing string. */
     const COPY = {
       zh: {
-        title: 'Islands 界面',
+        title: SECTION_TITLE,
         description: '悬浮岛屿式布局：圆角面板、常驻左侧导航栏与独立的工作区列表。关闭后立即恢复默认外观。',
         topbarToggle: '折叠或展开工作区',
         openRight: '打开侧边栏',
@@ -72,7 +74,7 @@ window.__ModuleLoader__.load({
         railHide: '从左侧栏移除',
         builtIn: 'DSH 内置',
         noExtras: '左侧栏还没有图标',
-        enable: '启用 Islands 界面',
+        enable: '启用浮岛主题',
         enableDesc: '关闭后立即恢复 DSH 默认外观，设置会保留。',
         accent: '强调色',
         accentDesc: '用于选中状态、滑块、发送按钮等。',
@@ -98,8 +100,8 @@ window.__ModuleLoader__.load({
         paletteDensity: '紧凑行高',
         paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
-        paletteEnable: '启用 Islands 界面',
-        paletteDisable: '关闭 Islands 界面',
+        paletteEnable: '启用浮岛主题',
+        paletteDisable: '关闭浮岛主题',
         debugTitle: '契约自检',
         debugOk: '全部命中',
         debugMiss: '缺失',
@@ -164,7 +166,7 @@ window.__ModuleLoader__.load({
         compatStructureScroll: '滚动容器',
       },
       en: {
-        title: 'Islands interface',
+        title: SECTION_TITLE,
         description:
           'Floating-island layout with rounded panels, a persistent rail and an islanded workspace list. Turn off to return to the default look immediately.',
         topbarToggle: 'Collapse or expand the workspace',
@@ -191,7 +193,7 @@ window.__ModuleLoader__.load({
         railHide: 'Remove from the left rail',
         builtIn: 'Built into DSH',
         noExtras: 'No icons on the left rail',
-        enable: 'Enable Islands UI',
+        enable: 'Enable floating islands',
         enableDesc: 'Turn off to restore the default appearance immediately; your settings are kept.',
         accent: 'Accent color',
         accentDesc: 'Used for selected states, sliders, the send button and more.',
@@ -217,8 +219,8 @@ window.__ModuleLoader__.load({
         paletteDensity: 'Compact rows',
         paletteTheme: 'Cycle theme preset',
         paletteAccent: 'Cycle accent colour',
-        paletteEnable: 'Enable Islands UI',
-        paletteDisable: 'Turn off Islands UI',
+        paletteEnable: 'Enable floating islands',
+        paletteDisable: 'Turn off floating islands',
         debugTitle: 'Contract inspector',
         debugOk: 'all present',
         debugMiss: 'missing',
@@ -2361,7 +2363,7 @@ window.__ModuleLoader__.load({
 
       const openSection = () => {
         dismiss();
-        openSettings({ section: 'Islands UI' });
+        openSettings({ section: SECTION_TITLE });
       };
 
       timer = window.setTimeout(dismiss, 5000);
@@ -3234,7 +3236,7 @@ window.__ModuleLoader__.load({
 
         ctx.slots.inject('settings.section', () =>
           ctx.slots.register(
-            { name: 'settings.section', id: 'islands-ui', order: 30, label: 'Islands UI' },
+            { name: 'settings.section', id: 'islands-ui', order: 30, label: SECTION_TITLE },
             IslandsSettingsPage,
           ),
         );
