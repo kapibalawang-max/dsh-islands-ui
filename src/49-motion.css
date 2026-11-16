@@ -1,0 +1,114 @@
+/* ---- 49-motion.css ----
+ *
+ * Page motion. The skin's chrome appears with one short entrance, rows settle
+ * into place, and a conversation swap fades the reading column in. Nothing
+ * here animates a value the user is reading, and every rule is dropped under
+ * `prefers-reduced-motion: reduce` — motion is decoration, never information.
+ */
+
+@keyframes isl-enter-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes isl-enter-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes isl-enter-row {
+  from { opacity: 0; transform: translateX(-5px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes isl-enter-pop {
+  from { opacity: 0; transform: translateY(4px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes isl-page-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Chrome: one entrance each, on mount only. */
+body[data-islands-ui] .isl-rail {
+  animation: isl-enter-fade var(--isl-dur-enter) var(--isl-ease-out) both;
+}
+
+body[data-islands-ui] .isl-topbar {
+  animation: isl-enter-fade var(--isl-dur-enter) var(--isl-ease-out) both;
+}
+
+body[data-islands-ui] .isl-pinnedHost {
+  animation: isl-enter-rise var(--isl-dur-enter) var(--isl-ease-out) both;
+}
+
+/* Pinned rows settle in sequence, six at most so a long list never lags. */
+body[data-islands-ui] .isl-pinnedRow {
+  animation: isl-enter-row 200ms var(--isl-ease-out) both;
+}
+
+body[data-islands-ui] .isl-pinnedRow:nth-child(2) { animation-delay: 26ms; }
+body[data-islands-ui] .isl-pinnedRow:nth-child(3) { animation-delay: 52ms; }
+body[data-islands-ui] .isl-pinnedRow:nth-child(4) { animation-delay: 78ms; }
+body[data-islands-ui] .isl-pinnedRow:nth-child(5) { animation-delay: 104ms; }
+body[data-islands-ui] .isl-pinnedRow:nth-child(n + 6) { animation-delay: 130ms; }
+
+/* Workspace rows: the same settle, shorter, because they are hit far more often. */
+body[data-islands-ui] [data-islands-part~="sidebar-root"] [data-row-key^="session:"] {
+  animation: isl-enter-row 170ms var(--isl-ease-out) both;
+}
+
+/* Host menus and popovers open with a whisper instead of a snap. */
+body[data-islands-ui] [role='menu'],
+body[data-islands-ui] [role='listbox'] {
+  animation: isl-enter-pop 130ms var(--isl-ease-out) both;
+}
+
+/* The composer lifts a hair when it takes focus — the same beat as its ring. */
+body[data-islands-ui] [data-composer-card] {
+  transition:
+    transform var(--isl-dur-base) var(--isl-ease-out),
+    box-shadow var(--isl-dur-base) var(--isl-ease-out);
+}
+
+body[data-islands-ui] [data-composer-card]:focus-within {
+  transform: translateY(-1px);
+}
+
+/* A conversation swap fades the reading column in; the flag is set for ~260ms
+   by the skin runtime, so this never animates mid-read. */
+body[data-islands-ui] [data-islands-part~="center-column"][data-islands-page-in] [data-conversation-scroll] {
+  animation: isl-page-in 240ms var(--isl-ease-out) both;
+}
+
+/* Press feedback: 1px of give, nothing that moves a neighbour. */
+body[data-islands-ui] .isl-railBtn:active,
+body[data-islands-ui] .isl-pinnedOpen:active,
+body[data-islands-ui] .isl-pinnedPinBtn:active,
+body[data-islands-ui] .isl-pinnedLocate:active,
+body[data-islands-ui] .isl-themeChip:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-islands-ui] .isl-rail,
+  body[data-islands-ui] .isl-topbar,
+  body[data-islands-ui] .isl-pinnedHost,
+  body[data-islands-ui] .isl-pinnedRow,
+  body[data-islands-ui] [data-islands-part~="sidebar-root"] [data-row-key^="session:"],
+  body[data-islands-ui] [role='menu'],
+  body[data-islands-ui] [role='listbox'],
+  body[data-islands-ui] [data-islands-part~="center-column"][data-islands-page-in] [data-conversation-scroll] {
+    animation: none !important;
+  }
+
+  body[data-islands-ui] [data-composer-card] {
+    transition: none !important;
+  }
+
+  body[data-islands-ui] [data-composer-card]:focus-within {
+    transform: none;
+  }
+}

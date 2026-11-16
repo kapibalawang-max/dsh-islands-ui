@@ -46,6 +46,9 @@ body[data-islands-ui] {
   /* Motion: two speeds cover every transition in the skin. */
   --isl-dur-fast: 120ms;
   --isl-dur-base: 150ms;
+  /* Entrance motion: a third, slightly slower speed for things that appear. */
+  --isl-dur-enter: 220ms;
+  --isl-ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
   /* Geometry. */
   --isl-radius-2xl: 24px;
   --isl-radius-xl: 20px;

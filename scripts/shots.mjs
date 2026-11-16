@@ -30,6 +30,14 @@ const BASE = join(SHOTS, 'baseline');
 const TOLERANCE = Number(process.env.SHOT_TOLERANCE ?? '0.002');
 const UPDATE = process.argv.includes('--update');
 
+/** Host chrome that renders live data (relative times, a task list that loads
+ *  late). Comparing it would fail the gate on things the skin does not own, so
+ *  these rectangles are excluded from the ratio and counted as unchanged. */
+const VOLATILE = [
+  { x: 1160, y: 590, w: 280, h: 310 }, // floating scheduled-task overlay
+  { x: 0, y: 845, w: 70, h: 55 }, // rail footer avatar and its presence dot
+];
+
 const SECRET = process.env.DSH_AUTH_SECRET ?? '';
 
 /** The web port is chosen per launch, so discover it instead of hard-coding one.
@@ -83,6 +91,7 @@ let ORIGIN = process.env.DSH_ORIGIN ?? '';
 const shots = [
   {
     name: 'main',
+    mask: VOLATILE,
     async setup(page) {
       await page.goto(ORIGIN, { waitUntil: 'domcontentloaded' });
       await page.waitForSelector('body[data-islands-ui]', { timeout: 15000 });
@@ -90,6 +99,7 @@ const shots = [
   },
   {
     name: 'dark',
+    mask: VOLATILE,
     async setup(page) {
       await page.goto(ORIGIN, { waitUntil: 'domcontentloaded' });
       await page.waitForSelector('body[data-islands-ui]', { timeout: 15000 });
@@ -109,6 +119,7 @@ const shots = [
   },
   {
     name: 'debug',
+    mask: VOLATILE,
     async setup(page) {
       await page.goto(`${ORIGIN}/?islands-debug=1`, { waitUntil: 'domcontentloaded' });
       await page.waitForSelector('.isl-debug', { timeout: 15000 });
@@ -155,11 +166,23 @@ for (const shot of shots) {
     failed += 1;
     continue;
   }
-  const diff = pixelmatch(a.data, b.data, null, a.width, a.height, { threshold: 0.1 });
-  const ratio = diff / (a.width * a.height);
+  const diff = new PNG({ width: a.width, height: a.height });
+  pixelmatch(a.data, b.data, diff.data, a.width, a.height, { threshold: 0.1, diffMask: true });
+  const masks = shot.mask ?? [];
+  const inside = (x, y) => masks.some((m) => x >= m.x && x < m.x + m.w && y >= m.y && y < m.y + m.h);
+  let changed = 0;
+  let compared = 0;
+  for (let y = 0; y < a.height; y += 1) {
+    for (let x = 0; x < a.width; x += 1) {
+      if (inside(x, y)) continue;
+      compared += 1;
+      if (diff.data[(y * a.width + x) * 4 + 3] !== 0) changed += 1;
+    }
+  }
+  const ratio = compared === 0 ? 0 : changed / compared;
   const verdict = ratio > TOLERANCE ? 'DIFF' : 'ok';
   if (verdict === 'DIFF') failed += 1;
-  console.log(`${shot.name}: ${verdict} ${(ratio * 100).toFixed(3)}% pixels (${diff})`);
+  console.log(`${shot.name}: ${verdict} ${(ratio * 100).toFixed(3)}% pixels (${changed})`);
 }
 
 await browser.close();

@@ -3205,6 +3205,42 @@ window.__ModuleLoader__.load({
         // place that turns a host local class name into a skin part.
         ctx.effect(() => installParts(), 'dsh-islands-ui: host parts');
 
+        /* Page motion: a conversation swap fades the reading column in once.
+           Watching the sidebar's own selection keeps this outside React's
+           render path — the skin only toggles a flag for ~260ms. */
+        ctx.effect(() => {
+          const selectedKey = () => {
+            const row = document.querySelector(`${HOST.SESSION_ROW}[aria-selected="true"]`);
+            return row === null ? null : row.getAttribute('data-row-key');
+          };
+          let current = selectedKey();
+          let frame = 0;
+          const paint = () => {
+            frame = 0;
+            const next = selectedKey();
+            if (next === current) return;
+            current = next;
+            const column = document.querySelector(partSelector('center-column'));
+            if (column === null) return;
+            column.setAttribute('data-islands-page-in', '');
+            window.setTimeout(() => column.removeAttribute('data-islands-page-in'), 260);
+          };
+          const schedule = () => {
+            if (frame !== 0) return;
+            frame = window.requestAnimationFrame(paint);
+          };
+          const observer = new MutationObserver(schedule);
+          observer.observe(document.body, {
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['aria-selected'],
+          });
+          return () => {
+            observer.disconnect();
+            if (frame !== 0) window.cancelAnimationFrame(frame);
+          };
+        }, 'dsh-islands-ui: page motion');
+
         // Everything below turns the chrome on, so it runs only after the gate
         // has confirmed this build still matches the stylesheet.
         const registerSkinChrome = (ctx) => {

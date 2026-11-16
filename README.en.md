@@ -127,6 +127,12 @@ Stored in `localStorage`; clear these keys to reset:
 
 ---
 
+## Motion
+
+The chrome arrives with one short entrance: rail, top bar and pinned area fade in, pinned rows settle in sequence, workspace session rows slide a few pixels, menus and popovers fade-and-scale open, the composer lifts 1px on focus, and a conversation swap fades the reading column in once. Everything is ≤240ms with `ease-out`, and nothing animates content you are reading.
+
+Turning on "Reduce motion" in the OS disables all of it.
+
 ## Development
 
 ```text
