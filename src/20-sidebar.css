@@ -559,16 +559,25 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   flex: none;
   width: 24px;
   height: 24px;
-  margin-left: 4px;
+  margin-left: 2px;
   padding: 0;
   border: 0;
   border-radius: var(--isl-radius-xs, 6px);
   background: transparent;
   color: var(--dsw-alias-label-tertiary);
   cursor: pointer;
+  position: relative;
   transition:
     background-color var(--isl-dur-fast) var(--ds-ease-in-out),
     color var(--isl-dur-fast) var(--ds-ease-in-out);
+}
+
+/* Larger hit target without changing the visual icon size. */
+.isl-pinnedPinBtn::before,
+.isl-pinnedLocate::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
 }
 
 .isl-pinnedRow:hover .isl-pinnedPinBtn,
@@ -596,6 +605,22 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
 body[data-islands-ui] [data-row-key^="session:"].isl-located {
   background: color-mix(in srgb, var(--dsw-alias-state-business-primary) 14%, transparent) !important;
 }
+/* Keep the current session obvious in long lists. */
+body[data-islands-ui] [data-row-key^="session:"][aria-selected='true'],
+body[data-islands-ui] [data-row-key^="session:"].is-active,
+body[data-islands-ui] [data-row-key^="session:"].is-current,
+body[data-islands-ui] [data-row-key^="session:"].is-selected {
+  background: color-mix(in srgb, var(--isl-accent) 12%, var(--isl-surface-muted));
+  box-shadow: inset 2px 0 0 var(--isl-accent);
+}
+
+body[data-islands-ui] [data-row-key^="session:"][aria-selected='true']:hover,
+body[data-islands-ui] [data-row-key^="session:"].is-active:hover,
+body[data-islands-ui] [data-row-key^="session:"].is-current:hover,
+body[data-islands-ui] [data-row-key^="session:"].is-selected:hover {
+  background: color-mix(in srgb, var(--isl-accent) 16%, var(--isl-surface-muted));
+}
+
 
 /* ==========================================================================
    Sidebar scroll containers

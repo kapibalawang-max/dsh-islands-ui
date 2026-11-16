@@ -372,8 +372,9 @@ body[data-islands-ui] .isl-paletteList {
 }
 
 .isl-paletteRow[data-on='true'] {
-  background: color-mix(in srgb, var(--isl-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--isl-accent) 14%, var(--isl-surface-muted));
   color: var(--dsw-alias-label-primary);
+  box-shadow: inset 2px 0 0 var(--isl-accent);
 }
 
 .isl-paletteRowText {
@@ -411,7 +412,7 @@ body[data-islands-ui] .isl-paletteFoot {
   gap: 14px;
   padding: 8px 14px;
   border-top: 1px solid var(--isl-border-soft);
-  color: var(--dsw-alias-label-tertiary);
+  color: var(--dsw-alias-label-secondary);
   font-size: 12px;
 }
 
@@ -508,8 +509,81 @@ body[data-islands-ui] .isl-themeChip {
   cursor: pointer;
 }
 
+body[data-islands-ui] .isl-themeChip:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 1px;
+}
+
 body[data-islands-ui] .isl-themeChip.is-selected {
   background: var(--isl-surface);
   color: var(--dsw-alias-label-primary);
   box-shadow: var(--isl-seam), 0 1px 2px rgba(17, 24, 39, 0.08);
+}
+
+
+/* ---- Settings: reset action -------------------------------------------- */
+
+.isl-prefRowReset {
+  align-items: center;
+}
+
+body[data-islands-ui] .isl-resetBtn {
+  flex: none;
+  padding: 6px 12px;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-radius-sm);
+  background: var(--isl-surface-muted);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background-color var(--isl-dur-fast) var(--ds-ease-in-out),
+    border-color var(--isl-dur-fast) var(--ds-ease-in-out);
+}
+
+body[data-islands-ui] .isl-resetBtn:hover {
+  background: var(--isl-hover);
+  border-color: var(--isl-border-strong);
+}
+
+body[data-islands-ui] .isl-resetBtn:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-islands-ui] .isl-pinnedSpinnerMotion {
+    animation: none;
+  }
+  body[data-islands-ui] *,
+  body[data-islands-ui] *::before,
+  body[data-islands-ui] *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ---- Settings: quick tips ---------------------------------------------- */
+
+body[data-islands-ui] .isl-tipsCard {
+  margin: 10px 0 4px;
+  padding: 10px 14px;
+  border: 1px solid var(--isl-border-soft);
+  border-radius: var(--isl-radius-md);
+  background: var(--isl-surface-muted);
+}
+
+body[data-islands-ui] .isl-tipsTitle {
+  color: var(--dsw-alias-label-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+body[data-islands-ui] .isl-tipsDesc {
+  margin-top: 2px;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
 }

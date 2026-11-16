@@ -52,3 +52,11 @@ body[data-islands-ui] [data-dsh-bottom-panel] > [class*='bottomResize'] {
   top: calc(-1px - var(--isl-gap));
   height: 10px;
 }
+
+/* sk-floating (a host overlay badge): its count chip is 11px white text on the
+   accent fill, which lands just under AA (4.23:1 light, 2.33:1 dark). A dark
+   ink chip keeps the badge legible for every accent. */
+body[data-islands-ui] [data-islands-part~="layout-frame"] .sk-floating .sk-float-count {
+  background: #24272d;
+  color: #ffffff;
+}

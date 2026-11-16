@@ -25,8 +25,8 @@ body[data-islands-ui] {
      island) and caption #adb2b8 (2.13:1). Both sit below AA for the 10-14px
      text this skin sets in them, so the two quiet rungs are re-declared one
      step deeper. Dark already passes and repeats the host values below. */
-  --dsw-alias-label-tertiary: #666b73;
-  --dsw-alias-label-caption: #71767f;
+  --dsw-alias-label-tertiary: #5f646d;
+  --dsw-alias-label-caption: #676d77;
   /* Depth: a 1px inner highlight on each island's top edge sells the panel,
      and the seated card gets a real drop shadow instead of a flat outline. */
   --isl-seam: inset 0 1px 0 rgba(255, 255, 255, 0.85);
@@ -157,8 +157,8 @@ body[data-islands-ui][data-ds-dark-theme] {
   --isl-shadow-island-raised: 0 16px 36px -20px rgba(0, 0, 0, 0.75);
   --isl-shadow-float: 0 20px 52px -20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
   --isl-active: rgba(255, 255, 255, 0.1);
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
   /* A zero shadow, not `none`: the seam appends to this value, and a shadow
      list cannot start with `none`. */
   --isl-shadow-island: 0 0 0 0 rgba(0, 0, 0, 0);

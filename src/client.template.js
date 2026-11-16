@@ -75,15 +75,15 @@ window.__ModuleLoader__.load({
         builtIn: 'DSH 内置',
         noExtras: '左侧栏还没有图标',
         enable: '启用浮岛主题',
-        enableDesc: '关闭后立即恢复 DSH 默认外观，设置会保留。',
+        enableDesc: '关掉会立刻恢复默认外观，设置会保留。可随时切换试试效果。',
         accent: '强调色',
-        accentDesc: '用于选中状态、滑块、发送按钮等。',
+        accentDesc: '会影响选中、滑块、发送按钮等重点位置的颜色，改完立刻生效。',
         accentDefault: '跟随主题',
         accentCustom: '自定义颜色',
         density: '紧凑行高',
-        densityDesc: '会话行从 32px 收到 26px，一屏多看几条。',
+        densityDesc: '紧凑时会话行更矮、同屏能多看几条；觉得拥挤可切回舒适。',
         theme: '主题预设',
-        themeDesc: '七套整体色板：画布、岛屿、描边与强调色一起变，深浅各一套。',
+        themeDesc: '一次切换整套配色（背景、卡片、描边、强调色）；点不同主题可立即预览。',
         themeMist: '雾',
         themeSand: '沙',
         themeSage: '苔',
@@ -91,17 +91,20 @@ window.__ModuleLoader__.load({
         themeLilac: '紫',
         themeInk: '墨',
         themeGraphite: '石',
+        tipsTitle: '小提示',
+        tipsDesc: '按 ⌘K 快速跳会话或执行命令；在「主题预设」里换整套配色；「紧凑行高」让列表一屏多看几条。',
         palettePlaceholder: '跳到会话，或输入命令',
         paletteSessions: '会话',
         paletteCommands: '命令',
-        paletteEmpty: '没有匹配项',
-        paletteHint: '↓ 选择 · ↵ 打开 · esc 关闭',
+        paletteEmpty: '没找到匹配的会话或命令，换个词试试',
+        paletteHint: '↑↓ 选择 · ↵ 打开 · tab 切换 · esc 关闭',
         paletteNew: '新建会话',
-        paletteDensity: '紧凑行高',
+        paletteDensity: '切换紧凑行高',
         paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
         paletteEnable: '启用浮岛主题',
         paletteDisable: '关闭浮岛主题',
+        paletteReset: '恢复默认外观与配色',
         debugTitle: '契约自检',
         debugOk: '全部命中',
         debugMiss: '缺失',
@@ -194,15 +197,15 @@ window.__ModuleLoader__.load({
         builtIn: 'Built into DSH',
         noExtras: 'No icons on the left rail',
         enable: 'Enable floating islands',
-        enableDesc: 'Turn off to restore the default appearance immediately; your settings are kept.',
+        enableDesc: 'Turns off the skin immediately and keeps your settings; switch anytime to preview.',
         accent: 'Accent color',
-        accentDesc: 'Used for selected states, sliders, the send button and more.',
+        accentDesc: 'Colors selected states, sliders, the send button and other highlights. Applies instantly.',
         accentDefault: 'Follow theme',
         accentCustom: 'Custom color',
         density: 'Compact rows',
-        densityDesc: 'Session rows drop from 32px to 26px; more per screen.',
+        densityDesc: 'Compact rows are shorter so you see more sessions at once; switch back if it feels tight.',
         theme: 'Theme preset',
-        themeDesc: 'Seven whole palettes — canvas, islands, hairlines and accent, light and dark.',
+        themeDesc: 'Switches the whole palette (canvas, islands, borders, accent). Click to preview instantly.',
         themeMist: 'Mist',
         themeSand: 'Sand',
         themeSage: 'Sage',
@@ -210,17 +213,20 @@ window.__ModuleLoader__.load({
         themeLilac: 'Lilac',
         themeInk: 'Ink',
         themeGraphite: 'Graphite',
+        tipsTitle: 'Quick tips',
+        tipsDesc: 'Press ⌘K to jump to a session or run a command; pick a theme preset for a whole new palette; compact rows fit more on screen.',
         palettePlaceholder: 'Jump to a session, or type a command',
         paletteSessions: 'Sessions',
         paletteCommands: 'Commands',
-        paletteEmpty: 'Nothing matches',
-        paletteHint: '↓ select · ↵ open · esc close',
+        paletteEmpty: 'No matching sessions or commands. Try a different term.',
+        paletteHint: '↑↓ select · ↵ open · tab cycle · esc close',
         paletteNew: 'New session',
-        paletteDensity: 'Compact rows',
+        paletteDensity: 'Toggle compact rows',
         paletteTheme: 'Cycle theme preset',
         paletteAccent: 'Cycle accent colour',
         paletteEnable: 'Enable floating islands',
         paletteDisable: 'Turn off floating islands',
+        paletteReset: 'Reset appearance and colors',
         debugTitle: 'Contract inspector',
         debugOk: 'all present',
         debugMiss: 'missing',
@@ -2482,9 +2488,21 @@ window.__ModuleLoader__.load({
       return out;
     }
 
+    function resetAppearancePrefs() {
+      try {
+        window.localStorage.removeItem(DENSITY_KEY);
+        window.localStorage.removeItem(THEME_KEY);
+        window.localStorage.removeItem(ACCENT_KEY);
+      } catch {}
+      applyAccent(null);
+      applyPrefs();
+    }
+
     /** The command list, rebuilt on each open so the labels follow the locale. */
     function paletteCommands(copy, enabled) {
       const nextTheme = () => THEMES[(THEMES.indexOf(readTheme()) + 1) % THEMES.length];
+      const themeLabel = (name) => copy[`theme${String(name).replace(/^./u, (c) => c.toUpperCase())}`] ?? name;
+      const compact = readDensity() === 'compact';
       return [
         {
           id: 'new-session',
@@ -2495,13 +2513,13 @@ window.__ModuleLoader__.load({
         {
           id: 'density',
           label: copy.paletteDensity,
-          hint: readDensity() === 'compact' ? 'on' : 'off',
-          run: () => storePref(DENSITY_KEY, readDensity() === 'compact' ? 'comfortable' : 'compact'),
+          hint: compact ? '32px → 26px' : '26px → 32px',
+          run: () => storePref(DENSITY_KEY, compact ? 'comfortable' : 'compact'),
         },
         {
           id: 'theme',
           label: copy.paletteTheme,
-          hint: copy[`theme${nextTheme().replace(/^./u, (c) => c.toUpperCase())}`] ?? nextTheme(),
+          hint: `${themeLabel(readTheme())} → ${themeLabel(nextTheme())}`,
           run: () => storePref(THEME_KEY, nextTheme()),
         },
         {
@@ -2515,6 +2533,12 @@ window.__ModuleLoader__.load({
             applyAccent(color);
             storeAccent(color);
           },
+        },
+        {
+          id: 'reset',
+          label: copy.paletteReset,
+          hint: copy.reset,
+          run: () => resetAppearancePrefs(),
         },
         {
           id: 'enable',
@@ -2859,6 +2883,12 @@ window.__ModuleLoader__.load({
           ),
         ),
         h(CompatibilityBanner, { copy, compat, onForce: forceEnable }),
+        h(
+          'div',
+          { className: 'isl-tipsCard' },
+          h('div', { className: 'isl-tipsTitle' }, copy.tipsTitle),
+          h('div', { className: 'isl-tipsDesc' }, copy.tipsDesc),
+        ),
         compat.forced ? h('div', { className: 'isl-compatForced' }, copy.compatForced) : null,
         h(
           'div',
@@ -2977,6 +3007,25 @@ window.__ModuleLoader__.load({
                 copy[`theme${name.replace(/^./u, (c) => c.toUpperCase())}`] ?? name,
               ),
             ),
+          ),
+        ),
+        h(
+          'div',
+          { className: 'isl-prefRow isl-prefRowReset' },
+          h(
+            'div',
+            { className: 'isl-prefText' },
+            h('div', { className: 'isl-prefTitle' }, copy.reset),
+            h('div', { className: 'isl-prefDesc' }, copy.paletteReset),
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              className: 'isl-resetBtn',
+              onClick: () => resetAppearancePrefs(),
+            },
+            copy.reset,
           ),
         ),
         // Preview hidden on request. The component and its styles stay in place;
