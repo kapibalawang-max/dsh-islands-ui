@@ -95,8 +95,6 @@ body[data-islands-ui] {
   --dsw-alias-markdown-code-block-banner: var(--isl-surface-muted);
   --dsw-alias-markdown-inline-code: var(--isl-surface-muted);
   --dsw-alias-markdown-tag: var(--isl-surface-muted);
-  --dsw-alias-settings-card-fill: color-mix(in srgb, var(--isl-surface-muted) 68%, var(--isl-surface));
-  --dsw-alias-settings-card-stroke: var(--isl-border-soft);
   --dsw-alias-border-l1: var(--isl-border-soft);
   --dsw-alias-border-l2: var(--isl-border-soft);
   --dsw-alias-border-l3: var(--isl-border);

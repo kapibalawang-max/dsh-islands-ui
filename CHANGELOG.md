@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.8 — 2026-11-16
+
+### 修正
+
+- **设置页恢复 DSH 原生样式**：删除 `40-settings.css`（设置弹窗的宽度、圆角、阴影、导航与卡片重绘全部移除），并把设置弹窗从 `[role='dialog']` 的通用圆角规则里排除。皮肤的岛屿语言靠 `--dsw-*` 别名下发给宿主组件，所以新增 `41-settings-native.css`：在设置弹窗子树内把这些别名逐一还原成宿主自己的值（浅色 / 深色各一套，取自 DSH 0.2.2-rc.2 关闭皮肤时的实际值）。设置页现在与未装皮肤时逐元素一致（98 个元素的计算样式零差异）。
+- **部件表收缩**：设置页不再被重绘，随之删掉用不到的部件（`settings-overlay`、`settings-mask`、`settings-panel`、`settings-nav-*`、`settings-card`、`settings-section`、`account-balance-card` 与整个 `settings-panel` 区域），部件从 68 降到 54、区域从 13 降到 12；`settings-nav-cell` 保留（rail 打开设置页时靠它定位）。
+
 ## 1.2.7 — 2026-11-16
 
 ### 修正

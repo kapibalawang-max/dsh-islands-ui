@@ -192,20 +192,12 @@ export const CONTENT_PARTS = {
   embeddedBody: 'embedded-body',
 };
 
-/** The settings dialog and its navigation. */
+/**
+ * The settings dialog keeps the host's own look, so the skin reads exactly one
+ * thing from it: the navigation cells it jumps to when the rail opens a page.
+ */
 export const SETTINGS_PARTS = {
-  overlay: 'settings-overlay',
-  mask: 'settings-mask',
-  panel: 'settings-panel',
-  navTitle: 'settings-nav-title',
-  nav: 'settings-nav',
-  navList: 'settings-nav-list',
   navCell: 'settings-nav-cell',
-  active: 'settings-nav-active',
-  navIcon: 'settings-nav-icon',
-  card: 'settings-card',
-  section: 'settings-section',
-  balanceCard: 'account-balance-card',
 };
 
 /** The skin's own update entry, read from the host's foot and toggle seats. */
@@ -302,15 +294,6 @@ export const PART_REGIONS = Object.freeze([
     id: 'settings',
     within: HOST.SETTINGS_OVERLAY,
     parts: SETTINGS_PARTS,
-  },
-  {
-    id: 'settings-panel',
-    within: partSelector('settings-panel'),
-    parts: {
-      header: 'settings-header',
-      options: 'settings-options',
-      close: 'settings-close',
-    },
   },
 ]);
 

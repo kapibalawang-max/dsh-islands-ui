@@ -59,7 +59,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
-| 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 68 parts and 13 regions are actually mounted, so a host upgrade shows up immediately |
+| 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 54 parts and 12 regions are actually mounted, so a host upgrade shows up immediately |
 | 📸 | **Visual regression** | `npm run shots` captures four baselines and diffs them pixel by pixel |
 
 The skin is a client-only style layer. Pinning helpers, the pinned shelf and the settings page are also implemented in the browser bundle; no host tool, service or session data is added.
@@ -138,7 +138,7 @@ src/
   17-update.css        desktop update entry, state styles, 3×3 dot-matrix loaders
   20-sidebar.css       workspace island, pinned shelf, session row states
   30-conversation.css  conversation page, composer, top tool group
-  40-settings.css      settings dialog and section shell
+  41-settings-native.css  settings dialog kept native (no restyle)
   48-islands-next.css  ridge and altitude, composer wake-up, density, presets, age marks, palette, self-check
   50-components.css    preference rows, switches, accent picker
   60-peers.css         third-party plugin adapters ([class*=...] is allowed only here)

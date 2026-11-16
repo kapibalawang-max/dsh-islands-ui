@@ -97,7 +97,8 @@ body[data-islands-ui] [data-menu-material] {
   box-shadow: var(--isl-shadow-float);
 }
 
-body[data-islands-ui] [role='dialog'],
+/* The settings dialog keeps the host's own shape: the skin does not restyle it. */
+body[data-islands-ui] [role='dialog']:not([data-shortcut-modal='settings']),
 body[data-islands-ui] [role='menu'],
 body[data-islands-ui] [role='listbox'] {
   border-radius: var(--isl-radius-lg);
