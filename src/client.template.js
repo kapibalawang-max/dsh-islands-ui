@@ -3132,7 +3132,12 @@ window.__ModuleLoader__.load({
             ),
           ),
         ),
-        h(ShortcutRow, { copy, onCapture: () => setShortcutVersion((v) => v + 1), key: 'shortcut' }),
+        h(ShortcutRow, {
+          copy,
+          onCapture: () => setShortcutVersion((v) => v + 1),
+          // The label is component state, so a reset remounts the row to re-read storage.
+          key: `shortcut-${shortcutVersion}`,
+        }),
         h(
           'div',
           { className: 'isl-prefRow isl-prefRowReset' },
@@ -3147,7 +3152,10 @@ window.__ModuleLoader__.load({
             {
               type: 'button',
               className: 'isl-resetBtn',
-              onClick: () => resetAppearancePrefs(),
+              onClick: () => {
+                resetAppearancePrefs();
+                setShortcutVersion((v) => v + 1);
+              },
             },
             copy.reset,
           ),
