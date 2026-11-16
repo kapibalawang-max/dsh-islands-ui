@@ -587,3 +587,32 @@ body[data-islands-ui] .isl-tipsDesc {
   font-size: 12px;
   line-height: 18px;
 }
+
+/* Quick-finder shortcut capture button (settings page). */
+body[data-islands-ui] .isl-shortcutBtn {
+  flex: none;
+  min-width: 64px;
+  padding: 4px 10px;
+  border: 1px solid var(--isl-border);
+  border-radius: var(--isl-radius-xs);
+  background: var(--isl-surface-muted);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+body[data-islands-ui] .isl-shortcutBtn:hover {
+  border-color: var(--isl-border-strong);
+}
+
+body[data-islands-ui] .isl-shortcutBtn:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 1px;
+}
+
+body[data-islands-ui] .isl-shortcutBtn.is-capturing {
+  border-color: var(--isl-accent);
+  color: var(--dsw-alias-label-secondary);
+}

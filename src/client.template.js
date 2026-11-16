@@ -82,6 +82,10 @@ window.__ModuleLoader__.load({
         accentCustom: '自定义颜色',
         density: '紧凑行高',
         densityDesc: '紧凑时会话行更矮、同屏能多看几条；觉得拥挤可切回舒适。',
+        shortcut: '快速查找快捷键',
+        shortcutDesc: '把唤出快速查找的组合改成你顺手的键；点按钮后按下新组合即可。',
+        shortcutCapture: '按下新的组合键…',
+        shortcutNeedMod: '组合里需要包含 ⌘（Ctrl）或 ⌥',
         theme: '主题预设',
         themeDesc: '一次切换整套配色（背景、卡片、描边、强调色）；点不同主题可立即预览。',
         themeMist: '雾',
@@ -204,6 +208,10 @@ window.__ModuleLoader__.load({
         accentCustom: 'Custom color',
         density: 'Compact rows',
         densityDesc: 'Compact rows are shorter so you see more sessions at once; switch back if it feels tight.',
+        shortcut: 'Quick finder shortcut',
+        shortcutDesc: 'Change the combination that opens the quick finder; click the button and press the new keys.',
+        shortcutCapture: 'Press the new key combination…',
+        shortcutNeedMod: 'Include ⌘ (Ctrl) or ⌥ in the combination',
         theme: 'Theme preset',
         themeDesc: 'Switches the whole palette (canvas, islands, borders, accent). Click to preview instantly.',
         themeMist: 'Mist',
@@ -309,6 +317,7 @@ window.__ModuleLoader__.load({
     const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
     const DENSITY_KEY = 'dsh-islands-ui:density';
     const THEME_KEY = 'dsh-islands-ui:theme';
+    const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
     const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite'];
     const listeners = new Set();
 
@@ -530,6 +539,51 @@ window.__ModuleLoader__.load({
       }
       applyPrefs();
       for (const listener of prefListeners) listener();
+    }
+
+    /**
+     * The quick-finder key combination. Stored as a space-joined token list,
+     * `mod` meaning the platform command key (Meta on darwin, Ctrl elsewhere)
+     * so one storage value serves both platforms. The default keeps ⌘K.
+     */
+    const DEFAULT_SHORTCUT = { mod: true, alt: false, shift: false, key: 'k' };
+
+    function readShortcut() {
+      try {
+        const stored = window.localStorage.getItem(SHORTCUT_KEY);
+        if (stored === null) return DEFAULT_SHORTCUT;
+        const parts = stored.trim().toLowerCase().split(/\s+/u);
+        if (parts.length < 1) return DEFAULT_SHORTCUT;
+        const key = parts.pop();
+        if (!/^[a-z0-9]$/u.test(key)) return DEFAULT_SHORTCUT;
+        const flags = new Set(parts);
+        for (const flag of flags) {
+          if (flag !== 'mod' && flag !== 'alt' && flag !== 'shift') return DEFAULT_SHORTCUT;
+        }
+        return { mod: flags.has('mod'), alt: flags.has('alt'), shift: flags.has('shift'), key };
+      } catch {
+        return DEFAULT_SHORTCUT;
+      }
+    }
+
+    function shortcutLabel(binding = readShortcut()) {
+      const darwin =
+        document.documentElement.getAttribute('data-platform') === 'darwin' ||
+        /Mac|iPhone|iPad/i.test(navigator.platform ?? '');
+      if (darwin) {
+        const parts = [];
+        if (binding.mod) parts.push('⌘');
+        if (binding.alt) parts.push('⌥');
+        if (binding.shift) parts.push('⇧');
+        parts.push(binding.key.toUpperCase());
+        return parts.join('');
+      }
+      const parts = [];
+      if (binding.mod) parts.push('Ctrl');
+      if (binding.alt) parts.push('Alt');
+      if (binding.shift) parts.push('Shift');
+      parts.push(binding.key.toUpperCase());
+      return parts.join('+');
     }
 
     function useLocale() {
@@ -2493,6 +2547,7 @@ window.__ModuleLoader__.load({
         window.localStorage.removeItem(DENSITY_KEY);
         window.localStorage.removeItem(THEME_KEY);
         window.localStorage.removeItem(ACCENT_KEY);
+        window.localStorage.removeItem(SHORTCUT_KEY);
       } catch {}
       applyAccent(null);
       applyPrefs();
@@ -2572,8 +2627,10 @@ window.__ModuleLoader__.load({
 
       React.useEffect(() => {
         const onKey = (event) => {
-          if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return;
-          if (event.key !== 'k' && event.key !== 'K') return;
+          const binding = readShortcut();
+          if ((event.metaKey || event.ctrlKey) !== binding.mod) return;
+          if (event.altKey !== binding.alt || event.shiftKey !== binding.shift) return;
+          if (event.key.toLowerCase() !== binding.key) return;
           // A modal dialog owns the keyboard: opening a palette on top of it
           // would let one Escape close both.
           const paletteOpen = document.querySelector('[role="dialog"].isl-palette') !== null;
@@ -2840,12 +2897,77 @@ window.__ModuleLoader__.load({
       );
     }
 
+    /** Capture-and-save editor for the quick-finder key combination. */
+    function ShortcutRow({ copy, onCapture }) {
+      const [capturing, setCapturing] = React.useState(false);
+      const [label, setLabel] = React.useState(() => shortcutLabel());
+      const [wrong, setWrong] = React.useState(false);
+      React.useEffect(() => {
+        if (!capturing) return undefined;
+        const onKey = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (event.key === 'Escape') {
+            setCapturing(false);
+            setWrong(false);
+            return;
+          }
+          if (['Meta', 'Control', 'Alt', 'Shift'].includes(event.key)) return;
+          if (!(event.metaKey || event.ctrlKey || event.altKey)) {
+            setWrong(true);
+            return;
+          }
+          const tokens = [];
+          if (event.metaKey || event.ctrlKey) tokens.push('mod');
+          if (event.altKey) tokens.push('alt');
+          if (event.shiftKey) tokens.push('shift');
+          tokens.push(event.key.toLowerCase());
+          try {
+            window.localStorage.setItem(SHORTCUT_KEY, tokens.join(' '));
+          } catch {
+            /* private mode: keep the session-only binding. */
+          }
+          setLabel(shortcutLabel(readShortcut()));
+          setWrong(false);
+          setCapturing(false);
+          onCapture?.();
+        };
+        window.addEventListener('keydown', onKey, true);
+        return () => window.removeEventListener('keydown', onKey, true);
+      }, [capturing]);
+      return h(
+        'div',
+        { className: 'isl-prefRow' },
+        h(
+          'div',
+          { className: 'isl-prefText' },
+          h('div', { className: 'isl-prefTitle' }, copy.shortcut),
+          h('div', { className: 'isl-prefDesc' }, wrong ? copy.shortcutNeedMod : copy.shortcutDesc),
+        ),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'isl-shortcutBtn' + (capturing ? ' is-capturing' : ''),
+            'data-capturing': capturing ? 'true' : 'false',
+            'aria-label': copy.shortcut,
+            onClick: () => {
+              setCapturing(true);
+              setWrong(false);
+            },
+          },
+          capturing ? copy.shortcutCapture : label,
+        ),
+      );
+    }
+
     function IslandsSettingsPage() {
       const on = useEnabled();
       const compat = useCompat();
       const lang = useLocale() ?? 'en';
       const copy = String(lang).toLowerCase().startsWith('zh') ? COPY.zh : COPY.en;
       const blocked = compat.status === 'missing';
+      const [shortcutVersion, setShortcutVersion] = React.useState(0);
       const [accent, setAccent] = React.useState(readAccent);
       const prefs = usePrefsSnapshot();
       const compactOn = prefs[0] === '1';
@@ -2887,7 +3009,7 @@ window.__ModuleLoader__.load({
           'div',
           { className: 'isl-tipsCard' },
           h('div', { className: 'isl-tipsTitle' }, copy.tipsTitle),
-          h('div', { className: 'isl-tipsDesc' }, copy.tipsDesc),
+          h('div', { className: 'isl-tipsDesc', key: `tips-${shortcutVersion}` }, copy.tipsDesc.includes('⌘K') ? copy.tipsDesc.replace('⌘K', shortcutLabel()) : copy.tipsDesc),
         ),
         compat.forced ? h('div', { className: 'isl-compatForced' }, copy.compatForced) : null,
         h(
@@ -3009,6 +3131,7 @@ window.__ModuleLoader__.load({
             ),
           ),
         ),
+        h(ShortcutRow, { copy, onCapture: () => setShortcutVersion((v) => v + 1), key: 'shortcut' }),
         h(
           'div',
           { className: 'isl-prefRow isl-prefRowReset' },
