@@ -79,7 +79,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🪟 | **岛脊与海拔** | 每座岛顶部一条 1px 内高光收住边缘；被内容压住的面板叠一圈柔和投影，滚动后再抬一档，层级不再只靠色块 |
 | ⌘K | **浮岛命令面板** | `⌘K` 打开居中面板：`↵` 真的切过去（收起的工作区也能搜到），命令行切皮肤、紧凑、主题与强调色 |
 | 🌊 | **紧凑密度** | 会话行从 32px 收到 26px（设置页开关，也可 `⌘K` 切换），长列表能多看几行 |
-| 🎨 | **主题预设** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite / Jade / Rose / Olive 十套，深浅各自成套（20 种组合）；强调色仍可单独覆盖 |
+| 🎨 | **主题预设** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite / Jade / Rose / Olive 十套，深浅各自成套（20 种组合）；每套都由一组 Radix UI 色阶派生（岛屿、画布、沉面、描边同源），强调色仍可单独覆盖 |
 | 🕰 | **行龄点** | 会话行首的点按“今天 / 本周 / 更早”变为实心、混色、空心；状态色仍归状态 |
 | 🩺 | **契约自检** | `?islands-debug=1` 在右下角列出 54 个部件、12 个区域的实际命中，宿主升级后一眼看出哪块失效 |
 | 📸 | **视觉回归** | `npm run shots` 拍四张基线图并做像素比对，改样式前先看差分 |
@@ -141,7 +141,7 @@ Windows 下不渲染插件顶栏，岛屿直接接在原生标题栏下方；工
 | `dsh-islands-ui:pinned-collapsed` | 置顶分类是否折叠 |
 | `dsh-islands-ui:rail` | 左侧栏图标的顺序与隐藏列表 |
 | `dsh-islands-ui:density` | `compact` 表示紧凑行高，缺省为标准 |
-| `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite`，主题预设 |
+| `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite` / `jade` / `rose` / `olive`，主题预设 |
 
 清除这些 key 即可恢复默认。
 

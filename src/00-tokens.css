@@ -8,25 +8,25 @@
 
 body[data-islands-ui] {
   /* Canvas: the unified background all islands float on. */
-  --isl-canvas: #f2f2f2;
-  --isl-canvas-veil: rgba(232, 234, 239, 0.72);
+  --isl-canvas: #e8e8ec;
+  --isl-canvas-veil: color-mix(in srgb, var(--isl-canvas) 72%, transparent);
   /* Island surfaces. */
-  --isl-surface: #ffffff;
-  --isl-surface-muted: #f3f5f8;
-  --isl-surface-sunken: #eceef3;
+  --isl-surface: #fcfcfd;
+  --isl-surface-muted: #f0f0f3;
+  --isl-surface-sunken: #e0e1e6;
   /* Hairlines: Islands uses tinted, very quiet borders. */
-  --isl-border-soft: rgba(17, 24, 39, 0.10);
-  --isl-border: rgba(17, 24, 39, 0.14);
-  --isl-border-strong: rgba(17, 24, 39, 0.20);
-  --isl-hover: rgba(17, 24, 39, 0.055);
-  --isl-active: rgba(17, 24, 39, 0.09);
-  --isl-accent: #4176e6;
+  --isl-border-soft: color-mix(in srgb, #1c2024 10%, transparent);
+  --isl-border: color-mix(in srgb, #1c2024 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #1c2024 22%, transparent);
+  --isl-hover: color-mix(in srgb, #1c2024 5%, transparent);
+  --isl-active: color-mix(in srgb, #1c2024 9%, transparent);
+  --isl-accent: #3358d4;
   /* Text: the host's light ladder ends in tertiary #81858c (3.71:1 on an
      island) and caption #adb2b8 (2.13:1). Both sit below AA for the 10-14px
      text this skin sets in them, so the two quiet rungs are re-declared one
      step deeper. Dark already passes and repeats the host values below. */
-  --dsw-alias-label-tertiary: #5f646d;
-  --dsw-alias-label-caption: #676d77;
+  --dsw-alias-label-tertiary: #5b6067;
+  --dsw-alias-label-caption: #61666e;
   /* Depth: a 1px inner highlight on each island's top edge sells the panel,
      and the seated card gets a real drop shadow instead of a flat outline. */
   --isl-seam: inset 0 1px 0 rgba(255, 255, 255, 0.85);
@@ -144,22 +144,23 @@ body[data-islands-ui] * {
 
 /* ---- Dark --------------------------------------------------------------- */
 body[data-islands-ui][data-ds-dark-theme] {
-  --isl-canvas: #0f1012;
-  --isl-canvas-veil: rgba(15, 16, 18, 0.72);
-  --isl-surface: #1b1c1f;
-  --isl-surface-muted: #232428;
-  --isl-surface-sunken: #151619;
-  --isl-border-soft: rgba(255, 255, 255, 0.06);
-  --isl-border: rgba(255, 255, 255, 0.09);
-  --isl-border-strong: rgba(255, 255, 255, 0.16);
-  --isl-hover: rgba(255, 255, 255, 0.06);
+  --isl-canvas: #111113;
+  --isl-canvas-veil: color-mix(in srgb, var(--isl-canvas) 72%, transparent);
+  --isl-surface: #1c1e20;
+  --isl-surface-muted: #18191b;
+  --isl-surface-sunken: #111113;
+  --isl-border-soft: color-mix(in srgb, #edeef0 12%, transparent);
+  --isl-border: color-mix(in srgb, #edeef0 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #edeef0 26%, transparent);
+  --isl-hover: color-mix(in srgb, #edeef0 7%, transparent);
   --isl-seam: inset 0 1px 0 rgba(255, 255, 255, 0.07);
   --isl-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
   --isl-shadow-card-focus:
     inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 2px 12px rgba(0, 0, 0, 0.45);
   --isl-shadow-island-raised: 0 16px 36px -20px rgba(0, 0, 0, 0.75);
   --isl-shadow-float: 0 20px 52px -20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
-  --isl-active: rgba(255, 255, 255, 0.1);
+  --isl-active: color-mix(in srgb, #edeef0 12%, transparent);
+  --isl-accent: #627de6;
   --dsw-alias-label-tertiary: #b3b8bf;
   --dsw-alias-label-caption: #8a9099;
   /* A zero shadow, not `none`: the seam appends to this value, and a shadow

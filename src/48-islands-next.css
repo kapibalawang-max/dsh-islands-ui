@@ -60,247 +60,291 @@ body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
 
 /* ---- 4. Theme presets --------------------------------------------------- */
 
-/* Mist is the shipped palette; every preset is a whole token set, not an accent swap. */
+/* Mist is the shipped palette and lives in 00 tokens; every preset below is a
+   whole token set derived from one Radix UI surface family, never an accent
+   swap. Light reads island = step 1, canvas = step 4, muted a blend of the
+   two, sunken = step 5, hairlines = the family's step 12 at 10 / 15 / 22 %.
+   Dark reads canvas = step 1, island = step 2, sunken = the canvas itself.
+   Accents come from a second family and stay >= 4.5:1 against the island in
+   both modes, because the rail and the update button set text in them. */
+/* Sand: warm paper, deep amber mark. */
 body[data-islands-ui][data-islands-theme='sand'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #ece7df;
-  --isl-surface: #fffdf8;
-  --isl-surface-muted: #f6f1e8;
-  --isl-surface-sunken: #efe9de;
-  --isl-border-soft: rgba(60, 42, 22, 0.1);
-  --isl-border: rgba(60, 42, 22, 0.15);
-  --isl-border-strong: rgba(60, 42, 22, 0.22);
-  --isl-hover: rgba(60, 42, 22, 0.05);
-  --isl-active: rgba(60, 42, 22, 0.08);
-  --isl-accent: #a4632a;
+  --isl-canvas: #e9e8e6;
+  --isl-surface: #fdfdfc;
+  --isl-surface-muted: #f1f1ef;
+  --isl-surface-sunken: #e2e1de;
+  --isl-border-soft: color-mix(in srgb, #21201c 10%, transparent);
+  --isl-border: color-mix(in srgb, #21201c 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #21201c 22%, transparent);
+  --isl-hover: color-mix(in srgb, #21201c 5%, transparent);
+  --isl-active: color-mix(in srgb, #21201c 9%, transparent);
+  --isl-accent: #ab6400;
 }
 
+/* Sage: grey-green field, garden green mark. */
 body[data-islands-ui][data-islands-theme='sage'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #e8ebe4;
-  --isl-surface: #fdfefb;
-  --isl-surface-muted: #f1f4ec;
-  --isl-surface-sunken: #e2e7dc;
-  --isl-border-soft: rgba(34, 52, 30, 0.1);
-  --isl-border: rgba(34, 52, 30, 0.15);
-  --isl-border-strong: rgba(34, 52, 30, 0.22);
-  --isl-accent: #4c7a4f;
+  --isl-canvas: #e6e9e8;
+  --isl-surface: #fbfdfc;
+  --isl-surface-muted: #eff1f0;
+  --isl-surface-sunken: #dfe2e0;
+  --isl-border-soft: color-mix(in srgb, #1a211e 10%, transparent);
+  --isl-border: color-mix(in srgb, #1a211e 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #1a211e 22%, transparent);
+  --isl-hover: color-mix(in srgb, #1a211e 5%, transparent);
+  --isl-active: color-mix(in srgb, #1a211e 9%, transparent);
+  --isl-accent: #218358;
 }
 
+/* Clay: terracotta field, bronze shell. */
 body[data-islands-ui][data-islands-theme='clay'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #f0e8e3;
-  --isl-surface: #fffcf9;
-  --isl-surface-muted: #f7efea;
-  --isl-surface-sunken: #eae1da;
-  --isl-border-soft: rgba(58, 36, 26, 0.1);
-  --isl-border: rgba(58, 36, 26, 0.15);
-  --isl-border-strong: rgba(58, 36, 26, 0.22);
+  --isl-canvas: #efe4df;
+  --isl-surface: #fdfcfc;
+  --isl-surface-muted: #f5eeeb;
+  --isl-surface-sunken: #e7d9d3;
+  --isl-border-soft: color-mix(in srgb, #43302b 10%, transparent);
+  --isl-border: color-mix(in srgb, #43302b 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #43302b 22%, transparent);
+  --isl-hover: color-mix(in srgb, #43302b 5%, transparent);
+  --isl-active: color-mix(in srgb, #43302b 9%, transparent);
   --isl-accent: #a8583f;
 }
 
+/* Lilac: clear violet, no pink drift. */
 body[data-islands-ui][data-islands-theme='lilac'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #eae7f1;
-  --isl-surface: #fdfcff;
-  --isl-surface-muted: #f3f1f8;
-  --isl-surface-sunken: #e4e0ee;
-  --isl-border-soft: rgba(42, 34, 66, 0.1);
-  --isl-border: rgba(42, 34, 66, 0.15);
-  --isl-border-strong: rgba(42, 34, 66, 0.23);
-  --isl-accent: #6f5bd1;
+  --isl-canvas: #ebe4ff;
+  --isl-surface: #fdfcfe;
+  --isl-surface-muted: #f3eeff;
+  --isl-surface-sunken: #e1d9ff;
+  --isl-border-soft: color-mix(in srgb, #2f265f 10%, transparent);
+  --isl-border: color-mix(in srgb, #2f265f 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #2f265f 22%, transparent);
+  --isl-hover: color-mix(in srgb, #2f265f 5%, transparent);
+  --isl-active: color-mix(in srgb, #2f265f 9%, transparent);
+  --isl-accent: #654dc4;
 }
 
+/* Graphite: the colourless one, cool grey mark. */
 body[data-islands-ui][data-islands-theme='graphite'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #e5e6e8;
-  --isl-surface: #fcfcfd;
-  --isl-surface-muted: #f0f1f3;
-  --isl-surface-sunken: #dfe1e4;
-  --isl-border-soft: rgba(17, 24, 39, 0.12);
-  --isl-border: rgba(17, 24, 39, 0.17);
-  --isl-border-strong: rgba(17, 24, 39, 0.25);
-  --isl-accent: #3f4652;
+  --isl-canvas: #e8e8e8;
+  --isl-surface: #fcfcfc;
+  --isl-surface-muted: #f0f0f0;
+  --isl-surface-sunken: #e0e0e0;
+  --isl-border-soft: color-mix(in srgb, #202020 10%, transparent);
+  --isl-border: color-mix(in srgb, #202020 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #202020 22%, transparent);
+  --isl-hover: color-mix(in srgb, #202020 5%, transparent);
+  --isl-active: color-mix(in srgb, #202020 9%, transparent);
+  --isl-accent: #60646c;
 }
 
+/* Ink: pale blue field, cold blue ink. */
 body[data-islands-ui][data-islands-theme='ink'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #e9ebef;
-  --isl-surface: #fbfcfd;
-  --isl-surface-muted: #eef1f5;
-  --isl-surface-sunken: #e3e7ed;
-  --isl-border-soft: rgba(17, 24, 39, 0.11);
-  --isl-border: rgba(17, 24, 39, 0.16);
-  --isl-border-strong: rgba(17, 24, 39, 0.24);
-  --isl-accent: #2f4bb8;
+  --isl-canvas: #e1e9ff;
+  --isl-surface: #fdfdfe;
+  --isl-surface-muted: #edf1ff;
+  --isl-surface-sunken: #d2deff;
+  --isl-border-soft: color-mix(in srgb, #1f2d5c 10%, transparent);
+  --isl-border: color-mix(in srgb, #1f2d5c 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #1f2d5c 22%, transparent);
+  --isl-hover: color-mix(in srgb, #1f2d5c 5%, transparent);
+  --isl-active: color-mix(in srgb, #1f2d5c 9%, transparent);
+  --isl-accent: #0d74ce;
 }
 
+/* Jade: mint field, jade mark. */
 body[data-islands-ui][data-islands-theme='jade'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #e6eeeb;
-  --isl-surface: #fbfefc;
-  --isl-surface-muted: #eff5f2;
-  --isl-surface-sunken: #dde8e4;
-  --isl-border-soft: rgba(20, 54, 48, 0.1);
-  --isl-border: rgba(20, 54, 48, 0.15);
-  --isl-border-strong: rgba(20, 54, 48, 0.22);
-  --isl-accent: #1f6f63;
+  --isl-canvas: #d6f1e3;
+  --isl-surface: #fbfefd;
+  --isl-surface-muted: #e6f6ee;
+  --isl-surface-sunken: #c3e9d7;
+  --isl-border-soft: color-mix(in srgb, #1d3b31 10%, transparent);
+  --isl-border: color-mix(in srgb, #1d3b31 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #1d3b31 22%, transparent);
+  --isl-hover: color-mix(in srgb, #1d3b31 5%, transparent);
+  --isl-active: color-mix(in srgb, #1d3b31 9%, transparent);
+  --isl-accent: #208368;
 }
 
+/* Rose: dusty rose field, crimson mark. */
 body[data-islands-ui][data-islands-theme='rose'] {
-  /* Darker canvases need a firmer label ladder to stay at AA. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #f1e8ea;
-  --isl-surface: #fffbfc;
-  --isl-surface-muted: #f8eff1;
-  --isl-surface-sunken: #ece0e3;
-  --isl-border-soft: rgba(72, 28, 44, 0.1);
-  --isl-border: rgba(72, 28, 44, 0.15);
-  --isl-border-strong: rgba(72, 28, 44, 0.22);
-  --isl-accent: #a84463;
+  --isl-canvas: #eae7ec;
+  --isl-surface: #fdfcfd;
+  --isl-surface-muted: #f2f0f3;
+  --isl-surface-sunken: #e3dfe6;
+  --isl-border-soft: color-mix(in srgb, #211f26 10%, transparent);
+  --isl-border: color-mix(in srgb, #211f26 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #211f26 22%, transparent);
+  --isl-hover: color-mix(in srgb, #211f26 5%, transparent);
+  --isl-active: color-mix(in srgb, #211f26 9%, transparent);
+  --isl-accent: #cb1d63;
 }
 
+/* Olive: olive field, chartreuse mark. */
 body[data-islands-ui][data-islands-theme='olive'] {
-  /* The yellowest canvas of the set; the ladder moves with it. */
   --dsw-alias-label-tertiary: #5b6067;
   --dsw-alias-label-caption: #61666e;
-  --isl-canvas: #ececdf;
-  --isl-surface: #fcfcf6;
-  --isl-surface-muted: #f2f2e8;
-  --isl-surface-sunken: #e4e4d5;
-  --isl-border-soft: rgba(46, 48, 20, 0.1);
-  --isl-border: rgba(46, 48, 20, 0.15);
-  --isl-border-strong: rgba(46, 48, 20, 0.22);
-  --isl-accent: #5f6b2f;
+  --isl-canvas: #e2f0bd;
+  --isl-surface: #fcfdfa;
+  --isl-surface-muted: #edf5d7;
+  --isl-surface-sunken: #d3e7a6;
+  --isl-border-soft: color-mix(in srgb, #37401c 10%, transparent);
+  --isl-border: color-mix(in srgb, #37401c 15%, transparent);
+  --isl-border-strong: color-mix(in srgb, #37401c 22%, transparent);
+  --isl-hover: color-mix(in srgb, #37401c 5%, transparent);
+  --isl-active: color-mix(in srgb, #37401c 9%, transparent);
+  --isl-accent: #5c7c2f;
 }
 
-body[data-islands-ui][data-ds-dark-theme][data-islands-theme='jade'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #0b1211;
-  --isl-surface: #151e1c;
-  --isl-surface-muted: #1d2725;
-  --isl-surface-sunken: #101817;
-  --isl-border-soft: rgba(200, 235, 228, 0.07);
-  --isl-border: rgba(200, 235, 228, 0.1);
-  --isl-border-strong: rgba(200, 235, 228, 0.17);
-  --isl-accent: #6cc0b0;
-}
-
-body[data-islands-ui][data-ds-dark-theme][data-islands-theme='rose'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #130d10;
-  --isl-surface: #1d1619;
-  --isl-surface-muted: #261e21;
-  --isl-surface-sunken: #181113;
-  --isl-border-soft: rgba(255, 225, 232, 0.07);
-  --isl-border: rgba(255, 225, 232, 0.1);
-  --isl-border-strong: rgba(255, 225, 232, 0.17);
-  --isl-accent: #e58fa3;
-}
-
-body[data-islands-ui][data-ds-dark-theme][data-islands-theme='olive'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #10120a;
-  --isl-surface: #1a1d14;
-  --isl-surface-muted: #22261a;
-  --isl-surface-sunken: #14170e;
-  --isl-border-soft: rgba(232, 238, 205, 0.07);
-  --isl-border: rgba(232, 238, 205, 0.1);
-  --isl-border-strong: rgba(232, 238, 205, 0.17);
-  --isl-accent: #b6c46e;
-}
-
+/* The same nine presets in dark, one block each. */
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sand'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #14110e;
-  --isl-surface: #201b16;
-  --isl-surface-muted: #2a241d;
-  --isl-surface-sunken: #191510;
-  --isl-border-soft: rgba(255, 236, 214, 0.07);
-  --isl-border: rgba(255, 236, 214, 0.1);
-  --isl-border-strong: rgba(255, 236, 214, 0.17);
-  --isl-accent: #d08a4e;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #111110;
+  --isl-surface: #1e1e1c;
+  --isl-surface-muted: #191918;
+  --isl-surface-sunken: #111110;
+  --isl-border-soft: color-mix(in srgb, #eeeeec 12%, transparent);
+  --isl-border: color-mix(in srgb, #eeeeec 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #eeeeec 26%, transparent);
+  --isl-hover: color-mix(in srgb, #eeeeec 7%, transparent);
+  --isl-active: color-mix(in srgb, #eeeeec 12%, transparent);
+  --isl-accent: #ffc53d;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='sage'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #0d110d;
-  --isl-surface: #171c16;
-  --isl-surface-muted: #1f261d;
-  --isl-surface-sunken: #121712;
-  --isl-border-soft: rgba(214, 236, 204, 0.07);
-  --isl-border: rgba(214, 236, 204, 0.1);
-  --isl-border-strong: rgba(214, 236, 204, 0.17);
-  --isl-accent: #7fb886;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #101211;
+  --isl-surface: #1c1e1c;
+  --isl-surface-muted: #171918;
+  --isl-surface-sunken: #101211;
+  --isl-border-soft: color-mix(in srgb, #eceeed 12%, transparent);
+  --isl-border: color-mix(in srgb, #eceeed 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #eceeed 26%, transparent);
+  --isl-hover: color-mix(in srgb, #eceeed 7%, transparent);
+  --isl-active: color-mix(in srgb, #eceeed 12%, transparent);
+  --isl-accent: #30a46c;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='clay'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #14100e;
-  --isl-surface: #1f1a17;
-  --isl-surface-muted: #282220;
-  --isl-surface-sunken: #181412;
-  --isl-border-soft: rgba(250, 232, 220, 0.07);
-  --isl-border: rgba(250, 232, 220, 0.1);
-  --isl-border-strong: rgba(250, 232, 220, 0.17);
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #141110;
+  --isl-surface: #211e1c;
+  --isl-surface-muted: #1c1917;
+  --isl-surface-sunken: #141110;
+  --isl-border-soft: color-mix(in srgb, #ede0d9 12%, transparent);
+  --isl-border: color-mix(in srgb, #ede0d9 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #ede0d9 26%, transparent);
+  --isl-hover: color-mix(in srgb, #ede0d9 7%, transparent);
+  --isl-active: color-mix(in srgb, #ede0d9 12%, transparent);
   --isl-accent: #d98a6b;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='lilac'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #100e17;
-  --isl-surface: #1a1724;
-  --isl-surface-muted: #221e2e;
-  --isl-surface-sunken: #141220;
-  --isl-border-soft: rgba(234, 228, 255, 0.08);
-  --isl-border: rgba(234, 228, 255, 0.11);
-  --isl-border-strong: rgba(234, 228, 255, 0.18);
-  --isl-accent: #9b8bff;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #14121f;
+  --isl-surface: #221a34;
+  --isl-surface-muted: #1b1525;
+  --isl-surface-sunken: #14121f;
+  --isl-border-soft: color-mix(in srgb, #e2ddfe 12%, transparent);
+  --isl-border: color-mix(in srgb, #e2ddfe 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #e2ddfe 26%, transparent);
+  --isl-hover: color-mix(in srgb, #e2ddfe 7%, transparent);
+  --isl-active: color-mix(in srgb, #e2ddfe 12%, transparent);
+  --isl-accent: #8d78de;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='graphite'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #0b0c0e;
-  --isl-surface: #15171a;
-  --isl-surface-muted: #1d2024;
-  --isl-surface-sunken: #101214;
-  --isl-border-soft: rgba(240, 242, 245, 0.07);
-  --isl-border: rgba(240, 242, 245, 0.1);
-  --isl-border-strong: rgba(240, 242, 245, 0.16);
-  --isl-accent: #a7b0bd;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #111111;
+  --isl-surface: #1e1e1e;
+  --isl-surface-muted: #191919;
+  --isl-surface-sunken: #111111;
+  --isl-border-soft: color-mix(in srgb, #eeeeee 12%, transparent);
+  --isl-border: color-mix(in srgb, #eeeeee 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #eeeeee 26%, transparent);
+  --isl-hover: color-mix(in srgb, #eeeeee 7%, transparent);
+  --isl-active: color-mix(in srgb, #eeeeee 12%, transparent);
+  --isl-accent: #82868e;
 }
 
 body[data-islands-ui][data-ds-dark-theme][data-islands-theme='ink'] {
-  --dsw-alias-label-tertiary: #adb2b8;
-  --dsw-alias-label-caption: #81858c;
-  --isl-canvas: #0d0f14;
-  --isl-surface: #171a21;
-  --isl-surface-muted: #1f232b;
-  --isl-surface-sunken: #13161b;
-  --isl-accent: #7d98ff;
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #11131f;
+  --isl-surface: #161e38;
+  --isl-surface-muted: #141726;
+  --isl-surface-sunken: #11131f;
+  --isl-border-soft: color-mix(in srgb, #d6e1ff 12%, transparent);
+  --isl-border: color-mix(in srgb, #d6e1ff 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #d6e1ff 26%, transparent);
+  --isl-hover: color-mix(in srgb, #d6e1ff 7%, transparent);
+  --isl-active: color-mix(in srgb, #d6e1ff 12%, transparent);
+  --isl-accent: #0090ff;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='jade'] {
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #0d1512;
+  --isl-surface: #10251d;
+  --isl-surface-muted: #121c18;
+  --isl-surface-sunken: #0d1512;
+  --isl-border-soft: color-mix(in srgb, #adf0d4 12%, transparent);
+  --isl-border: color-mix(in srgb, #adf0d4 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #adf0d4 26%, transparent);
+  --isl-hover: color-mix(in srgb, #adf0d4 7%, transparent);
+  --isl-active: color-mix(in srgb, #adf0d4 12%, transparent);
+  --isl-accent: #29a383;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='rose'] {
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #121113;
+  --isl-surface: #1e1e20;
+  --isl-surface-muted: #1a191b;
+  --isl-surface-sunken: #121113;
+  --isl-border-soft: color-mix(in srgb, #eeeef0 12%, transparent);
+  --isl-border: color-mix(in srgb, #eeeef0 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #eeeef0 26%, transparent);
+  --isl-hover: color-mix(in srgb, #eeeef0 7%, transparent);
+  --isl-active: color-mix(in srgb, #eeeef0 12%, transparent);
+  --isl-accent: #ea4587;
+}
+
+body[data-islands-ui][data-ds-dark-theme][data-islands-theme='olive'] {
+  --dsw-alias-label-tertiary: #b3b8bf;
+  --dsw-alias-label-caption: #8a9099;
+  --isl-canvas: #11130c;
+  --isl-surface: #1a2214;
+  --isl-surface-muted: #151a10;
+  --isl-surface-sunken: #11130c;
+  --isl-border-soft: color-mix(in srgb, #e3f7ba 12%, transparent);
+  --isl-border: color-mix(in srgb, #e3f7ba 18%, transparent);
+  --isl-border-strong: color-mix(in srgb, #e3f7ba 26%, transparent);
+  --isl-hover: color-mix(in srgb, #e3f7ba 7%, transparent);
+  --isl-active: color-mix(in srgb, #e3f7ba 12%, transparent);
+  --isl-accent: #bdee63;
 }
 
 /* ---- 5. Row age mark ---------------------------------------------------- */

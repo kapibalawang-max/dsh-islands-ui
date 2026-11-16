@@ -167,7 +167,10 @@ for (const shot of shots) {
     continue;
   }
   const diff = new PNG({ width: a.width, height: a.height });
-  pixelmatch(a.data, b.data, diff.data, a.width, a.height, { threshold: 0.1, diffMask: true });
+  // A threshold of 0.1 (pixelmatch's default) ignores YIQ distances the eye
+  // still reads as a palette shift: a two-step canvas change slipped through at
+  // 0.000 %. 0.02 keeps antialiasing noise out while catching that.
+  pixelmatch(a.data, b.data, diff.data, a.width, a.height, { threshold: 0.02, diffMask: true });
   const masks = shot.mask ?? [];
   const inside = (x, y) => masks.some((m) => x >= m.x && x < m.x + m.w && y >= m.y && y < m.y + m.h);
   let changed = 0;
