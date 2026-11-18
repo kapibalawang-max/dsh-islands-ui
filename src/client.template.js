@@ -769,28 +769,38 @@ window.__ModuleLoader__.load({
       }
     }
 
-    function HouseGlyph() {
-      return h('svg', { width: 18, height: 18, viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': true },
-        h('path', { d: 'M3 8.6 10 3l7 5.6V16a1 1 0 0 1-1 1h-4v-4.5H8V17H4a1 1 0 0 1-1-1V8.6Z', stroke: 'currentColor', strokeWidth: 1.5, strokeLinejoin: 'round' }));
+    function HouseGlyph({ size = 18 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('path', { d: 'M3.234 6.15 L6.734 3.286 C7.47 2.683 8.53 2.683 9.266 3.286 L12.766 6.15 C13.231 6.53 13.5 7.098 13.5 7.698 L13.5 11.5 C13.5 12.605 12.605 13.5 11.5 13.5 L4.5 13.5 C3.395 13.5 2.5 12.605 2.5 11.5 L2.5 7.698 C2.5 7.098 2.769 6.53 3.234 6.15 Z', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round', strokeLinejoin: 'round' }),
+        h('path', { d: 'M6.25 13.5 L6.25 11.2 C6.25 10.537 6.787 10 7.45 10 L8.55 10 C9.213 10 9.75 10.537 9.75 11.2 L9.75 13.5', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round', strokeLinejoin: 'round' }));
     }
 
-    function ClockGlyph() {
-      return h('svg', { width: 18, height: 18, viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': true },
-        h('circle', { cx: 10, cy: 10, r: 7, stroke: 'currentColor', strokeWidth: 1.5 }),
-        h('path', { d: 'M10 6.2V10l2.6 1.6', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' }));
+    function ClockGlyph({ size = 18 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('circle', { cx: 8, cy: 8, r: 6, stroke: 'currentColor', strokeWidth: 1.25 }),
+        h('path', { d: 'M8 4.75 L8 8 L10.5 9.5', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round', strokeLinejoin: 'round' }));
     }
 
-    function PluginsGlyph() {
-      return h('svg', { width: 18, height: 18, viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': true },
-        h('rect', { x: 3, y: 3, width: 6, height: 6, rx: 1.6, stroke: 'currentColor', strokeWidth: 1.4 }),
-        h('rect', { x: 11, y: 3, width: 6, height: 6, rx: 1.6, stroke: 'currentColor', strokeWidth: 1.4 }),
-        h('rect', { x: 3, y: 11, width: 6, height: 6, rx: 1.6, stroke: 'currentColor', strokeWidth: 1.4 }),
-        h('path', { d: 'M14 11v6M11 14h6', stroke: 'currentColor', strokeWidth: 1.4, strokeLinecap: 'round' }));
+    function PluginsGlyph({ size = 18 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('path', { d: 'M2.5 4.75 H5.25 A1.75 1.75 0 1 1 8.25 4.75 H11.25 V7.5 A1.75 1.75 0 1 1 11.25 10.5 V13.5 H2.5 Z', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round', strokeLinejoin: 'round' }));
     }
 
-    function PlugGlyph() {
-      return h('svg', { width: 17, height: 17, viewBox: '0 0 20 20', fill: 'none', 'aria-hidden': true },
-        h('path', { d: 'M7 3v4M13 3v4M5 7h10v3a5 5 0 0 1-10 0V7ZM10 15v3', stroke: 'currentColor', strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+    function KanbanGlyph({ size = 18 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('rect', { x: 2.25, y: 2.75, width: 11.5, height: 10.5, rx: 2, stroke: 'currentColor', strokeWidth: 1.25 }),
+        h('path', { d: 'M5.25 5.5 V10.25 M8 5.5 V8.25 M10.75 5.5 V10.75', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round' }));
+    }
+
+    function WorkbenchGlyph({ size = 18 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('rect', { x: 2.25, y: 2.75, width: 11.5, height: 10.5, rx: 2, stroke: 'currentColor', strokeWidth: 1.25 }),
+        h('path', { d: 'M7 2.75 V13.25 M2.25 9.5 H7 M7 6.5 H13.75', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round' }));
+    }
+
+    function PlugGlyph({ size = 17 } = {}) {
+      return h('svg', { width: size, height: size, viewBox: '0 0 16 16', fill: 'none', 'aria-hidden': true },
+        h('path', { d: 'M5.5 2.5 V5.5 M10.5 2.5 V5.5 M3.5 5.5 H12.5 V8 A4.5 4.5 0 0 1 8 12.5 A4.5 4.5 0 0 1 3.5 8 Z M8 12.5 V14', stroke: 'currentColor', strokeWidth: 1.25, strokeLinecap: 'round', strokeLinejoin: 'round' }));
     }
 
     function CheckGlyph() {
@@ -1078,19 +1088,15 @@ window.__ModuleLoader__.load({
         [],
       );
 
-      const iconFor = (id, size) => {
-        const entry = byId.get(id);
-        if (entry?.component !== undefined) {
-          try {
-            return h(entry.component, { size, active: active === id });
-          } catch {
-            /* fall back to the generic glyph */
-          }
-        }
-        if (id === 'schedules') return h(ClockGlyph);
-        if (id === 'plugins') return h(PluginsGlyph);
-        return h(PlugGlyph);
+      // One drawing set for the whole rail: the entries keep their identity by
+      // position and tooltip, not by five unrelated icon families.
+      const RAIL_GLYPHS = {
+        schedules: ClockGlyph,
+        plugins: PluginsGlyph,
+        'super-kanban': KanbanGlyph,
+        'dsh-workbench': WorkbenchGlyph,
       };
+      const iconFor = (id, size) => h(RAIL_GLYPHS[id] ?? PlugGlyph, { size });
 
       // Official panels are registered by the bundled web-client fiber, whose
       // internal name is `wc`; that code means nothing in the UI. Third-party

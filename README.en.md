@@ -75,6 +75,7 @@ The skin is a client-only style layer. Pinning helpers, the pinned shelf and the
 | Spacing | 5px between every island, including the bottom panel |
 | Top bar | 40px window strip hosting the conversation tools and the right-panel toggle; macOS clears the traffic lights, Linux starts at 8px below the native title bar. Windows renders no island top bar: the caption row keeps the native sidebar toggle and the right-hand tools stay in the conversation header |
 | Accent | Brand blue by default; purple / green / orange / pink / red presets or any custom color |
+| Icons | One 16-grid line set at 1.25 stroke with round caps, following the text color and selected state; the rail, workspace folders and disclosure arrows all belong to it |
 
 ---
 

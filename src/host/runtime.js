@@ -93,6 +93,7 @@ export const HOST_ATTRIBUTES = Object.freeze([
   'data-shell-leading',
   'data-signed-out',
   'data-row-key',
+  'data-icon',
   'data-session-schedule-mark',
   'data-turn-trigger',
   'data-shortcut-modal',
