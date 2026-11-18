@@ -93,7 +93,7 @@ body[data-islands-ui] {
     transparent
   );
   --dsw-specific-menu: color-mix(in srgb, var(--isl-surface) 90%, transparent);
-  --dsw-alias-menu-group-header-fill: color-mix(in srgb, var(--isl-surface-muted) 92%, transparent);
+  --dsw-alias-menu-group-header-fill: var(--isl-surface-muted);
   --dsw-alias-markdown-code-block: var(--isl-surface-muted);
   --dsw-alias-markdown-code-block-banner: var(--isl-surface-muted);
   --dsw-alias-markdown-inline-code: var(--isl-surface-muted);
@@ -114,7 +114,11 @@ body[data-islands-ui] {
   --dsw-radius-lg: 14px;
   --dsw-radius-xl: 18px;
   --dsw-radius-panel: 20px;
-  --dsw-menu-backdrop-filter: blur(18px) saturate(140%);
+  /* Popups are opaque. The host paints every menu through a translucent fill
+     plus an 18px backdrop blur, which reads as glass over whatever sits under
+     it; the skin keeps menus solid so text never fights the page behind. */
+  --dsw-menu-backdrop-filter: none;
+  --dsw-menu-surface-fill: var(--isl-surface);
   --dsw-mask-blur: blur(3px);
   --dsw-alias-bg-mask-1: rgba(107, 114, 128, 0.3);
   --dsw-alias-bg-mask-2: rgba(107, 114, 128, 0.18);
@@ -214,5 +218,5 @@ body[data-islands-ui][data-islands-accent] * {
 html[data-platform='darwin'] body[data-islands-ui],
 html[data-platform='darwin'] body[data-islands-ui][data-ds-dark-theme] {
   --dsw-specific-menu: color-mix(in srgb, var(--isl-surface) 88%, transparent);
-  --dsw-alias-menu-group-header-fill: color-mix(in srgb, var(--isl-surface-muted) 94%, transparent);
+  --dsw-alias-menu-group-header-fill: var(--isl-surface-muted);
 }

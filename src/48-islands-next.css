@@ -417,8 +417,8 @@ body[data-islands-ui] .isl-palette {
   align-items: flex-start;
   justify-content: center;
   padding: max(12vh, 88px) 16px 16px;
+  /* A plain dim, no blur: blurring the page turned the panel into glass. */
   background: color-mix(in srgb, var(--isl-canvas) 55%, transparent);
-  backdrop-filter: blur(6px);
 }
 
 body[data-islands-ui] .isl-paletteCard {
