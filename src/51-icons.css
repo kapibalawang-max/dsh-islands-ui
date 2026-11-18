@@ -1,20 +1,17 @@
 /* ---- 51-icons.css ---- */
 /* The host paints its own sprite glyphs (`svg[data-icon] > use`) straight from
    an inline sprite; the symbol itself cannot be replaced (getElementById takes
-   the first match). These rules turn the element into a mask and supply the
-   skin's drawing instead, so the whole interface shares one icon set: 16-grid
-   line art, 1.25 stroke, round caps, colour following `currentColor`. */
+   the first match). These three header buttons carried filled glyphs that read
+   as solid blobs at 16px, so the element becomes a mask and the skin supplies
+   the same line-art set the rail uses. Workspace rows keep the host's own
+   folder and disclosure glyphs. */
 
 body[data-islands-ui] {
-  --isl-icon-folder: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.25 3.25 L5.33 3.25 C5.914 3.25 6.469 3.505 6.849 3.948 L7.151 4.302 C7.531 4.745 8.086 5 8.67 5 L11.75 5 C12.855 5 13.75 5.895 13.75 7 L13.75 10.75 C13.75 11.855 12.855 12.75 11.75 12.75 L4.25 12.75 C3.145 12.75 2.25 11.855 2.25 10.75 L2.25 5.25 C2.25 4.145 3.145 3.25 4.25 3.25 Z'/%3E%3Cpath d='M2.25 7.5 H13.75'/%3E%3C/svg%3E");
-  --isl-icon-folder-open: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1.609 13.188 L2.129 5.121 C2.197 4.069 3.071 3.25 4.125 3.25 L5.33 3.25 C5.914 3.25 6.469 3.505 6.849 3.948 L7.151 4.302 C7.531 4.745 8.086 5 8.67 5 L11.25 5 C11.802 5 12.25 5.448 12.25 6 L12.25 7'/%3E%3Cpath d='M5.183 7 L12.785 7 C13.489 7 13.973 7.709 13.716 8.364 L12.249 12.114 C12.099 12.498 11.729 12.75 11.317 12.75 L3.715 12.75 C3.011 12.75 2.527 12.041 2.784 11.386 L4.251 7.636 C4.401 7.252 4.771 7 5.183 7 Z'/%3E%3C/svg%3E");
   --isl-icon-folder-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7.5 12.75 L4.25 12.75 C3.145 12.75 2.25 11.855 2.25 10.75 L2.25 5.25 C2.25 4.145 3.145 3.25 4.25 3.25 L5.33 3.25 C5.914 3.25 6.469 3.505 6.849 3.948 L7.151 4.302 C7.531 4.745 8.086 5 8.67 5 L12.5 5 C13.19 5 13.75 5.56 13.75 6.25 L13.75 7.5'/%3E%3Cpath d='M11.75 9.75 V13.75 M9.75 11.75 H13.75'/%3E%3C/svg%3E");
-  --isl-icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5.875 3.75 L10.125 8 L5.875 12.25'/%3E%3C/svg%3E");
   --isl-icon-search: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='7' cy='7' r='4.75'/%3E%3Cpath d='M10.375 10.375 L13.75 13.75'/%3E%3C/svg%3E");
   --isl-icon-sliders: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.25 4.75 H7.75 M11.75 4.75 H13.75'/%3E%3Ccircle cx='9.75' cy='4.75' r='2'/%3E%3Cpath d='M2.25 11.25 H4.25 M8.25 11.25 H13.75'/%3E%3Ccircle cx='6.25' cy='11.25' r='2'/%3E%3C/svg%3E");
 }
 
-body[data-islands-ui] [data-row-key^='workspace:'] svg[data-icon],
 body[data-islands-ui] svg[data-icon='dsw-icon-search-outline-regular'],
 body[data-islands-ui] svg[data-icon='dsw-icon-sliders-two-outline-regular'],
 body[data-islands-ui] svg[data-icon='dsw-icon-project-add-outline-regular'] {
@@ -28,26 +25,10 @@ body[data-islands-ui] svg[data-icon='dsw-icon-project-add-outline-regular'] {
   mask-size: contain;
 }
 
-body[data-islands-ui] [data-row-key^='workspace:'] svg[data-icon] > use,
 body[data-islands-ui] svg[data-icon='dsw-icon-search-outline-regular'] > use,
 body[data-islands-ui] svg[data-icon='dsw-icon-sliders-two-outline-regular'] > use,
 body[data-islands-ui] svg[data-icon='dsw-icon-project-add-outline-regular'] > use {
   display: none;
-}
-
-body[data-islands-ui] [data-row-key^='workspace:'] svg[data-icon='dsw-icon-folder-close-regular'] {
-  -webkit-mask-image: var(--isl-icon-folder);
-  mask-image: var(--isl-icon-folder);
-}
-
-body[data-islands-ui] [data-row-key^='workspace:'] svg[data-icon='dsw-icon-folder-open-regular'] {
-  -webkit-mask-image: var(--isl-icon-folder-open);
-  mask-image: var(--isl-icon-folder-open);
-}
-
-body[data-islands-ui] [data-row-key^='workspace:'] svg[data-icon='dsw-icon-triangle-right-fill-regular'] {
-  -webkit-mask-image: var(--isl-icon-chevron);
-  mask-image: var(--isl-icon-chevron);
 }
 
 body[data-islands-ui] svg[data-icon='dsw-icon-search-outline-regular'] {
