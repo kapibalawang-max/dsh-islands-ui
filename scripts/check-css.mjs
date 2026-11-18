@@ -84,6 +84,92 @@ for (const file of files) {
   }
 }
 
+/* ---- token hygiene -------------------------------------------------------
+   A token declared twice in the same block means the first value is dead, and
+   a token nobody reads is either a leftover or a rename that missed a reader.
+   Both are silent in the browser, so gate them here. */
+const declared = new Map();
+const readNames = new Set();
+const templateText = await readFile(join(src, 'client.template.js'), 'utf8');
+let blockSeq = 0;
+
+/** Walk one stylesheet and report every custom property with its block. */
+function collectTokens(text, label, context = '') {
+  let index = 0;
+  let prelude = '';
+  while (index < text.length) {
+    const char = text[index];
+    if (char === '{') {
+      const selector = prelude.trim().replace(/\s+/gu, ' ');
+      prelude = '';
+      const path = context === '' ? selector : `${context} › ${selector}`;
+      if (selector.startsWith('@')) {
+        const close = matchBrace(text, index + 1);
+        collectTokens(text.slice(index + 1, close), label, path);
+        index = close + 1;
+        continue;
+      }
+      /* Each physical block gets its own id: the same selector may legitimately
+         appear twice, and only a repeat inside one block is a dead value. */
+      blockSeq += 1;
+      const block = `${label}#${blockSeq}`;
+      const close = matchBrace(text, index + 1);
+      const body = text.slice(index + 1, close);
+      for (const decl of body.matchAll(/(--[A-Za-z0-9-]+)\s*:/gu)) {
+        const name = decl[1];
+        const holder = declared.get(name) ?? [];
+        holder.push({ label, path, block });
+        declared.set(name, holder);
+      }
+      index = close + 1;
+      continue;
+    }
+    if (char === '}') {
+      prelude = '';
+      index += 1;
+      continue;
+    }
+    prelude += char;
+    index += 1;
+  }
+}
+
+/** Index of the brace that closes the block opened at `start`. */
+function matchBrace(text, start) {
+  let depth = 1;
+  for (let index = start; index < text.length; index += 1) {
+    if (text[index] === '{') depth += 1;
+    else if (text[index] === '}') {
+      depth -= 1;
+      if (depth === 0) return index;
+    }
+  }
+  return text.length;
+}
+
+for (const file of files) {
+  const label = `src/${file}`;
+  const text = (await readFile(join(src, file), 'utf8')).replace(/\/\*[\s\S]*?\*\//gu, '');
+  collectTokens(text, label);
+  for (const read of text.matchAll(/var\(\s*(--[A-Za-z0-9-]+)/gu)) readNames.add(read[1]);
+}
+for (const read of templateText.matchAll(/var\(\s*(--[A-Za-z0-9-]+)/gu)) readNames.add(read[1]);
+
+for (const [name, sites] of declared) {
+  const seen = new Map();
+  for (const site of sites) {
+    if (seen.has(site.block)) {
+      problems.push(`${site.label}: "${site.path}" declares ${name} twice (the first value is dead)`);
+    }
+    seen.set(site.block, true);
+  }
+  /* Host `--dsw-*` aliases are read by the host's own components, so only the
+     skin's own `--isl-*` scale has to be read here. */
+  if (name.startsWith('--isl-') && !readNames.has(name)) {
+    problems.push(`${sites[0].label}: ${name} is declared but never read`);
+  }
+}
+
 if (problems.length > 0) {
   console.error(`check:css failed:\n- ${problems.join('\n- ')}`);
   process.exitCode = 1;

@@ -54,7 +54,7 @@ body[data-islands-ui][data-islands-density='compact'] .isl-rowStatus {
   height: var(--isl-row-h-compact);
 }
 
-body[data-islands-ui][data-islands-density='compact'] .isl-pinnedRows {
+body[data-islands-ui][data-islands-density='compact'] .isl-pinnedList {
   gap: 0;
 }
 

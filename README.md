@@ -35,7 +35,7 @@ dsh plugin --profile web add dsh-islands-ui
 
 安装后刷新页面（`⌘R` / `Ctrl+R`）。皮肤默认开启；可在 **设置 → 浮岛界面** 关闭，关闭后立即恢复 Harness 默认外观，偏好和强调色会保留。
 
-> 适用于 DSH `0.2.2-rc.1` 与 `0.2.2-rc.2`。客户端会读取运行中的 DSH 版本（`window.__DSH_BOOT__.release.version`），自动选用对应的侧栏结构样式；更早的 `0.2.x` 构建回退到基础样式。包内声明了完整的 `dsh.bundle` + `dsh.client` manifest，`dsh plugin add` 会自动写入 profile 的 bundle 栈，不需要手工改 `cordis.patch.yml`。
+> 兼容 DSH `0.2.2-rc.1` 与 `0.2.2-rc.2`（引擎约束 `>=0.2.2-rc.1 <0.3.0-0`）。样式表对所有构建只有一份，不按版本切换；结构差异由皮肤写回的部件标记表达。客户端读到的运行版本只显示在设置页，供排查升级后的样式问题。包内声明了完整的 `dsh.bundle` + `dsh.client` manifest，`dsh plugin add` 会自动写入 profile 的 bundle 栈，不需要手工改 `cordis.patch.yml`。
 
 ### 卸载
 
@@ -69,7 +69,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 
 | | 功能 | 说明 |
 | :---: | --- | --- |
-| 🏝 | **浮岛布局** | 画布、主会话、工作区、右侧栏、底部面板各自独立；扁平无投影，以色块 + 1px 发丝线分隔 |
+| 🏝 | **浮岛布局** | 画布、主会话、工作区、右侧栏、底部面板各自独立；以色块 + 1px 发丝线分层，岛顶一条 1px 内高光，被内容压住的浮层叠一圈柔和投影 |
 | 🧭 | **常驻左侧栏** | 工作区与全部插件图标直接排列；首页按钮只作会话 / 工作区抽屉触发器、不占选中态（hover 浅色反馈、点击半透明涟漪）；面板图标点击切换，按住拖动排序（浮动预览跟随鼠标），右键显示 / 隐藏图标 |
 | ⚙️ | **独立设置页** | 设置 → 浮岛界面：一键开关皮肤、强调色（六种预设 + 任意取色）、紧凑行高、回复边框、快捷键 |
 | 📌 | **置顶聚合** | 置顶会话同时保留在原工作区，并聚合到「新会话」与「工作区」标题之间；分类可折叠 |
@@ -89,7 +89,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 
 | 层级 | 规则 |
 | --- | --- |
-| 画布 | 纯色 `#f2f2f2`（深色 `#0f1012`），不透明、无毛玻璃 |
+| 画布 | 纯色 `#e8e8ec`（深色 `#111113`），不透明、无毛玻璃 |
 | 岛屿 | 白色 / 深灰表面，16–20px 圆角，1px 发丝描边；顶部 1px 内高光当“脊”，被内容压住时加柔和投影 |
 | 间距 | 所有岛屿统一 5px 间隙，左右、顶部、底部、底部面板四周一致 |
 | 字号 | 最小 12px，12 / 13 / 14px 为主力档位，层级靠字重与颜色区分 |
@@ -142,6 +142,10 @@ Windows 下不渲染插件顶栏，岛屿直接接在原生标题栏下方；工
 | `dsh-islands-ui:rail` | 左侧栏图标的顺序与隐藏列表 |
 | `dsh-islands-ui:density` | `compact` 表示紧凑行高，缺省为标准 |
 | `dsh-islands-ui:reply-border` | `off` 表示助手回复不加边框，缺省为加 |
+| `dsh-islands-ui:shortcut` | 命令面板的组合键（缺省 `⌘K` / `Ctrl+K`） |
+| `dsh-islands-ui:rail-pins` | 左侧栏置顶的插件图标 |
+
+`dsh-islands-ui:force` 另存于 `sessionStorage`，只在当前会话强制启用皮肤，关掉标签页即失效。
 
 清除这些 key 即可恢复默认。
 
@@ -155,17 +159,20 @@ src/
   10-shell.css         三栏框架 → 画布 + 岛屿
   15-topbar.css        窗口顶部栏
   16-rail.css          左侧图标栏、拖动排序、显隐菜单、设置齿轮
+  17-update.css        桌面更新入口、状态样式、3×3 点阵加载动效
   20-sidebar.css       工作区岛屿、置顶聚合、会话行状态
   30-conversation.css  会话页、输入框、顶部工具组
   41-settings-native.css  设置弹窗还原宿主原生样式（不重绘）
   48-islands-next.css  岛脊与海拔、输入卡唤醒、密度、行龄、命令面板、自检浮层
+  49-motion.css        入场与切换动效、减少动效适配
   50-components.css    偏好行、开关、强调色选择器等共享组件
+  51-icons.css         16 格线性图标的统一描边与尺寸
   60-peers.css         第三方插件适配（仅此文件允许 [class*=...]）
   host/runtime.js      宿主契约、本地名提取、区域/部件表、遍历器
   client.template.js   浏览器端入口模板（React 组件 + 插槽注册）
 build.mjs              把 src/*.css 与 host/runtime.js 内联进 client.js
 client.js              构建产物（自包含，运行时无法读文件）
-scripts/check-css.mjs  选择器门禁
+scripts/check-css.mjs  选择器门禁与 token 门禁（同块重复声明、声明了没人读）
 scripts/check-parts.mjs 部件表门禁
 scripts/check-package.mjs  发布前包内容校验
 scripts/shots.mjs     无头截图与像素回归（`npm run shots`）
@@ -200,7 +207,7 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 | 文件 | 作用 |
 | --- | --- |
 | `.github/workflows/ci.yml` | PR / main 上跑 `npm run check` 和 `npm pack --dry-run`，Node 20 / 22 / 24 矩阵 |
-| `.github/workflows/publish.yml` | 推送 `v*` tag 或手动触发发布；tag 必须与 `package.json` 版本一致，使用 `NPM_TOKEN` secret |
+| `.github/workflows/publish.yml` | 推送 `v*` tag 或手动触发发布；tag 必须与 `package.json` 版本一致，走 npm Trusted Publishing（OIDC 交换短期凭据，不存 `NPM_TOKEN`） |
 | `.github/ISSUE_TEMPLATE/` | Bug / Feature 表单，强制填写 DSH 版本、平台和复现步骤 |
 | `.github/PULL_REQUEST_TEMPLATE.md` | PR 自检：构建、宽窄屏、深色模式、无本地路径 |
 | `.github/dependabot.yml` | 每周检查 GitHub Actions 版本更新 |
@@ -208,7 +215,7 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 | `.nvmrc` | 本地开发使用 Node 24 |
 | `CONTRIBUTING.md` | 开发、构建、提交约定和 PR 清单 |
 | `SECURITY.md` | 支持版本与私密漏洞报告流程 |
-| `scripts/check-package.mjs` | 包里 manifest、row name、client 构建、截图和 `files[]` 的发布前校验 |
+| `scripts/check-package.mjs` | 包里 manifest、row name、强调色与默认色一致、client 构建、截图和 `files[]` 的发布前校验 |
 
 仓库设置：`main` 需要 PR、CI 的 `check (Node 20/22/24)` 通过和对话解决后才能合并，且禁止 force push；`v*` tag 禁止删除/移动；外部 fork PR 需要维护者批准。
 

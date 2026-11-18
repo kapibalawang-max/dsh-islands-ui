@@ -84,6 +84,19 @@ if (await exists('skin.json')) {
   check(skin.package === pkg.name, 'skin.json package must equal the npm package name');
   check(skin.bodyAttr === 'data-islands-ui', 'skin.json bodyAttr must match the CSS attribute');
   check(skin.wiring?.id === 'islands-ui', 'skin.json wiring.id must match the cordis row id');
+
+  /* The store tile shows this accent next to the skin's own default. They drifted
+     once already, so read the default from the light token block and compare. */
+  const tokens = await readFile(join(root, 'src/00-tokens.css'), 'utf8').catch(() => '');
+  const lightBlock = tokens.split('data-ds-dark-theme')[0];
+  const defaultAccent = lightBlock.match(/--isl-accent:\s*(#[0-9a-f]{6})\s*;/iu)?.[1] ?? null;
+  check(defaultAccent !== null, 'cannot read the default --isl-accent from src/00-tokens.css');
+  if (defaultAccent !== null) {
+    check(
+      String(skin.accent ?? '').toLowerCase() === defaultAccent.toLowerCase(),
+      `skin.json accent (${skin.accent}) must match the default --isl-accent (${defaultAccent})`,
+    );
+  }
 }
 
 check(await exists(pkg.icon ?? ''), `missing package icon: ${pkg.icon}`);

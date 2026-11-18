@@ -6,27 +6,26 @@
 
 | 内容 | 位置 |
 | --- | --- |
-| 1.1.14 源码快照 | `~/sonet/backups/dsh-islands-ui/dsh-islands-ui-1.1.14.tar.gz` |
-| 1.1.14 装到本机的那份 `client.js` | `~/sonet/backups/dsh-islands-ui/client.js.1.1.14`（md5 `d15491e0a21435e3f026c73c605f54f6`） |
-| git 标签 | `v1.1.14-backup`（指向 1.1.14 的发布提交） |
-| 远端 1.1.14 提交 | `172ca8d3`（`https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/172ca8d3`） |
+| 1.1.14 源码 | git 标签 `v1.1.14-backup`（1.1.14 的发布提交，只在本地，未推到远端） |
+| 1.1.14 的 `client.js` | `git show v1.1.14-backup:client.js`（md5 `d15491e0a21435e3f026c73c605f54f6`） |
+| 远端 1.1.14 提交 | `172ca8d3`（`https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/172ca8d3`，在 `origin/main` 历史里） |
 
 ## 三种回滚
 
-**只退某一项**（最快，不用重装）：打开 `⌘K` 或设置页 → Islands 界面，关掉对应开关。
+**只退某一项**（最快，不用重装）：打开 `⌘K` 或 设置 → 浮岛界面，关掉对应开关。
 
 | 想要的结果 | 操作 |
 | --- | --- |
-| 去掉点阵纹理 | 关「海面点阵」（写 `localStorage['dsh-islands-ui:sea'] = '0'`） |
-| 去掉紧凑行高 | 关「紧凑行高」（`dsh-islands-ui:density` 清空或删键） |
-| 回到默认配色 | 主题预设选「雾」（`dsh-islands-ui:theme` 删键） |
-| 现在的强调色 | 强调色选第一个色块或「跟随主题」 |
-| 整套皮肤停用 | 关「启用 Islands 界面」，立即回到 DSH 默认外观 |
+| 去掉紧凑行高 | 关「紧凑行高」（删 `dsh-islands-ui:density` 键） |
+| 回复不套边框 | 关「回复边框」（`dsh-islands-ui:reply-border` 写成 `off` 或删键） |
+| 回到默认强调色 | 强调色选「默认」（删 `dsh-islands-ui:accent` 键） |
+| 左侧栏图标复原 | 删 `dsh-islands-ui:rail` 与 `dsh-islands-ui:rail-pins` 两个键，刷新 |
+| 整套皮肤停用 | 关「启用浮岛界面」，立即回到 DSH 默认外观（偏好保留） |
 
 **退代码**：
 
 ```bash
-cd ~/sonet/dsh-islands-ui
+cd ~/sonet/apps/dsh-islands-ui
 git reset --hard v1.1.14-backup     # 回到 1.1.14 发布提交
 npm run build && npm run check
 ```
@@ -40,8 +39,8 @@ dsh plugin --profile desktop add "https://codeload.github.com/kapibalawang-max/d
 或者直接覆盖已装文件再刷新：
 
 ```bash
-cp ~/sonet/backups/dsh-islands-ui/client.js.1.1.14 \
-   ~/.dsh/profiles/desktop/node_modules/dsh-islands-ui/client.js
+git -C ~/sonet/apps/dsh-islands-ui show v1.1.14-backup:client.js \
+  > ~/.dsh/profiles/desktop/node_modules/dsh-islands-ui/client.js
 ```
 
 然后 ⌘R。下次 `dsh plugin add` 会把它重新拉回远端版本，所以这只是临时手段。

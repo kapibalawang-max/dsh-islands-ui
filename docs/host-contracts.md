@@ -13,7 +13,7 @@ Islands UI 不再把宿主构建输出的哈希类名写进样式表或 DOM 查�
 | `src/host/runtime.js` | 契约字面量、本地名提取、区域/部件表、遍历器 |
 | `src/*.css` | 只读 `data-islands-part` 和宿主契约 |
 | `src/60-peers.css` | 第三方插件适配，允许 `[class*=...]`，核心样式不读 |
-| `scripts/check-css.mjs` | 选择器门禁：作用域、部件名、属性白名单、禁止哈希类名/子串匹配 |
+| `scripts/check-css.mjs` | 选择器门禁：作用域、部件名、属性白名单、禁止哈希类名/子串匹配；token 门禁：同一块内重复声明、`--isl-*` 声明后没人读 |
 | `scripts/check-parts.mjs` | 表完整性：定义了没读、读了没定义、本地名格式 |
 | `test/host-runtime.test.mjs` | 本地名提取和表的单元测试 |
 

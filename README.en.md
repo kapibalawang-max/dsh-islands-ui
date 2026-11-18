@@ -30,9 +30,9 @@ dsh plugin --profile desktop add dsh-islands-ui
 dsh plugin --profile web add dsh-islands-ui
 ```
 
-Then refresh (`⌘R` / `Ctrl+R`). The skin is enabled by default. Turn it off at **Settings → Floating island theme** to restore the stock appearance immediately; your preference and accent are kept.
+Then refresh (`⌘R` / `Ctrl+R`). The skin is enabled by default. Turn it off at **Settings → 浮岛界面** to restore the stock appearance immediately; your preference and accent are kept.
 
-> Requires DeepSeek Harness `0.2.2-rc.1` or `0.2.2-rc.2`. The client reads the running release (`window.__DSH_BOOT__.release.version`) and injects the sidebar structure stylesheet for that build; older `0.2.x` builds fall back to the base stylesheet. The package declares `dsh.bundle` + `dsh.client`, so `dsh plugin add` installs and mounts it without editing the profile by hand.
+> Requires DeepSeek Harness `0.2.2-rc.1` or `0.2.2-rc.2` (engine range `>=0.2.2-rc.1 <0.3.0-0`). One stylesheet serves every build; it never branches on a release number. Structure differences are expressed by the part marks the skin writes back, and the release the client reads is only shown on the settings page for support triage. The package declares `dsh.bundle` + `dsh.client`, so `dsh plugin add` installs and mounts it without editing the profile by hand.
 
 ### Uninstall
 
@@ -46,15 +46,15 @@ dsh plugin --profile desktop remove dsh-islands-ui
 
 | | Feature | Details |
 | :---: | --- | --- |
-| 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; flat, no drop shadows, separated by color and a 1px hairline |
+| 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; color blocks and a 1px hairline do the layering, a 1px inner highlight marks each island's top edge, and a panel pressed by content takes one soft shadow |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
-| ⚙️ | **Settings page** | Settings → Floating island theme: on/off, accent presets, custom color, compact rows, reply border, shortcut |
+| ⚙️ | **Settings page** | Settings → 浮岛界面: on/off, accent presets, custom color, compact rows, reply border, shortcut |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
-| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, reply border, theme and accent |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, reply border and accent |
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 54 parts and 12 regions are actually mounted, so a host upgrade shows up immediately |
@@ -68,7 +68,7 @@ The skin is a client-only style layer. Pinning helpers, the pinned shelf and the
 
 | Layer | Rule |
 | --- | --- |
-| Canvas | Solid `#f2f2f2` (dark `#0f1012`), opaque, no blur |
+| Canvas | Solid `#e8e8ec` (dark `#111113`), opaque, no blur |
 | Floating islands | White / dark-gray surfaces, 16–20px radius, 1px hairline; a 1px inner highlight along the top edge, soft shadow where content presses |
 | Spacing | 5px between every island, including the bottom panel |
 | Top bar | 40px window strip hosting the conversation tools and the right-panel toggle; macOS clears the traffic lights, Linux starts at 8px below the native title bar. Windows renders no island top bar: the caption row keeps the native sidebar toggle and the right-hand tools stay in the conversation header |
@@ -118,10 +118,15 @@ Stored in `localStorage`; clear these keys to reset:
 | Key | Purpose |
 | --- | --- |
 | `dsh-islands-ui:enabled` | `1` / `0`, master switch |
-| `dsh-islands-ui:accent` | Custom accent color; absent means follow theme |
+| `dsh-islands-ui:accent` | Custom accent color; absent means the default blue `#3358d4` |
 | `dsh-islands-ui:pinned-collapsed` | Whether the pinned group is collapsed |
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
+| `dsh-islands-ui:rail-pins` | Pinned plugin icons on the left rail |
 | `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
+| `dsh-islands-ui:reply-border` | `off` drops the border around assistant replies, absent keeps it |
+| `dsh-islands-ui:shortcut` | Binding for the command palette (default `⌘K` / `Ctrl+K`) |
+
+`dsh-islands-ui:force` lives in `sessionStorage` and forces the skin on for the current session only; closing the tab clears it.
 
 ---
 
@@ -144,17 +149,21 @@ src/
   30-conversation.css  conversation page, composer, top tool group
   41-settings-native.css  settings dialog kept native (no restyle)
   48-islands-next.css  ridge and altitude, composer wake-up, density, age marks, palette, self-check
+  49-motion.css       entrance and swap motion, reduced-motion opt-out
   50-components.css    preference rows, switches, accent picker
+  51-icons.css         16-grid line icons: one stroke and size set
   60-peers.css         third-party plugin adapters ([class*=...] is allowed only here)
   host/runtime.js      host contracts, local-name extraction, part table, walker
   client.template.js   browser entry (React components + slot registrations)
 build.mjs              inline src/*.css and host/runtime.js into client.js
 client.js              built, self-contained artifact
-scripts/check-css.mjs  selector gate
+scripts/check-css.mjs  selector gate plus token gate (same-block redeclaration, declared-but-never-read)
 scripts/check-parts.mjs  part-table gate
 scripts/check-package.mjs  pre-publish packaging checks
+scripts/shots.mjs      headless screenshots and pixel diff (`npm run shots`)
 test/                  local-name and table-integrity tests
 skin.json              theme-manager manifest
+docs/                  publishing, store listing and host-contract notes
 ```
 
 ```bash
@@ -182,7 +191,7 @@ The module loader cannot read package files at runtime, so `client.js` must cont
 | File | Purpose |
 | --- | --- |
 | `.github/workflows/ci.yml` | Runs `npm run check` and `npm pack --dry-run` on PRs / main across Node 20, 22 and 24 |
-| `.github/workflows/publish.yml` | Publishes on a `v*` tag or manual dispatch; the tag must match `package.json`, and `NPM_TOKEN` is required |
+| `.github/workflows/publish.yml` | Publishes on a `v*` tag or manual dispatch; the tag must match `package.json`, and npm Trusted Publishing exchanges a short-lived credential over OIDC, so no `NPM_TOKEN` is stored |
 | `.github/ISSUE_TEMPLATE/` | Bug and feature forms that require the DSH version, platform and reproduction steps |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Build, wide/narrow layout, dark mode and local-path checks |
 | `.github/dependabot.yml` | Weekly GitHub Actions version updates |
@@ -190,7 +199,7 @@ The module loader cannot read package files at runtime, so `client.js` must cont
 | `.nvmrc` | Node 24 for local development |
 | `CONTRIBUTING.md` | Development, build, commit conventions and PR checklist |
 | `SECURITY.md` | Supported versions and the private vulnerability-reporting flow |
-| `scripts/check-package.mjs` | Pre-publish validation of the manifest, row name, client build, screenshots and `files[]` |
+| `scripts/check-package.mjs` | Pre-publish validation of the manifest, row name, accent matching the default token, client build, screenshots and `files[]` |
 
 Repository settings: `main` requires a PR, the `check (Node 20/22/24)` CI jobs and resolved conversations, with force pushes disabled; `v*` tags cannot be deleted or moved; fork PRs from external contributors need maintainer approval.
 
@@ -200,8 +209,8 @@ Repository settings: `main` requires a PR, the `check (Node 20/22/24)` CI jobs a
 
 - The skin is a pure client style layer and does not replace session, settings or plugin data or behavior.
 - Styles depend on two stable layers only: host contracts (`data-slot`, `data-phase`, `data-conversation-scroll`, `data-composer-card`, `data-row-key`, `role` / `aria-*`) and the skin's own part marks in `data-islands-part`. Host class names appear only as local names in the tables in `src/host/runtime.js`; a hash segment never enters a selector. A Harness rebuild that changes hashes needs no update, and a host rename makes the affected rule go quiet until one table line changes.
-- On startup the plugin verifies the core contracts (`[data-slot="root"]`, `[data-slot="sidebar"]`) and the core parts (frame, center column, sidebar root). Only a missing core contract leaves the skin **off**; DSH keeps its default look, a toast explains why (5s auto-dismiss, manual close, click to open the plugin settings) and Settings → Floating island theme carries a persistent amber notice plus a session-scoped "Enable anyway". A missing decorative part only silences its own rules.
-- Settings → Floating island theme shows the detected DSH release and sidebar structure (`flat` / `scroll`, inferred from the parts present) for support triage.
+- On startup the plugin verifies the core contracts (`[data-slot="root"]`, `[data-slot="sidebar"]`) and the core parts (frame, center column, sidebar root). Only a missing core contract leaves the skin **off**; DSH keeps its default look, a toast explains why (5s auto-dismiss, manual close, click to open the plugin settings) and Settings → 浮岛界面 carries a persistent amber notice plus a session-scoped "Enable anyway". A missing decorative part only silences its own rules.
+- Settings → 浮岛界面 shows the detected DSH release and sidebar structure (`flat` / `scroll`, inferred from the parts present) for support triage.
 - Dark mode follows `data-ds-dark-theme`; the accent remaps `--dsw-alias-state-business-primary`, so it affects both the skin and native buttons.
 - Windows uses `data-windows-titlebar` and `--dsh-windows-titlebar-height` and renders no island top bar; Linux currently follows native window decorations.
 - `dsh.engines.dsh` / `engines.dsh` pin the tested line to `>=0.2.2-rc.1 <0.3.0-0`; outside that range the plugin manager refuses to install or upgrade. Structure drift inside the line is handled by one stylesheet keyed on the parts present, no longer by a version-selected variant. `skin.json` gives theme managers the id, accent and mount row.
@@ -220,7 +229,7 @@ No. The skin injects CSS and registers browser-side slots only. Rail pins, the p
 
 **How do I fully reset the skin?**
 
-Turn off **Settings → Floating island theme**. To clear the saved preferences too, delete the `dsh-islands-ui:*` localStorage keys (see [State](#state)).
+Turn off **Settings → 浮岛界面**. To clear the saved preferences too, delete the `dsh-islands-ui:*` localStorage keys (see [State](#state)).
 
 **Can I run it with another theme?**
 

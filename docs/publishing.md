@@ -28,7 +28,7 @@ npm view dsh-islands-ui dist.integrity
 npm view dsh-islands-ui time
 ```
 
-首次发布成功后，仓库里的 `.github/workflows/publish.yml` 可以在推送 `v*` tag 或手动触发时复用它；需要在 GitHub 仓库设置里添加 `NPM_TOKEN` secret（或改用 npm Trusted Publishing）。
+首次发布成功后，仓库里的 `.github/workflows/publish.yml` 可以在推送 `v*` tag 或手动触发时复用它。默认走 npm Trusted Publishing：在 npm 包设置里把本仓库的 workflow 登记为受信发布者，CI 通过 OIDC 换短期凭据，仓库里不需要存任何长期 token。若改用传统 secret 方式，才需要在 GitHub 仓库设置里添加 `NPM_TOKEN`。
 
 ## 2. 本地安装验证
 

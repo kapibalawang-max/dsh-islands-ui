@@ -23,7 +23,7 @@ npm pack --dry-run
 - 设计变量集中在 `src/00-tokens.css`，不要在组件规则里硬编码颜色、圆角或间距。
 - 选择器尽量复用 Harness 的 `data-*` 挂点；依赖 CSS Module 哈希类名时，在注释里写清它对应的页面和升级风险。
 - 新增交互放 `src/client.template.js`，并保持纯客户端：不新增 host 服务、不读写会话数据、不发起网络请求。
-- 颜色、间距、字号优先使用已有 token；新增 token 时同时补深色值。
+- 颜色、间距、字号优先使用已有 token；新增 token 时同时补深色值。同一个块里不要重复声明同一个 token（`npm run check:css` 会拦），改名时把旧读取处一并改掉，否则旧名会被当成“声明了没人读”。
 - 动画遵循 `prefers-reduced-motion`。
 
 ## 提交
