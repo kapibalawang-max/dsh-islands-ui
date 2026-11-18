@@ -25,13 +25,21 @@
 
 ## 安装
 
+从 GitHub Release 装（推荐，这个仓库的版本号领先公共库）：
+
 ```bash
 # 桌面端默认 profile
-dsh plugin --profile desktop add dsh-islands-ui
+dsh plugin --profile desktop add \
+  https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/refs/tags/v1.2.29
 
 # 浏览器 / 远程场景使用的 web profile
-dsh plugin --profile web add dsh-islands-ui
+dsh plugin --profile web add \
+  https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/refs/tags/v1.2.29
 ```
+
+也可以下载 [Release 里的压缩包](https://github.com/kapibalawang-max/dsh-islands-ui/releases/latest) 后按本地文件装：`dsh plugin --profile desktop add /绝对路径/dsh-islands-ui-1.2.29.tgz`。
+
+> 公共库里的 `dsh-islands-ui` 是原作者的另一个版本线，版本号更低、功能也不同，直接 `add dsh-islands-ui` 装到的是那一份，不是这里这一份。
 
 安装后刷新页面（`⌘R` / `Ctrl+R`）。皮肤默认开启；可在 **设置 → 浮岛界面** 关闭，关闭后立即恢复 Harness 默认外观，偏好和强调色会保留。
 

@@ -9,7 +9,34 @@ npm pack --dry-run
 
 `npm run check` 会检查包名、`dsh.bundle`、`cordis.patch.yml` 的 row name、`client.js` 是否是最新构建、`skin.json`、截图、图标以及 `files[]` 是否遗漏关键文件。
 
-## 1. 发布到 npm
+## 0. 发布到自己的 GitHub 仓库（当前采用的通路）
+
+公共库 `dsh-islands-ui` 登记在原作者账号下，Trusted Publishing 也绑在他自己的仓库上，因此从 fork 发布会被 npm 拒绝（`E404 ... you do not have permission`）。本仓库改用 GitHub Release 发布，包里带完整 `dsh.bundle` manifest，可以直接装。
+
+```bash
+npm run check                                   # 全绿再发
+npm pack --cache /tmp/npmcache --pack-destination /tmp
+gh release create v1.2.29 /tmp/dsh-islands-ui-1.2.29.tgz \
+  --repo kapibalawang-max/dsh-islands-ui \
+  --title "浮岛界面 1.2.29" --notes-file /tmp/release-notes.md --latest
+```
+
+三点注意：
+
+- tag 名与 `package.json` 的 `version` 必须一致，否则读者装到的东西和 Release 名不对应。
+- `npm pack` 在这台机器上必须带 `--cache /tmp/npmcache`，否则 `~/.npm` 里 root 权限的文件会报 `Your cache folder contains root-owned files`。
+- Release 正文里写清安装命令（codeload 标签地址或本地 tgz），读者不需要知道 npm。
+
+安装验证（实测可用）：
+
+```bash
+dsh plugin --profile desktop add \
+  https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/refs/tags/v1.2.29
+```
+
+`releases/download/...tgz` 这个地址本机实测经常超时，`codeload.github.com/.../tar.gz/refs/tags/vX.Y.Z` 更稳，文档里优先写后者。
+
+## 1. 发布到 npm（若将来拿到发布权限）
 
 ```bash
 npm login --registry=https://registry.npmjs.org/

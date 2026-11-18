@@ -22,13 +22,21 @@ Floating islands reorganizes the Harness three-column shell into a set of rounde
 
 ## Install
 
+Install from the GitHub release (recommended — this repository runs ahead of the public registry):
+
 ```bash
 # Desktop profile (the default app profile)
-dsh plugin --profile desktop add dsh-islands-ui
+dsh plugin --profile desktop add \
+  https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/refs/tags/v1.2.29
 
 # Or the web profile used by a browser/remote setup
-dsh plugin --profile web add dsh-islands-ui
+dsh plugin --profile web add \
+  https://codeload.github.com/kapibalawang-max/dsh-islands-ui/tar.gz/refs/tags/v1.2.29
 ```
+
+You can also download the [tarball attached to the release](https://github.com/kapibalawang-max/dsh-islands-ui/releases/latest) and install it as a local file: `dsh plugin --profile desktop add /absolute/path/dsh-islands-ui-1.2.29.tgz`.
+
+> The `dsh-islands-ui` on the public registry is a different line from the original author: lower version, different features. A bare `add dsh-islands-ui` installs that one, not this one.
 
 Then refresh (`⌘R` / `Ctrl+R`). The skin is enabled by default. Turn it off at **Settings → 浮岛界面** to restore the stock appearance immediately; your preference and accent are kept.
 
