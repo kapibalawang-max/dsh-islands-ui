@@ -1,5 +1,5 @@
 /**
- * Browser half of the Islands UI skin.
+ * Browser half of the 浮岛界面 skin.
  *
  * Publishes the stylesheet, marks the host parts, and registers the skin's own
  * chrome. The stylesheet lives in src/*.css, the host bridge in
@@ -159,14 +159,14 @@ window.__ModuleLoader__.load({
         updateStateInstalling: '准备重启',
         updateStateReady: '安装并重启',
         updateStateError: '更新失败',
-        compatTitle: 'Islands UI 已自动关闭',
+        compatTitle: '浮岛界面已自动关闭',
         compatBody: '当前 DSH 构建的界面结构与插件不匹配，皮肤已回退到默认外观，以免出现双栏重叠或控件遮挡。',
         compatView: '查看插件设置',
         compatMissing: '缺失的界面契约',
         compatBannerTitle: '皮肤已自动停用：界面结构不匹配',
         compatBannerBody:
-          'Islands UI 的样式依赖 DSH 公开的插槽、相位等契约，以及皮肤写回的部件标记。当前构建缺少核心契约，浮岛布局、原生导航隐藏和工作区折叠都会失效，因此插件没有启用皮肤，DSH 保持默认外观。',
-        compatFix: '处理方式：把 Islands UI 更新到适配当前 DSH 的版本，或回退 DSH。若确认界面正常，可临时强制启用（下次启动会重新检测）。',
+          '浮岛界面的样式依赖 DSH 公开的插槽、相位等契约，以及皮肤写回的部件标记。当前构建缺少核心契约，浮岛布局、原生导航隐藏和工作区折叠都会失效，因此插件没有启用皮肤，DSH 保持默认外观。',
+        compatFix: '处理方式：把浮岛界面更新到适配当前 DSH 的版本，或回退 DSH。若确认界面正常，可临时强制启用（下次启动会重新检测）。',
         compatForce: '仍然启用',
         compatForced: '已强制启用，本次会话跳过自动检测。',
         compatDismiss: '关闭提示',
@@ -289,16 +289,16 @@ window.__ModuleLoader__.load({
         updateStateInstalling: 'Preparing restart',
         updateStateReady: 'Install and restart',
         updateStateError: 'Update failed',
-        compatTitle: 'Islands UI turned itself off',
+        compatTitle: 'Floating islands turned itself off',
         compatBody:
           'This DSH build no longer matches the plugin, so the skin fell back to the default look instead of overlapping panels.',
         compatView: 'Open plugin settings',
         compatMissing: 'Missing interface contracts',
         compatBannerTitle: 'Skin disabled: interface structure changed',
         compatBannerBody:
-          'Islands UI styles itself against the host contracts for slots and phases, plus the part marks the skin writes back. This build is missing the core contracts, so the island layout, the hidden native navigation and the workspace collapse would all break. The skin therefore stayed off and DSH keeps its default look.',
+          'Floating islands styles itself against the host contracts for slots and phases, plus the part marks the skin writes back. This build is missing the core contracts, so the island layout, the hidden native navigation and the workspace collapse would all break. The skin therefore stayed off and DSH keeps its default look.',
         compatFix:
-          'Update Islands UI to a release that matches this DSH build, or roll DSH back. If the interface looks fine, you can enable it anyway for this session.',
+          'Update Floating islands to a release that matches this DSH build, or roll DSH back. If the interface looks fine, you can enable it anyway for this session.',
         compatForce: 'Enable anyway',
         compatForced: 'Enabled manually; automatic detection is skipped for this session.',
         compatDismiss: 'Dismiss',

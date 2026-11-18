@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="icon.svg" width="76" height="76" alt="Islands UI" />
-  <h1>Islands UI</h1>
+  <img src="icon.svg" width="76" height="76" alt="浮岛界面" />
+  <h1>浮岛界面</h1>
   <p><strong>为 DeepSeek Harness 打造的浮岛式界面皮肤</strong></p>
   <p>圆角岛屿 · 常驻左侧栏 · 置顶聚合 · 可调强调色</p>
   <p>
@@ -16,10 +16,10 @@
 </div>
 
 <p align="center">
-  <img src="assets/all-panels.png" alt="Islands UI 主界面：左侧栏、会话区、右侧栏与底部面板" width="100%" />
+  <img src="assets/all-panels.png" alt="浮岛界面 主界面：左侧栏、会话区、右侧栏与底部面板" width="100%" />
 </p>
 
-Islands UI 把 Harness 的三栏界面重新组织成一组悬浮在纯色画布上的圆角岛屿：左侧常驻图标栏、独立的工作区列表、主会话区、右侧工作台和底部面板各自成块，用 5px 的画布间隙与发丝描边分层。它不修改 Harness 的会话、设置或插件逻辑，只重绘界面。
+浮岛界面 把 Harness 的三栏界面重新组织成一组悬浮在纯色画布上的圆角岛屿：左侧常驻图标栏、独立的工作区列表、主会话区、右侧工作台和底部面板各自成块，用 5px 的画布间隙与发丝描边分层。它不修改 Harness 的会话、设置或插件逻辑，只重绘界面。
 
 ---
 
@@ -48,9 +48,9 @@ dsh plugin --profile desktop remove dsh-islands-ui
 ## 宣传图
 
 <p align="center">
-  <img src="assets/promo-cover.png" width="32%" alt="Islands UI 宣传图：更现代的界面，更完整的交互" />
-  <img src="assets/promo-themes.png" width="32%" alt="Islands UI 宣传图：亮暗主题，自由选择" />
-  <img src="assets/promo-install.png" width="32%" alt="Islands UI 宣传图：三步安装" />
+  <img src="assets/promo-cover.png" width="32%" alt="浮岛界面 宣传图：更现代的界面，更完整的交互" />
+  <img src="assets/promo-themes.png" width="32%" alt="浮岛界面 宣传图：亮暗主题，自由选择" />
+  <img src="assets/promo-install.png" width="32%" alt="浮岛界面 宣传图：三步安装" />
 </p>
 
 ---
@@ -60,7 +60,7 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 新会话 | 工作区折叠 |
 | :---: | :---: |
 | ![新会话](assets/new_session.png) | ![工作区折叠](assets/workspace-closed.png) |
-| **置顶与定位** | **设置 · Islands UI** |
+| **置顶与定位** | **设置 → 浮岛主题** |
 | ![置顶与定位](assets/pin-session.png) | ![设置](assets/settings.png) |
 
 ---
@@ -247,7 +247,7 @@ npm pack             # 生成 dsh-islands-ui-<version>.tgz
 
 **为什么某些界面还是旧样式？**
 
-说明皮肤**检测到核心宿主契约缺失，已自动关闭**。DSH 升级可能改掉 `data-slot`、`data-phase` 等公开契约；半启用会变成双栏重叠，所以插件宁可保持默认外观：右下角会有提示，设置 → 浮岛主题 顶部有黄色说明条并列出缺失的契约。把 Islands UI 更新到适配当前 DSH 的版本即可恢复；确认界面正常也可以点「仍然启用」临时开启（下次启动重新检测）。
+说明皮肤**检测到核心宿主契约缺失，已自动关闭**。DSH 升级可能改掉 `data-slot`、`data-phase` 等公开契约；半启用会变成双栏重叠，所以插件宁可保持默认外观：右下角会有提示，设置 → 浮岛主题 顶部有黄色说明条并列出缺失的契约。把 浮岛界面 更新到适配当前 DSH 的版本即可恢复；确认界面正常也可以点「仍然启用」临时开启（下次启动重新检测）。
 
 **Windows / Linux 能用吗？**
 
@@ -271,4 +271,4 @@ npm 发布后 DSHHub 会自动发现；dsh-market 的「主题」Tab 读取 awes
 
 [MIT](LICENSE) © DawnCHL
 
-<p align="center"><sub>Made for DeepSeek Harness · Islands UI</sub></p>
+<p align="center"><sub>Made for DeepSeek Harness · 浮岛界面</sub></p>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Islands UI · 48 depth, rhythm and floating panels
+   浮岛界面 · 48 depth, rhythm and floating panels
    The shell already draws the islands; this layer gives them thickness (a seam
    instead of a flat outline), a rhythm that can tighten, and the surfaces the
    skin owns itself: the command palette and the contract inspector.

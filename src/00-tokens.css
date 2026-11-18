@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Islands UI · 00 tokens
+   浮岛界面 · 00 tokens
    One source of truth for the skin. Every rule below reads these variables,
    so light/dark, radius, elevation and spacing are changed in one place.
    `--dsw-*` aliases are re-pointed at the Islands scale so shipped components

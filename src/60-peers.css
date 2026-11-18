@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Islands UI · 60 peer adapters
+   浮岛界面 · 60 peer adapters
    Rules for plugins that mount their own surfaces inside the frame. These are
    not host contracts: each peer owns the attributes and class names below, and
    the core stylesheets never read them. The CSS gate allows [class*=...] only

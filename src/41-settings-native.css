@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Islands UI · 41 settings, native
+   浮岛界面 · 41 settings, native
    The settings dialog keeps the host's own look: the skin does not restyle its
    panel, navigation, cards or type. Because the island language reaches shipped
    components through the `--dsw-*` aliases, the dialog would otherwise inherit

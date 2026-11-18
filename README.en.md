@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="assets/icon-180.png" width="86" height="86" alt="Islands UI" />
-  <h1>Islands UI</h1>
+  <img src="assets/icon-180.png" width="86" height="86" alt="Floating islands" />
+  <h1>Floating islands</h1>
   <p><strong>A floating-island interface skin for DeepSeek Harness</strong></p>
   <p>Rounded islands · persistent rail · pinned-session shelf · adjustable accent</p>
   <p>
@@ -13,10 +13,10 @@
 </div>
 
 <p align="center">
-  <img src="assets/all-panels.png" alt="Islands UI: rail, conversation, right sidebar and bottom panel" width="100%" />
+  <img src="assets/all-panels.png" alt="Floating islands: rail, conversation, right sidebar and bottom panel" width="100%" />
 </p>
 
-Islands UI reorganizes the Harness three-column shell into a set of rounded islands floating on a solid canvas: a persistent icon rail, a separate workspace list, the conversation island, a right workbench and a bottom panel, separated by 5px canvas gaps and hairline borders. It does not touch sessions, settings or plugin logic — it only redraws the interface.
+Floating islands reorganizes the Harness three-column shell into a set of rounded islands floating on a solid canvas: a persistent icon rail, a separate workspace list, the conversation island, a right workbench and a bottom panel, separated by 5px canvas gaps and hairline borders. It does not touch sessions, settings or plugin logic — it only redraws the interface.
 
 ---
 
@@ -71,7 +71,7 @@ The skin is a client-only style layer. Pinning helpers, the pinned shelf and the
 | Layer | Rule |
 | --- | --- |
 | Canvas | Solid `#f2f2f2` (dark `#0f1012`), opaque, no blur |
-| Islands | White / dark-gray surfaces, 16–20px radius, 1px hairline; a 1px inner highlight along the top edge, soft shadow where content presses |
+| Floating islands | White / dark-gray surfaces, 16–20px radius, 1px hairline; a 1px inner highlight along the top edge, soft shadow where content presses |
 | Spacing | 5px between every island, including the bottom panel |
 | Top bar | 40px window strip hosting the conversation tools and the right-panel toggle; macOS clears the traffic lights, Linux starts at 8px below the native title bar. Windows renders no island top bar: the caption row keeps the native sidebar toggle and the right-hand tools stay in the conversation header |
 | Accent | Brand blue by default; purple / green / orange / pink / red presets or any custom color |
@@ -96,9 +96,9 @@ If you hit a title-bar, drag-region, window-button or layout issue, please open 
 ## Key visuals
 
 <p align="center">
-  <img src="assets/promo-cover.png" width="32%" alt="Islands UI key visual: a more modern interface, more complete interactions" />
-  <img src="assets/promo-themes.png" width="32%" alt="Islands UI key visual: light and dark themes" />
-  <img src="assets/promo-install.png" width="32%" alt="Islands UI key visual: install in three steps" />
+  <img src="assets/promo-cover.png" width="32%" alt="Floating islands key visual: a more modern interface, more complete interactions" />
+  <img src="assets/promo-themes.png" width="32%" alt="Floating islands key visual: light and dark themes" />
+  <img src="assets/promo-install.png" width="32%" alt="Floating islands key visual: install in three steps" />
 </p>
 
 ---
@@ -108,7 +108,7 @@ If you hit a title-bar, drag-region, window-button or layout issue, please open 
 | New session | Workspace collapsed |
 | :---: | :---: |
 | ![New session](assets/new_session.png) | ![Workspace collapsed](assets/workspace-closed.png) |
-| **Pinned and reveal** | **Settings · Islands UI** |
+| **Pinned and reveal** | **Settings → 浮岛主题** |
 | ![Pinned and reveal](assets/pin-session.png) | ![Settings](assets/settings.png) |
 
 ---
@@ -231,7 +231,7 @@ Not recommended. Two skins write the same `--dsw-*` tokens and layout rules, so 
 
 **Why do some surfaces keep the old look?**
 
-A DSH upgrade can change a host local name or a contract. The affected rule goes quiet instead of matching a neighbour; update Islands UI, or open an issue with a screenshot and DSH version.
+A DSH upgrade can change a host local name or a contract. The affected rule goes quiet instead of matching a neighbour; update Floating islands, or open an issue with a screenshot and DSH version.
 
 **Windows / Linux?**
 
@@ -251,4 +251,4 @@ DSHHub discovers npm packages automatically. dsh-market's Themes tab reads the a
 - Windows / Linux test reports especially welcome (screenshot + OS version + window size)
 - Security issues: do not open a public issue; follow [SECURITY.md](https://github.com/DawnCHL/dsh-islands-ui/blob/main/SECURITY.md)
 
-<p align="center"><sub>Made for DeepSeek Harness · Islands UI</sub></p>
+<p align="center"><sub>Made for DeepSeek Harness · Floating islands</sub></p>

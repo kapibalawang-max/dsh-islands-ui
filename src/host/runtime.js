@@ -1,5 +1,5 @@
 /**
- * Host bridge for Islands UI.
+ * Host bridge for 浮岛界面.
  *
  * Two layers only:
  *   1. HOST holds the literals the host promises (slot anchors, phase marks,
