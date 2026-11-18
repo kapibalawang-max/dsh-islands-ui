@@ -36,7 +36,7 @@ const ownAttributes = new Set([
   'data-col',
   'data-span',
   'data-islands-density',
-  'data-islands-border',
+  'data-islands-fill',
   'data-islands-age', 'data-islands-page-in',
 ]);
 const hashedClass = /\.[A-Za-z0-9-]+_[A-Za-z0-9_-]+/u;

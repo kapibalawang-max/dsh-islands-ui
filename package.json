@@ -1,6 +1,6 @@
 {
   "name": "dsh-islands-ui",
-  "version": "1.2.28",
+  "version": "1.2.29",
   "description": "浮岛界面 — 悬浮岛屿式的界面皮肤：圆角面板、常驻左侧栏、置顶会话架与可调强调色。",
   "icon": "./assets/icon-180.png",
   "type": "module",

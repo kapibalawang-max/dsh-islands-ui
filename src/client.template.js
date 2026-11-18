@@ -82,8 +82,8 @@ window.__ModuleLoader__.load({
         accentCustom: '自定义颜色',
         density: '紧凑行高',
         densityDesc: '紧凑时会话行更矮、同屏能多看几条；觉得拥挤可切回舒适。',
-        replyBorder: '回复边框',
-        replyBorderDesc: '给助手每次的完整回复套一层圆角边框，和周围内容分开；关掉就回到纯文字。',
+        replyBorder: '回复底色',
+        replyBorderDesc: '助手每次的完整回复垫一层底色，和上方的思考步骤分开；关掉就回到纯文字。',
         shortcut: '快速查找快捷键',
         shortcutDesc: '把唤出快速查找的组合改成你顺手的键；点按钮后按下新组合即可。',
         shortcutCapture: '按下新的组合键…',
@@ -97,7 +97,7 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ 选择 · ↵ 打开 · tab 切换 · esc 关闭',
         paletteNew: '新建会话',
         paletteDensity: '切换紧凑行高',
-        paletteBorder: '切换回复边框',
+        paletteFill: '切换回复底色',
         paletteAccent: '切换强调色',
         paletteEnable: '启用浮岛界面',
         paletteDisable: '关闭浮岛界面',
@@ -201,8 +201,8 @@ window.__ModuleLoader__.load({
         accentCustom: 'Custom color',
         density: 'Compact rows',
         densityDesc: 'Compact rows are shorter so you see more sessions at once; switch back if it feels tight.',
-        replyBorder: 'Reply border',
-        replyBorderDesc: 'Puts each finished reply in a rounded frame so it separates from the surrounding steps; turn it off for plain text.',
+        replyBorder: 'Reply fill',
+        replyBorderDesc: 'Sets each finished reply on a filled block so it separates from the steps above; turn it off for plain text.',
         shortcut: 'Quick finder shortcut',
         shortcutDesc: 'Change the combination that opens the quick finder; click the button and press the new keys.',
         shortcutCapture: 'Press the new key combination…',
@@ -216,7 +216,7 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ select · ↵ open · tab cycle · esc close',
         paletteNew: 'New session',
         paletteDensity: 'Toggle compact rows',
-        paletteBorder: 'Toggle reply border',
+        paletteFill: 'Toggle reply fill',
         paletteAccent: 'Cycle accent colour',
         paletteEnable: 'Enable floating islands',
         paletteDisable: 'Turn off floating islands',
@@ -302,7 +302,9 @@ window.__ModuleLoader__.load({
     const DEFAULT_ACCENT = '#3358d4';
     const ACCENT_PRESETS = ['#3358d4', '#644fc1', '#218358', '#ab6400', '#cb1d63', '#8e4ec6'];
     const DENSITY_KEY = 'dsh-islands-ui:density';
-    const BORDER_KEY = 'dsh-islands-ui:reply-border';
+    const FILL_KEY = 'dsh-islands-ui:reply-fill';
+    /** 1.2.28 and earlier stored the same switch under this name. */
+    const FILL_KEY_LEGACY = 'dsh-islands-ui:reply-border';
     const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
     const listeners = new Set();
 
@@ -484,16 +486,17 @@ window.__ModuleLoader__.load({
       }
     }
 
-    function readBorder() {
+    function readFill() {
       try {
-        return window.localStorage.getItem(BORDER_KEY) === 'off' ? 'off' : 'on';
+        const stored = window.localStorage.getItem(FILL_KEY) ?? window.localStorage.getItem(FILL_KEY_LEGACY);
+        return stored === 'off' ? 'off' : 'on';
       } catch {
         return 'on';
       }
     }
 
     function prefsSnapshot() {
-      return `${readDensity() === 'compact' ? '1' : '0'}${readBorder() === 'on' ? '1' : '0'}`;
+      return `${readDensity() === 'compact' ? '1' : '0'}${readFill() === 'on' ? '1' : '0'}`;
     }
 
     function subscribePrefs(listener) {
@@ -510,13 +513,16 @@ window.__ModuleLoader__.load({
       if (body === null) return;
       if (readDensity() === 'compact') body.setAttribute('data-islands-density', 'compact');
       else body.removeAttribute('data-islands-density');
-      if (readBorder() === 'off') body.setAttribute('data-islands-border', 'off');
-      else body.removeAttribute('data-islands-border');
+      if (readFill() === 'off') body.setAttribute('data-islands-fill', 'off');
+      else body.removeAttribute('data-islands-fill');
     }
 
     function storePref(key, value) {
       try {
         window.localStorage.setItem(key, value);
+        /* Writing the current key retires the pre-1.2.29 spelling, so the two
+           never disagree once the switch has been touched. */
+        if (key === FILL_KEY) window.localStorage.removeItem(FILL_KEY_LEGACY);
       } catch {
         /* private mode: the choice still applies for this page. */
       }
@@ -2534,7 +2540,8 @@ window.__ModuleLoader__.load({
     function resetAppearancePrefs() {
       try {
         window.localStorage.removeItem(DENSITY_KEY);
-        window.localStorage.removeItem(BORDER_KEY);
+        window.localStorage.removeItem(FILL_KEY);
+        window.localStorage.removeItem(FILL_KEY_LEGACY);
         window.localStorage.removeItem(ACCENT_KEY);
         window.localStorage.removeItem(SHORTCUT_KEY);
       } catch {}
@@ -2545,7 +2552,7 @@ window.__ModuleLoader__.load({
     /** The command list, rebuilt on each open so the labels follow the locale. */
     function paletteCommands(copy, enabled) {
       const compact = readDensity() === 'compact';
-      const border = readBorder() === 'on';
+      const fill = readFill() === 'on';
       return [
         {
           id: 'new-session',
@@ -2560,10 +2567,10 @@ window.__ModuleLoader__.load({
           run: () => storePref(DENSITY_KEY, compact ? 'comfortable' : 'compact'),
         },
         {
-          id: 'border',
-          label: copy.paletteBorder,
-          hint: border ? 'on → off' : 'off → on',
-          run: () => storePref(BORDER_KEY, border ? 'off' : 'on'),
+          id: 'fill',
+          label: copy.paletteFill,
+          hint: fill ? 'on → off' : 'off → on',
+          run: () => storePref(FILL_KEY, fill ? 'off' : 'on'),
         },
         {
           id: 'accent',
@@ -2960,7 +2967,7 @@ window.__ModuleLoader__.load({
       const [accent, setAccent] = React.useState(readAccent);
       const prefs = usePrefsSnapshot();
       const compactOn = prefs[0] === '1';
-      const borderOn = prefs[1] === '1';
+      const fillOn = prefs[1] === '1';
       const chooseAccent = (color) => {
         setAccent(color);
         applyAccent(color);
@@ -3107,9 +3114,9 @@ window.__ModuleLoader__.load({
               type: 'button',
               role: 'switch',
               className: 'isl-switch',
-              'aria-checked': borderOn,
+              'aria-checked': fillOn,
               'aria-label': copy.replyBorder,
-              onClick: () => storePref(BORDER_KEY, borderOn ? 'off' : 'on'),
+              onClick: () => storePref(FILL_KEY, fillOn ? 'off' : 'on'),
             },
             h('span', { className: 'isl-switchThumb' }),
           ),

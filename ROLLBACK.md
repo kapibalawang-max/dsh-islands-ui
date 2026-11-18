@@ -17,7 +17,7 @@
 | 想要的结果 | 操作 |
 | --- | --- |
 | 去掉紧凑行高 | 关「紧凑行高」（删 `dsh-islands-ui:density` 键） |
-| 回复不套边框 | 关「回复边框」（`dsh-islands-ui:reply-border` 写成 `off` 或删键） |
+| 回复不垫底色 | 关「回复底色」（`dsh-islands-ui:reply-fill` 写成 `off` 或删键） |
 | 回到默认强调色 | 强调色选「默认」（删 `dsh-islands-ui:accent` 键） |
 | 左侧栏图标复原 | 删 `dsh-islands-ui:rail` 与 `dsh-islands-ui:rail-pins` 两个键，刷新 |
 | 整套皮肤停用 | 关「启用浮岛界面」，立即回到 DSH 默认外观（偏好保留） |

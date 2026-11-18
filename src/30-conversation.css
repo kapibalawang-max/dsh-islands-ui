@@ -211,14 +211,24 @@ html:not([data-windows-titlebar]) body[data-islands-ui] [data-sidebar-right-togg
   display: none !important;
 }
 
-/* The finished reply lands as its own island card: one hairline, one soft
-   radius, no shadow. Steps and tool rows above it stay flat so the answer is
-   the only thing framed. Settings → 回复边框 turns this off. */
+/* The finished reply lands as its own block: a filled well, one soft radius,
+   no outline, no shadow. The fill is the canvas tone, so a reply reads as a
+   recess in the island rather than another card stacked on it. Steps and tool
+   rows above stay flat so the answer is the only thing separated.
+   Settings → 回复底色 turns this off. */
 body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
   padding: 12px 14px;
-  border: 1px solid var(--isl-border-soft);
+  border: 0;
   border-radius: var(--isl-radius-md);
-  background: var(--isl-surface);
+  background: var(--isl-canvas);
+}
+
+/* Inside the well, code chips step up to the island surface: the muted tone
+   would sit 1.07:1 against the fill and the blocks would disappear. */
+body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+  --dsw-alias-markdown-code-block: var(--isl-surface);
+  --dsw-alias-markdown-code-block-banner: var(--isl-surface-muted);
+  --dsw-alias-markdown-inline-code: var(--isl-surface);
 }
 
 body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] > *:first-child {
@@ -229,9 +239,12 @@ body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-par
   margin-bottom: 0;
 }
 
-body[data-islands-ui][data-islands-border='off'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+body[data-islands-ui][data-islands-fill='off'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
+  --dsw-alias-markdown-code-block: var(--isl-surface-muted);
+  --dsw-alias-markdown-code-block-banner: var(--isl-surface-muted);
+  --dsw-alias-markdown-inline-code: var(--isl-surface-muted);
 }
