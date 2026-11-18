@@ -108,7 +108,7 @@ If you hit a title-bar, drag-region, window-button or layout issue, please open 
 | New session | Workspace collapsed |
 | :---: | :---: |
 | ![New session](assets/new_session.png) | ![Workspace collapsed](assets/workspace-closed.png) |
-| **Pinned and reveal** | **Settings → 浮岛主题** |
+| **Pinned and reveal** | **Settings → 浮岛界面** |
 | ![Pinned and reveal](assets/pin-session.png) | ![Settings](assets/settings.png) |
 
 ---

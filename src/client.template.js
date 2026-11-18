@@ -17,7 +17,7 @@ window.__ModuleLoader__.load({
 
     const ATTRIBUTE = SKIN_ATTR;
     /* One name in every locale: the settings entry and the page heading match. */
-    const SECTION_TITLE = '浮岛主题';
+    const SECTION_TITLE = '浮岛界面';
     const STORAGE_KEY = 'dsh-islands-ui:enabled';
     const WORKSPACE_ATTR = 'data-islands-workspace-collapsed';
     /** Escape hatch, session scoped so the next launch re-runs the check. */
@@ -74,7 +74,7 @@ window.__ModuleLoader__.load({
         railHide: '从左侧栏移除',
         builtIn: 'DSH 内置',
         noExtras: '左侧栏还没有图标',
-        enable: '启用浮岛主题',
+        enable: '启用浮岛界面',
         enableDesc: '关掉会立刻恢复默认外观，设置会保留。可随时切换试试效果。',
         accent: '强调色',
         accentDesc: '会影响选中、滑块、发送按钮等重点位置的颜色，改完立刻生效。',
@@ -109,8 +109,8 @@ window.__ModuleLoader__.load({
         paletteDensity: '切换紧凑行高',
         paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
-        paletteEnable: '启用浮岛主题',
-        paletteDisable: '关闭浮岛主题',
+        paletteEnable: '启用浮岛界面',
+        paletteDisable: '关闭浮岛界面',
         paletteReset: '恢复默认外观与配色',
         debugTitle: '契约自检',
         debugOk: '全部命中',
