@@ -82,6 +82,8 @@ window.__ModuleLoader__.load({
         accentCustom: '自定义颜色',
         density: '紧凑行高',
         densityDesc: '紧凑时会话行更矮、同屏能多看几条；觉得拥挤可切回舒适。',
+        replyBorder: '回复边框',
+        replyBorderDesc: '给助手每次的完整回复套一层圆角边框，和周围内容分开；关掉就回到纯文字。',
         shortcut: '快速查找快捷键',
         shortcutDesc: '把唤出快速查找的组合改成你顺手的键；点按钮后按下新组合即可。',
         shortcutCapture: '按下新的组合键…',
@@ -95,6 +97,7 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ 选择 · ↵ 打开 · tab 切换 · esc 关闭',
         paletteNew: '新建会话',
         paletteDensity: '切换紧凑行高',
+        paletteBorder: '切换回复边框',
         paletteAccent: '切换强调色',
         paletteEnable: '启用浮岛界面',
         paletteDisable: '关闭浮岛界面',
@@ -198,6 +201,8 @@ window.__ModuleLoader__.load({
         accentCustom: 'Custom color',
         density: 'Compact rows',
         densityDesc: 'Compact rows are shorter so you see more sessions at once; switch back if it feels tight.',
+        replyBorder: 'Reply border',
+        replyBorderDesc: 'Puts each finished reply in a rounded frame so it separates from the surrounding steps; turn it off for plain text.',
         shortcut: 'Quick finder shortcut',
         shortcutDesc: 'Change the combination that opens the quick finder; click the button and press the new keys.',
         shortcutCapture: 'Press the new key combination…',
@@ -211,6 +216,7 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ select · ↵ open · tab cycle · esc close',
         paletteNew: 'New session',
         paletteDensity: 'Toggle compact rows',
+        paletteBorder: 'Toggle reply border',
         paletteAccent: 'Cycle accent colour',
         paletteEnable: 'Enable floating islands',
         paletteDisable: 'Turn off floating islands',
@@ -296,6 +302,7 @@ window.__ModuleLoader__.load({
     const DEFAULT_ACCENT = '#4176e6';
     const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
     const DENSITY_KEY = 'dsh-islands-ui:density';
+    const BORDER_KEY = 'dsh-islands-ui:reply-border';
     const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
     const listeners = new Set();
 
@@ -477,8 +484,16 @@ window.__ModuleLoader__.load({
       }
     }
 
+    function readBorder() {
+      try {
+        return window.localStorage.getItem(BORDER_KEY) === 'off' ? 'off' : 'on';
+      } catch {
+        return 'on';
+      }
+    }
+
     function prefsSnapshot() {
-      return readDensity() === 'compact' ? '1' : '0';
+      return `${readDensity() === 'compact' ? '1' : '0'}${readBorder() === 'on' ? '1' : '0'}`;
     }
 
     function subscribePrefs(listener) {
@@ -495,6 +510,8 @@ window.__ModuleLoader__.load({
       if (body === null) return;
       if (readDensity() === 'compact') body.setAttribute('data-islands-density', 'compact');
       else body.removeAttribute('data-islands-density');
+      if (readBorder() === 'off') body.setAttribute('data-islands-border', 'off');
+      else body.removeAttribute('data-islands-border');
     }
 
     function storePref(key, value) {
@@ -2517,6 +2534,7 @@ window.__ModuleLoader__.load({
     function resetAppearancePrefs() {
       try {
         window.localStorage.removeItem(DENSITY_KEY);
+        window.localStorage.removeItem(BORDER_KEY);
         window.localStorage.removeItem(ACCENT_KEY);
         window.localStorage.removeItem(SHORTCUT_KEY);
       } catch {}
@@ -2527,6 +2545,7 @@ window.__ModuleLoader__.load({
     /** The command list, rebuilt on each open so the labels follow the locale. */
     function paletteCommands(copy, enabled) {
       const compact = readDensity() === 'compact';
+      const border = readBorder() === 'on';
       return [
         {
           id: 'new-session',
@@ -2539,6 +2558,12 @@ window.__ModuleLoader__.load({
           label: copy.paletteDensity,
           hint: compact ? '26px → 32px' : '32px → 26px',
           run: () => storePref(DENSITY_KEY, compact ? 'comfortable' : 'compact'),
+        },
+        {
+          id: 'border',
+          label: copy.paletteBorder,
+          hint: border ? 'on → off' : 'off → on',
+          run: () => storePref(BORDER_KEY, border ? 'off' : 'on'),
         },
         {
           id: 'accent',
@@ -2935,6 +2960,7 @@ window.__ModuleLoader__.load({
       const [accent, setAccent] = React.useState(readAccent);
       const prefs = usePrefsSnapshot();
       const compactOn = prefs[0] === '1';
+      const borderOn = prefs[1] === '1';
       const chooseAccent = (color) => {
         setAccent(color);
         applyAccent(color);
@@ -3062,6 +3088,28 @@ window.__ModuleLoader__.load({
               'aria-checked': compactOn,
               'aria-label': copy.density,
               onClick: () => storePref(DENSITY_KEY, compactOn ? 'comfortable' : 'compact'),
+            },
+            h('span', { className: 'isl-switchThumb' }),
+          ),
+        ),
+        h(
+          'div',
+          { className: 'isl-prefRow' },
+          h(
+            'div',
+            { className: 'isl-prefText' },
+            h('div', { className: 'isl-prefTitle' }, copy.replyBorder),
+            h('div', { className: 'isl-prefDesc' }, copy.replyBorderDesc),
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              role: 'switch',
+              className: 'isl-switch',
+              'aria-checked': borderOn,
+              'aria-label': copy.replyBorder,
+              onClick: () => storePref(BORDER_KEY, borderOn ? 'off' : 'on'),
             },
             h('span', { className: 'isl-switchThumb' }),
           ),

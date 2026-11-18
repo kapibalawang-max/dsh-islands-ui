@@ -210,3 +210,28 @@ html:not([data-windows-titlebar]) body[data-islands-ui] [data-sidebar-right-expa
 html:not([data-windows-titlebar]) body[data-islands-ui] [data-sidebar-right-toggle] {
   display: none !important;
 }
+
+/* The finished reply lands as its own island card: one hairline, one soft
+   radius, no shadow. Steps and tool rows above it stay flat so the answer is
+   the only thing framed. Settings → 回复边框 turns this off. */
+body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+  padding: 12px 14px;
+  border: 1px solid var(--isl-border-soft);
+  border-radius: var(--isl-radius-md);
+  background: var(--isl-surface);
+}
+
+body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] > *:first-child {
+  margin-top: 0;
+}
+
+body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] > *:last-child {
+  margin-bottom: 0;
+}
+
+body[data-islands-ui][data-islands-border='off'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
