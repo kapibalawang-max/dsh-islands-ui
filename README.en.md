@@ -48,7 +48,6 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | :---: | --- | --- |
 | 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; flat, no drop shadows, separated by color and a 1px hairline |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
-| 🎨 | **Theme presets** | Mist / Sand / Sage / Clay / Lilac / Ink / Graphite / Jade / Rose / Olive, each with its own light and dark set (20 combinations); the accent can still override |
 | ⚙️ | **Settings page** | Settings → Floating island theme: on/off, accent presets, custom color and follow-theme |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
@@ -57,7 +56,6 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
 | ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, theme and accent |
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
-| 🎨 | **Theme presets** | Mist / Sand / Ink, each with a light and a dark set; the accent still overrides on its own |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 54 parts and 12 regions are actually mounted, so a host upgrade shows up immediately |
 | 📸 | **Visual regression** | `npm run shots` captures four baselines and diffs them pixel by pixel |
@@ -124,7 +122,6 @@ Stored in `localStorage`; clear these keys to reset:
 | `dsh-islands-ui:pinned-collapsed` | Whether the pinned group is collapsed |
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
 | `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
-| `dsh-islands-ui:theme` | `mist` / `sand` / `sage` / `clay` / `lilac` / `ink` / `graphite` theme preset |
 
 ---
 
@@ -146,7 +143,7 @@ src/
   20-sidebar.css       workspace island, pinned shelf, session row states
   30-conversation.css  conversation page, composer, top tool group
   41-settings-native.css  settings dialog kept native (no restyle)
-  48-islands-next.css  ridge and altitude, composer wake-up, density, presets, age marks, palette, self-check
+  48-islands-next.css  ridge and altitude, composer wake-up, density, age marks, palette, self-check
   50-components.css    preference rows, switches, accent picker
   60-peers.css         third-party plugin adapters ([class*=...] is allowed only here)
   host/runtime.js      host contracts, local-name extraction, part table, walker

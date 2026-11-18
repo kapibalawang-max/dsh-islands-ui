@@ -87,8 +87,7 @@ body[data-islands-ui] [data-islands-part~="center-column"][data-islands-page-in]
 body[data-islands-ui] .isl-railBtn:active,
 body[data-islands-ui] .isl-pinnedOpen:active,
 body[data-islands-ui] .isl-pinnedPinBtn:active,
-body[data-islands-ui] .isl-pinnedLocate:active,
-body[data-islands-ui] .isl-themeChip:active {
+body[data-islands-ui] .isl-pinnedLocate:active {
   transform: scale(0.97);
 }
 

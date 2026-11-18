@@ -86,20 +86,8 @@ window.__ModuleLoader__.load({
         shortcutDesc: '把唤出快速查找的组合改成你顺手的键；点按钮后按下新组合即可。',
         shortcutCapture: '按下新的组合键…',
         shortcutNeedMod: '组合里需要包含 ⌘（Ctrl）或 ⌥',
-        theme: '主题预设',
-        themeDesc: '一次切换整套配色（背景、卡片、描边、强调色）；点不同主题可立即预览。',
-        themeMist: '雾',
-        themeSand: '沙',
-        themeSage: '苔',
-        themeClay: '陶',
-        themeLilac: '紫',
-        themeInk: '墨',
-        themeGraphite: '石',
-        themeJade: '青玉',
-        themeRose: '玫瑰',
-        themeOlive: '橄榄',
         tipsTitle: '小提示',
-        tipsDesc: '按 ⌘K 快速跳会话或执行命令；在「主题预设」里换整套配色；「紧凑行高」让列表一屏多看几条。',
+        tipsDesc: '按 ⌘K 快速跳会话或执行命令；「紧凑行高」让列表一屏多看几条。',
         palettePlaceholder: '跳到会话，或输入命令',
         paletteSessions: '会话',
         paletteCommands: '命令',
@@ -107,7 +95,6 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ 选择 · ↵ 打开 · tab 切换 · esc 关闭',
         paletteNew: '新建会话',
         paletteDensity: '切换紧凑行高',
-        paletteTheme: '切换主题预设',
         paletteAccent: '切换强调色',
         paletteEnable: '启用浮岛界面',
         paletteDisable: '关闭浮岛界面',
@@ -215,20 +202,8 @@ window.__ModuleLoader__.load({
         shortcutDesc: 'Change the combination that opens the quick finder; click the button and press the new keys.',
         shortcutCapture: 'Press the new key combination…',
         shortcutNeedMod: 'Include ⌘ (Ctrl) or ⌥ in the combination',
-        theme: 'Theme preset',
-        themeDesc: 'Switches the whole palette (canvas, islands, borders, accent). Click to preview instantly.',
-        themeMist: 'Mist',
-        themeSand: 'Sand',
-        themeSage: 'Sage',
-        themeClay: 'Clay',
-        themeLilac: 'Lilac',
-        themeInk: 'Ink',
-        themeGraphite: 'Graphite',
-        themeJade: 'Jade',
-        themeRose: 'Rose',
-        themeOlive: 'Olive',
         tipsTitle: 'Quick tips',
-        tipsDesc: 'Press ⌘K to jump to a session or run a command; pick a theme preset for a whole new palette; compact rows fit more on screen.',
+        tipsDesc: 'Press ⌘K to jump to a session or run a command; compact rows fit more on screen.',
         palettePlaceholder: 'Jump to a session, or type a command',
         paletteSessions: 'Sessions',
         paletteCommands: 'Commands',
@@ -236,7 +211,6 @@ window.__ModuleLoader__.load({
         paletteHint: '↑↓ select · ↵ open · tab cycle · esc close',
         paletteNew: 'New session',
         paletteDensity: 'Toggle compact rows',
-        paletteTheme: 'Cycle theme preset',
         paletteAccent: 'Cycle accent colour',
         paletteEnable: 'Enable floating islands',
         paletteDisable: 'Turn off floating islands',
@@ -322,9 +296,7 @@ window.__ModuleLoader__.load({
     const DEFAULT_ACCENT = '#4176e6';
     const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
     const DENSITY_KEY = 'dsh-islands-ui:density';
-    const THEME_KEY = 'dsh-islands-ui:theme';
     const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
-    const THEMES = ['mist', 'sand', 'sage', 'clay', 'lilac', 'ink', 'graphite', 'jade', 'rose', 'olive'];
     const listeners = new Set();
 
     function readStored() {
@@ -505,17 +477,8 @@ window.__ModuleLoader__.load({
       }
     }
 
-    function readTheme() {
-      try {
-        const stored = window.localStorage.getItem(THEME_KEY);
-        return THEMES.includes(stored) ? stored : 'mist';
-      } catch {
-        return 'mist';
-      }
-    }
-
     function prefsSnapshot() {
-      return `${readDensity() === 'compact' ? 1 : 0}${readTheme()}`;
+      return readDensity() === 'compact' ? '1' : '0';
     }
 
     function subscribePrefs(listener) {
@@ -532,9 +495,6 @@ window.__ModuleLoader__.load({
       if (body === null) return;
       if (readDensity() === 'compact') body.setAttribute('data-islands-density', 'compact');
       else body.removeAttribute('data-islands-density');
-      const theme = readTheme();
-      if (theme === 'mist') body.removeAttribute('data-islands-theme');
-      else body.setAttribute('data-islands-theme', theme);
     }
 
     function storePref(key, value) {
@@ -2557,7 +2517,6 @@ window.__ModuleLoader__.load({
     function resetAppearancePrefs() {
       try {
         window.localStorage.removeItem(DENSITY_KEY);
-        window.localStorage.removeItem(THEME_KEY);
         window.localStorage.removeItem(ACCENT_KEY);
         window.localStorage.removeItem(SHORTCUT_KEY);
       } catch {}
@@ -2567,8 +2526,6 @@ window.__ModuleLoader__.load({
 
     /** The command list, rebuilt on each open so the labels follow the locale. */
     function paletteCommands(copy, enabled) {
-      const nextTheme = () => THEMES[(THEMES.indexOf(readTheme()) + 1) % THEMES.length];
-      const themeLabel = (name) => copy[`theme${String(name).replace(/^./u, (c) => c.toUpperCase())}`] ?? name;
       const compact = readDensity() === 'compact';
       return [
         {
@@ -2582,12 +2539,6 @@ window.__ModuleLoader__.load({
           label: copy.paletteDensity,
           hint: compact ? '26px → 32px' : '32px → 26px',
           run: () => storePref(DENSITY_KEY, compact ? 'comfortable' : 'compact'),
-        },
-        {
-          id: 'theme',
-          label: copy.paletteTheme,
-          hint: `${themeLabel(readTheme())} → ${themeLabel(nextTheme())}`,
-          run: () => storePref(THEME_KEY, nextTheme()),
         },
         {
           id: 'accent',
@@ -2984,7 +2935,6 @@ window.__ModuleLoader__.load({
       const [accent, setAccent] = React.useState(readAccent);
       const prefs = usePrefsSnapshot();
       const compactOn = prefs[0] === '1';
-      const themeName = prefs.slice(1);
       const chooseAccent = (color) => {
         setAccent(color);
         applyAccent(color);
@@ -3114,34 +3064,6 @@ window.__ModuleLoader__.load({
               onClick: () => storePref(DENSITY_KEY, compactOn ? 'comfortable' : 'compact'),
             },
             h('span', { className: 'isl-switchThumb' }),
-          ),
-        ),
-        h(
-          'div',
-          { className: 'isl-prefRow' },
-          h(
-            'div',
-            { className: 'isl-prefText' },
-            h('div', { className: 'isl-prefTitle' }, copy.theme),
-            h('div', { className: 'isl-prefDesc' }, copy.themeDesc),
-          ),
-          h(
-            'div',
-            { className: 'isl-themePicker' },
-            THEMES.map((name) =>
-              h(
-                'button',
-                {
-                  type: 'button',
-                  key: name,
-                  className: 'isl-themeChip' + (themeName === name ? ' is-selected' : ''),
-                  'data-islands-theme-chip': name,
-                  'aria-pressed': themeName === name,
-                  onClick: () => storePref(THEME_KEY, name),
-                },
-                copy[`theme${name.replace(/^./u, (c) => c.toUpperCase())}`] ?? name,
-              ),
-            ),
           ),
         ),
         h(ShortcutRow, {
