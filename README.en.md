@@ -48,13 +48,13 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | :---: | --- | --- |
 | 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; flat, no drop shadows, separated by color and a 1px hairline |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
-| ⚙️ | **Settings page** | Settings → Floating island theme: on/off, accent presets, custom color, follow-theme, compact rows, reply border, shortcut |
+| ⚙️ | **Settings page** | Settings → Floating island theme: on/off, accent presets, custom color, compact rows, reply border, shortcut |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
-| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, theme and accent |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, reply border, theme and accent |
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 54 parts and 12 regions are actually mounted, so a host upgrade shows up immediately |
@@ -72,7 +72,7 @@ The skin is a client-only style layer. Pinning helpers, the pinned shelf and the
 | Floating islands | White / dark-gray surfaces, 16–20px radius, 1px hairline; a 1px inner highlight along the top edge, soft shadow where content presses |
 | Spacing | 5px between every island, including the bottom panel |
 | Top bar | 40px window strip hosting the conversation tools and the right-panel toggle; macOS clears the traffic lights, Linux starts at 8px below the native title bar. Windows renders no island top bar: the caption row keeps the native sidebar toggle and the right-hand tools stay in the conversation header |
-| Accent | Brand blue by default; purple / green / orange / pink / red presets or any custom color |
+| Accent | Six presets derived from Radix scales (blue / violet / green / amber / rose / magenta), plus any custom color |
 | Icons | One 16-grid line set at 1.25 stroke with round caps, following the text color and selected state; the rail, workspace folders and disclosure arrows all belong to it |
 
 ---

@@ -78,7 +78,7 @@ window.__ModuleLoader__.load({
         enableDesc: '关掉会立刻恢复默认外观，设置会保留。可随时切换试试效果。',
         accent: '强调色',
         accentDesc: '会影响选中、滑块、发送按钮等重点位置的颜色，改完立刻生效。',
-        accentDefault: '跟随主题',
+        accentDefault: '默认',
         accentCustom: '自定义颜色',
         density: '紧凑行高',
         densityDesc: '紧凑时会话行更矮、同屏能多看几条；觉得拥挤可切回舒适。',
@@ -197,7 +197,7 @@ window.__ModuleLoader__.load({
         enableDesc: 'Turns off the skin immediately and keeps your settings; switch anytime to preview.',
         accent: 'Accent color',
         accentDesc: 'Colors selected states, sliders, the send button and other highlights. Applies instantly.',
-        accentDefault: 'Follow theme',
+        accentDefault: 'Default',
         accentCustom: 'Custom color',
         density: 'Compact rows',
         densityDesc: 'Compact rows are shorter so you see more sessions at once; switch back if it feels tight.',
@@ -299,8 +299,8 @@ window.__ModuleLoader__.load({
     /** Order + visibility of every left-rail panel entry. */
     const RAIL_CONFIG_KEY = 'dsh-islands-ui:rail';
     const ACCENT_KEY = 'dsh-islands-ui:accent';
-    const DEFAULT_ACCENT = '#4176e6';
-    const ACCENT_PRESETS = ['#4176e6', '#7c5cff', '#1f9d63', '#e07a2e', '#d94f8a', '#d64545'];
+    const DEFAULT_ACCENT = '#3358d4';
+    const ACCENT_PRESETS = ['#3358d4', '#644fc1', '#218358', '#ab6400', '#cb1d63', '#8e4ec6'];
     const DENSITY_KEY = 'dsh-islands-ui:density';
     const BORDER_KEY = 'dsh-islands-ui:reply-border';
     const SHORTCUT_KEY = 'dsh-islands-ui:shortcut';
@@ -1858,9 +1858,9 @@ window.__ModuleLoader__.load({
         { width: size, height: size, viewBox: '0 0 64 64', fill: 'none', 'aria-hidden': true },
         h('rect', { width: 64, height: 64, rx: 16, fill: '#0f1115' }),
         h('rect', { x: 10, y: 10, width: 44, height: 44, rx: 11, fill: '#22252b' }),
-        h('rect', { x: 16, y: 16, width: 14, height: 32, rx: 6, fill: '#4176e6' }),
+        h('rect', { x: 16, y: 16, width: 14, height: 32, rx: 6, fill: '#3358d4' }),
         h('rect', { x: 34, y: 16, width: 14, height: 14, rx: 6, fill: '#f5f7fa' }),
-        h('rect', { x: 34, y: 34, width: 14, height: 14, rx: 6, fill: '#7aaaff' }),
+        h('rect', { x: 34, y: 34, width: 14, height: 14, rx: 6, fill: '#7c96ee' }),
       );
     }
 
@@ -2568,7 +2568,7 @@ window.__ModuleLoader__.load({
         {
           id: 'accent',
           label: copy.paletteAccent,
-          hint: readAccent() ?? copy.accentDefault,
+          hint: readAccent() ? '' : copy.accentDefault,
           run: () => {
             const current = readAccent() ?? DEFAULT_ACCENT;
             const index = ACCENT_PRESETS.findIndex((color) => color.toLowerCase() === current.toLowerCase());

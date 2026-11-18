@@ -231,7 +231,7 @@ body[data-islands-ui] .isl-paletteList {
   flex: none;
   width: 28px;
   color: var(--dsw-alias-label-tertiary);
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
 }
 
@@ -257,7 +257,7 @@ body[data-islands-ui] .isl-paletteFoot {
   border-radius: var(--isl-radius-2xs);
   background: var(--isl-surface-muted);
   font-family: var(--dsw-font-mono, ui-monospace, monospace);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* ---- 6. Contract inspector --------------------------------------------- */
@@ -282,7 +282,7 @@ body[data-islands-ui] .isl-debug {
   box-shadow: var(--isl-seam), var(--isl-shadow-float);
   color: var(--dsw-alias-label-secondary);
   font-family: var(--dsw-font-mono, ui-monospace, monospace);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 16px;
 }
 

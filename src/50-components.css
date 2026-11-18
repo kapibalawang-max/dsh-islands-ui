@@ -179,11 +179,12 @@ body[data-islands-ui] :focus-visible {
   opacity: 0.6;
 }
 
+/* Four per row: seven presets plus the custom picker make two even rows
+   instead of a ragged 6 + 2 wrap. */
 .isl-accentPicker {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 24px);
+  justify-content: end;
   gap: 8px;
 }
 
@@ -260,7 +261,7 @@ body[data-islands-ui] :focus-visible {
   width: min(380px, calc(100vw - 32px));
   padding: 12px 14px;
   border: 1px solid rgba(224, 160, 24, 0.5);
-  border-radius: var(--isl-radius-lg, 16px);
+  border-radius: var(--isl-radius-lg);
   background: var(--dsw-alias-bg-overlay, #ffffff);
   color: var(--dsw-alias-label-primary, #1f2328);
   box-shadow: 0 14px 36px -14px rgba(0, 0, 0, 0.35);
@@ -335,7 +336,7 @@ body[data-islands-ui] :focus-visible {
   margin: 12px 0 4px;
   padding: 12px 14px;
   border: 1px solid rgba(224, 160, 24, 0.45);
-  border-radius: var(--isl-radius-lg, 16px);
+  border-radius: var(--isl-radius-lg);
   background: rgba(240, 180, 41, 0.14);
   background: color-mix(in srgb, #f0b429 14%, transparent);
   color: var(--dsw-alias-label-primary, #1f2328);

@@ -562,7 +562,7 @@ body[data-islands-ui] [data-row-key^="session:"]:has([data-islands-part~="pin-in
   margin-left: 2px;
   padding: 0;
   border: 0;
-  border-radius: var(--isl-radius-xs, 6px);
+  border-radius: var(--isl-radius-xs);
   background: transparent;
   color: var(--dsw-alias-label-tertiary);
   cursor: pointer;

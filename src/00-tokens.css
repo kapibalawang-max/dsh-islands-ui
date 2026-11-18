@@ -21,6 +21,9 @@ body[data-islands-ui] {
   --isl-hover: color-mix(in srgb, #1c2024 5%, transparent);
   --isl-active: color-mix(in srgb, #1c2024 9%, transparent);
   --isl-accent: #3358d4;
+  /* Text reading of the accent: identical in light, lifted in dark so the
+     host's active-tab label clears 4.5:1 on the island. */
+  --isl-accent-ink: #3358d4;
   /* Text: the host's light ladder ends in tertiary #81858c (3.71:1 on an
      island) and caption #adb2b8 (2.13:1). Both sit below AA for the 10-14px
      text this skin sets in them, so the two quiet rungs are re-declared one
@@ -165,6 +168,7 @@ body[data-islands-ui][data-ds-dark-theme] {
   --isl-shadow-float: 0 20px 52px -20px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
   --isl-active: color-mix(in srgb, #edeef0 12%, transparent);
   --isl-accent: #627de6;
+  --isl-accent-ink: color-mix(in srgb, #627de6 62%, #fff);
   --dsw-alias-label-tertiary: #b3b8bf;
   --dsw-alias-label-caption: #8a9099;
   /* A zero shadow, not `none`: the seam appends to this value, and a shadow
@@ -206,10 +210,11 @@ html[data-windows-titlebar] body[data-islands-ui] {
   --isl-topbar-height: 0px;
 }
 
-/* User-selected accent: remap the business tokens everywhere. */
-body[data-islands-ui][data-islands-accent],
-body[data-islands-ui][data-islands-accent] * {
-  --dsw-alias-state-business-primary: var(--isl-accent);
+/* The accent drives the host's business tokens too, so a picked colour and the
+   default one both reach every host surface (tabs, active rows, send button). */
+body[data-islands-ui],
+body[data-islands-ui] * {
+  --dsw-alias-state-business-primary: var(--isl-accent-ink);
   --dsw-alias-state-business-tertiary: color-mix(in srgb, var(--isl-accent) 16%, transparent);
 }
 
