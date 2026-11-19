@@ -211,11 +211,12 @@ html:not([data-windows-titlebar]) body[data-islands-ui] [data-sidebar-right-togg
   display: none !important;
 }
 
-/* The finished reply lands as its own block: a filled well, one soft radius,
-   no outline, no shadow. The fill is the canvas tone, so a reply reads as a
-   recess in the island rather than another card stacked on it. Steps and tool
-   rows above stay flat so the answer is the only thing separated.
-   Settings → 回复底色 turns this off. */
+/* The finished reply lands as its own block, in one of three readings chosen
+   in Settings → 回复样式. The default is a filled well: the canvas tone, one
+   soft radius, no outline, no shadow, so a reply reads as a recess in the
+   island rather than another card stacked on it. `border` restores the hairline
+   card the skin used before 1.2.29; `none` lets the answer run as plain text.
+   Steps and tool rows above stay flat in every reading. */
 body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
   padding: 12px 14px;
   border: 0;
@@ -239,7 +240,19 @@ body[data-islands-ui] [data-chat-flow-kind='assistant-step'][data-chat-group-par
   margin-bottom: 0;
 }
 
-body[data-islands-ui][data-islands-fill='off'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+/* The hairline card: island surface behind a 1px tint, the shape the skin had
+   before replies were filled. Code chips go back to the muted rung they were
+   always drawn in. */
+body[data-islands-ui][data-islands-reply='border'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
+  border: 1px solid var(--isl-border-soft);
+  background: var(--isl-surface);
+  --dsw-alias-markdown-code-block: var(--isl-surface-muted);
+  --dsw-alias-markdown-code-block-banner: var(--isl-surface-muted);
+  --dsw-alias-markdown-inline-code: var(--isl-surface-muted);
+}
+
+/* Plain text: the answer keeps the room the fill gave it but paints nothing. */
+body[data-islands-ui][data-islands-reply='none'] [data-chat-flow-kind='assistant-step'][data-chat-group-part='response'] {
   padding: 0;
   border: 0;
   border-radius: 0;

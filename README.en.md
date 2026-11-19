@@ -56,13 +56,13 @@ dsh plugin --profile desktop remove dsh-islands-ui
 | :---: | --- | --- |
 | 🏝 | **Floating islands** | Canvas, conversation, workspace, right sidebar and bottom panel become separate rounded surfaces; color blocks and a 1px hairline do the layering, a 1px inner highlight marks each island's top edge, and a panel pressed by content takes one soft shadow |
 | 🧭 | **Persistent rail** | Workspace plus every plugin launcher, shown inline; the home button is a pure conversation / workspace-drawer trigger with no selected state (subtle hover and a translucent click ripple); click a panel to open it, drag to reorder with a floating preview, right-click to show or hide |
-| ⚙️ | **Settings page** | Settings → 浮岛界面: on/off, accent presets, custom color, compact rows, reply fill, shortcut |
+| ⚙️ | **Settings page** | Settings → 浮岛界面: on/off, accent presets, custom color, compact rows, reply style, shortcut |
 | 📌 | **Pinned shelf** | Pinned sessions stay in their workspace and are also aggregated between “New session” and “Workspace”; the group collapses |
 | 🌙 | **Dark mode** | Full dark token set: near-black canvas, dark islands, translucent interaction layers |
 | 🔄 | **Desktop update entry** | Pinned above the settings gear; distinct states for available, downloading, verifying, installing and failure, with accent-colored 3×3 dot-matrix loaders |
 | ⌨️ | **Shortcuts** | `⌘B`, `⌥⌘B`, `⌘,`; buttons show the current binding on hover |
 | 🪟 | **Ridge and altitude** | A 1px inner highlight along each island's top edge, plus a soft shadow once content presses the panel; scrolling lifts it a step higher |
-| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, reply fill and accent |
+| ⌘K | **Command palette** | `⌘K` opens a centered island: `↵` opens the session (collapsed workspaces included), commands toggle the skin, density, reply style and accent |
 | 🌊 | **Compact density** | Session rows shrink from 32px to 26px (settings page toggle, also in `⌘K`) so long lists show a few more rows |
 | 🕰 | **Age marks** | The 14px dot on each row turns solid today, blended this week, hollow later; state colors stay state colors |
 | 🩺 | **Contract self-check** | `?islands-debug=1` lists which of the 54 parts and 12 regions are actually mounted, so a host upgrade shows up immediately |
@@ -131,8 +131,9 @@ Stored in `localStorage`; clear these keys to reset:
 | `dsh-islands-ui:rail` | Left-rail icon order and hidden entries |
 | `dsh-islands-ui:rail-pins` | Pinned plugin icons on the left rail |
 | `dsh-islands-ui:density` | `compact` for tight rows, absent for standard |
-| `dsh-islands-ui:reply-fill` | `off` drops the fill behind assistant replies, absent keeps it |
-| `dsh-islands-ui:reply-border` | Pre-1.2.29 spelling; still read, retired as soon as the switch is touched |
+| `dsh-islands-ui:reply-style` | `fill` for the filled well (default), `border` for the outline card, `none` for plain text |
+| `dsh-islands-ui:reply-fill` | 1.2.29 spelling; `off` reads as `none`, kept for installs upgrading in place |
+| `dsh-islands-ui:reply-border` | Pre-1.2.29 spelling; `off` reads as `none` |
 | `dsh-islands-ui:shortcut` | Binding for the command palette (default `⌘K` / `Ctrl+K`) |
 
 `dsh-islands-ui:force` lives in `sessionStorage` and forces the skin on for the current session only; closing the tab clears it.
